@@ -28,7 +28,7 @@ import com.xiuye.config.condition.StudentCondition;
 																 * @
 																 * Configuration等
 																 */ })
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy/*(proxyTargetClass=true)*/
 @Profile("dev")
 @PropertySource("test.properties")
 @Import({AspectConfig.class})/*@Aspect可以生效,相当于Configuration类作用,都是配置类*/
