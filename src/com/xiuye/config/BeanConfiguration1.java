@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import com.xiuye.bean.Car;
 import com.xiuye.bean.Student;
@@ -20,6 +21,12 @@ import com.xiuye.config.condition.StudentCondition;
 @Profile("dev")
 @PropertySource("test.properties")
 public class BeanConfiguration1 {
+
+	//启用el表达式 ("#{express}")解析功能,否则原样子语句注入
+	@Bean
+	public PropertySourcesPlaceholderConfigurer pspc(){
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 
 	@Bean
 	@Conditional(StudentCondition.class)
