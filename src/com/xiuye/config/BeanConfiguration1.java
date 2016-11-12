@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 import com.xiuye.bean.Car;
@@ -17,6 +18,7 @@ import com.xiuye.config.condition.StudentCondition;
 @Configuration
 @ComponentScan("com.xiuye.component")
 @Profile("dev")
+@PropertySource("test.properties")
 public class BeanConfiguration1 {
 
 	@Bean

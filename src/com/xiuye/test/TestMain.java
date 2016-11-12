@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,6 +32,9 @@ public class TestMain {
 	private Car car;
 
 	@Resource
+	private Environment env;
+
+	@Resource
 	private WhiteCar wcar;
 
 	@BeforeClass
@@ -55,6 +59,11 @@ public class TestMain {
 	@Test
 	public void testWhiteCar(){
 		this.wcar.configInfo();
+	}
+
+	@Test
+	public void testPropertiesFile(){
+		System.out.println(env.getProperty("key"));
 	}
 
 }
