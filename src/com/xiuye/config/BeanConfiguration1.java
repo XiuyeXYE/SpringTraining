@@ -22,7 +22,7 @@ import com.xiuye.config.condition.StudentCondition;
 @PropertySource("test.properties")
 public class BeanConfiguration1 {
 
-	//启用el表达式 ("#{express}")解析功能,否则原样子语句注入
+	//启用el表达式 ("${express}")解析功能,否则原样子语句注入
 	@Bean
 	public PropertySourcesPlaceholderConfigurer pspc(){
 		return new PropertySourcesPlaceholderConfigurer();
@@ -63,5 +63,6 @@ public class BeanConfiguration1 {
 	public WhiteCar wCar(){
 		return new WhiteCar();
 	}
+
 
 }

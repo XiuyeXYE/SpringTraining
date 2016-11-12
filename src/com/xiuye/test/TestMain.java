@@ -66,6 +66,14 @@ public class TestMain {
 	private String value;
 	@Value("${programminglang}")
 	private String langs;
+	@Value("#{systemProperties['key']}")//注意括号
+	private String value2;
+	@Value("#{systemProperties['programminglang']}")//注意括号
+	private String langs2;
+	@Value("#{T(System).currentTimeMillis()}")
+	private long time;
+	@Value("#{T(Math).random()}")
+	private double d ;
 
 	@Test
 	public void testPropertiesFile() {
@@ -73,6 +81,12 @@ public class TestMain {
 			System.out.println(env.getProperty("programminglang"));
 			System.out.println(value);
 			System.out.println(langs);
+			System.out.println(langs2);
+			System.out.println(value2);
+			System.out.println(time);
+			System.out.println(d);
 	}
+
+
 
 }
