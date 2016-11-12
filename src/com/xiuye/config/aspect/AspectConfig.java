@@ -19,7 +19,8 @@ public class AspectConfig {
 	public void beforeDescription(){
 		System.out.println("Before method:description!");
 	}
-	@Pointcut("execution(** com.xiuye.component.*.description())")
+	//接口类也起作用 
+	@Pointcut("execution(** com.xiuye.component.CarComponent.description())")
 	public void description(){
 	}
 
