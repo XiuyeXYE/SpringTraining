@@ -3,6 +3,7 @@ package com.xiuye.main;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.xiuye.bean.Car;
 import com.xiuye.bean.Student;
 import com.xiuye.component.Component;
 import com.xiuye.component.ComponentForStudent;
@@ -25,6 +26,8 @@ public class Main {
 		cf.studentInfo();
 		Component c = ac.getBean(Component.class, "100","200");
 		System.out.println(c);
+		Car car = ac.getBean(Car.class);
+		car.configInfo();
 	}
 
 }
