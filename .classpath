@@ -43,5 +43,18 @@
 	<classpathentry kind="lib" path="lib/ojdbc6dms_g.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc6dms.jar"/>
 	<classpathentry kind="lib" path="lib/javaCsv.jar"/>
+	<classpathentry kind="lib" path="lib/debugger-app-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/fontbox-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/itext-pdfa-5.5.9.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.5.9.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-app-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-debugger-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/PDFRenderer-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/preflight-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/preflight-app-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlworker-5.5.9.jar"/>
+	<classpathentry kind="lib" path="lib/xmpbox-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

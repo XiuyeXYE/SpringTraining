@@ -20,7 +20,6 @@ import com.xiuye.config.BeanConfiguration1;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = BeanConfiguration1.class)
 @ActiveProfiles("dev")
-
 public class TestMain {
 
 	@Resource
