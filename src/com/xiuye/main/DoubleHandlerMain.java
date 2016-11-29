@@ -9,7 +9,7 @@ public class DoubleHandlerMain {
 		Double d = Double.valueOf("1.0E10");
 		DecimalFormat format = new DecimalFormat(".###");
 		System.out.println(format.format(d));
-		d = Double.valueOf("5.6789");
+		d = Double.valueOf("5656.6789767");
 		format = new DecimalFormat(".###");
 		System.out.println(format.format(d));
 
@@ -17,7 +17,8 @@ public class DoubleHandlerMain {
 
 	public static String outputFullLengthDouble(String d) {
 		DecimalFormat format = new DecimalFormat(".###");
-		return format.format(d);
+		double d1 = Double.valueOf(d);
+		return format.format(d1);
 	}
 
 	public static String outputFullLengthDouble(double d) {
