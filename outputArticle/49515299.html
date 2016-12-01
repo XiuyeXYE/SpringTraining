@@ -1,0 +1,214 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Android-windows下的jni实践之路            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>编译过程：</p><br/>
+<p>D:\programming&gt;cd D:\programming\java\YourSafe\bin\classes\com\example\yoursafe<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\bin\classes\com\example\yoursafe&gt;javah -jni MainAct<br><br/>
+ivity<br><br/>
+错误: 找不到 'MainActivity' 的类文件。<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\bin\classes\com\example\yoursafe&gt;cd ../../..<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\bin\classes&gt;javah -jni com.example.yoursafe.MainAct<br><br/>
+ivity<br><br/>
+无法找到类型 'android.annotation.SuppressLint' 的注释方法 'value()': 找不到andro<br><br/>
+id.annotation.SuppressLint的类文件<br><br/>
+错误: 无法访问android.app.Activity<br><br/>
+&nbsp; 找不到android.app.Activity的类文件<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\bin\classes&gt;javah -jni com.example.yoursafe.Hello<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\bin\classes&gt;cd D:\programming\java\YourSafe\jni<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;d:<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;ndk-build<br><br/>
+Android NDK: Could not find application project directory !<br><br/>
+Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br><br/>
+F:\360Apps\Android\android-ndk-r10\build/core/build-local.mk:148: *** Android ND<br><br/>
+K: Aborting &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;ndk-build android.mk<br><br/>
+Android NDK: Could not find application project directory !<br><br/>
+Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br><br/>
+F:\360Apps\Android\android-ndk-r10\build/core/build-local.mk:148: *** Android ND<br><br/>
+K: Aborting &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;set NDK_PROJECT_PATH = D:\programming\java\Your<br><br/>
+Safe<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;ndk-build android.mk<br><br/>
+Android NDK: Could not find application project directory !<br><br/>
+Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br><br/>
+F:\360Apps\Android\android-ndk-r10\build/core/build-local.mk:148: *** Android ND<br><br/>
+K: Aborting &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;echo %D:\programming\java\YourSafe%<br><br/>
+%D:\programming\java\YourSafe%<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;echo % NDK_PROJECT_PATH%<br><br/>
+% NDK_PROJECT_PATH%<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;echo %NDK_PROJECT_PATH%<br><br/>
+%NDK_PROJECT_PATH%<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;set NDK_PROJECT_PATH=D:\programming\java\YourSa<br><br/>
+fe<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;echo %NDK_PROJECT_PATH%<br><br/>
+D:\programming\java\YourSafe<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;ndk-build<br><br/>
+Android NDK: WARNING: APP_PLATFORM android-15 is larger than android:minSdkVersi<br><br/>
+on 8 in D:\programming\java\YourSafe/AndroidManifest.xml<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe\jni&gt;cd ..<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;cd..<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java&gt;cd yoursafe<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+Android NDK: WARNING: APP_PLATFORM android-15 is larger than android:minSdkVersi<br><br/>
+on 8 in D:\programming\java\YourSafe/AndroidManifest.xml<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+Android NDK: WARNING: APP_PLATFORM android-15 is larger than android:minSdkVersi<br><br/>
+on 8 in D:\programming\java\YourSafe/AndroidManifest.xml<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+Android NDK: WARNING: APP_PLATFORM android-15 is larger than android:minSdkVersi<br><br/>
+on 8 in D:\programming\java\YourSafe/AndroidManifest.xml<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: D:\programming\jav<br><br/>
+a\YourSafe/jni/Android.mk<br><br/>
+F:/360Apps/Android/android-ndk-r10/build/core/add-application.mk:209: *** Androi<br><br/>
+d NDK: Aborting... &nbsp; &nbsp;. &nbsp;Stop.<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+[armeabi] Compile&#43;&#43; thumb: hello &lt;= hello.cpp<br><br/>
+D:\programming\java\YourSafe/jni/hello.cpp: In function '_jstring* Java_com_exam<br><br/>
+ple_yoursafe_Hello_hello(JNIEnv*, jclass)':<br><br/>
+D:\programming\java\YourSafe/jni/hello.cpp:6:9: error: 'env' was not declared in<br><br/>
+&nbsp;this scope<br><br/>
+make.exe: *** [D:\programming\java\YourSafe/obj/local/armeabi/objs/hello/hello.o<br><br/>
+] Error 1<br><br/>
+<br><br/>
+<br><br/>
+D:\programming\java\YourSafe&gt;ndk-build<br><br/>
+[armeabi] Compile&#43;&#43; thumb: hello &lt;= hello.cpp<br><br/>
+[armeabi] StaticLibrary &nbsp;: libstdc&#43;&#43;.a<br><br/>
+[armeabi] SharedLibrary &nbsp;: libhello.so<br><br/>
+[armeabi] Install &nbsp; &nbsp; &nbsp; &nbsp;: libhello.so =&gt; libs/armeabi/libhello.so<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p>编译前配置的mk文件：Android.mk(android的a要大写)</p><br/>
+<p><span style="white-space:pre">LOCAL_PATH := $(call my-dir)<br><br/>
+include $(CLEAR_VARS)<br><br/>
+LOCAL_MODULE := hello<br><br/>
+LOCAL_SRC_FILES := hello.cpp<br><br/>
+include $(BUILD_SHARED_LIBRARY)</span></p><br/>
+<p><br><br/>
+</p><br/>
+<p>编译过程：</p><br/>
+<p><br><br/>
+</p><br/>
+<p>编译class文件得到jni文件。</p><br/>
+<p><br><br/>
+</p><br/>
+<p>把编译好jni的c的头文件放在项目根目录jni文件夹下，没有jni文件夹就自己创建一个。</p><br/>
+<p><br><br/>
+</p><br/>
+<p>接下来，编译得到so文件，在项目根路径下编译啊（也许还要设置NDK_PROJECT_PATH环境变量指向你的项目根路径！）</p><br/>
+<p><br><br/>
+</p><br/>
+<p>必须在项目的根路径编译：parentPath\ndk-build(ndk-build为ndk下文件配置到环境变量path中可随处使用)</p><br/>
+<p>eg.D:\androidProject\ndk-build</p><br/>
+<p>接下来就是自动编译了，是在windows下编译</p><br/>
+<p><span style="white-space:pre"></span>--遇到问题上面已经显示了：</p><br/>
+<p><span style="white-space:pre"></span>解决问题1：版本问题：本jni编译器只支持android-15以上，所以设置AndroidManifest.xml文件中的</p><br/>
+<p><span style="white-space:pre">&lt;uses-sdk<br><br/>
+&nbsp; &nbsp; &nbsp; &nbsp; android:minSdkVersion=&quot;15&quot;&nbsp; android:targetSdkVersion=&quot;21&quot; /&gt;</span>//设置minSdkVersion到合适版本</p><br/>
+<p><span style="white-space:pre"></span>--遇到问题2：APP_BUILD_SCRIPT points to an unknown file就是Android.xml文件名a要大写。</p><br/>
+<p><br><br/>
+</p><br/>
+<p><span style="white-space:pre"></span>--遇到问题3：代码错误，漏写变量啊，错误函数啊，这个编译器应该会指出，照提示修改。</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p>编译后会有obj文件夹，运行程序会自动将so文件加载到libs文件下。</p><br/>
+<p><br><br/>
+</p><br/>
+<p>编译后obj文件路径：</p><br/>
+<p>obj/local/armeabi/objs<br><br/>
+</p><br/>
+<p><span style="white-space:pre"></span>--hello</p><br/>
+<p><span style="white-space:pre"></span>--hello.o</p><br/>
+<p><span style="white-space:pre"></span>--hello.o.d</p><br/>
+<p><span style="white-space:pre"></span>--libhello.so</p><br/>
+<p><span style="white-space:pre"></span>--libstdc&#43;&#43;.a</p><br/>
+<p>编译后的so文件路径：</p><br/>
+<p>libs/armeabi/libhello.so</p><br/>
+<p><br><br/>
+</p><br/>
+<p>最后在手机运行成功调用jni函数。</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

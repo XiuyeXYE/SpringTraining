@@ -1,0 +1,26 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++输出运算重载为成员函数            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1599825" snippet_file_name="blog_20160306_1_2199622"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+class A{<br/>
+	public:<br/>
+		ostream &amp; operator &lt;&lt; (ostream&amp; out){<br/>
+			out &lt;&lt; a &lt;&lt; b;<br/>
+			return out;<br/>
+		}<br/>
+	private:<br/>
+		int a = {10};<br/>
+		int b = {100};<br/>
+};<br/>
+int main(){<br/>
+	A a;<br/>
+	a &lt;&lt; cout &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160306230957899?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>成员函数的话，只能这样使用了！</p><br/>
+   <br/>
+</div>

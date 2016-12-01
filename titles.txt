@@ -1,0 +1,319 @@
+<item>将文件内容准换为unicode码内容文件（java实现）-----article/47336985.html</item>
+<item>移位运算RGB-----article/48105901.html</item>
+<item>5个常见的RuntimeException-----article/48138977.html</item>
+<item>简述RuntimeException和非RuntimeException的区别-----article/48139043.html</item>
+<item>输入输出操作例子（1）-----article/48139071.html</item>
+<item>简述Error和Exception的区别-----article/48139191.html</item>
+<item>用自定义缓存区的方式实现文件的移动-----article/48139445.html</item>
+<item>用缓冲流的方式实现文件的移动-----article/48139573.html</item>
+<item>实现empList的序列化和反序列化-----article/48140811.html</item>
+<item>简述节点流和处理流的区别，以及Java流式输入输出的架构特点-----article/48141309.html</item>
+<item>简述RandomAccessFile和FileInputStream及FileOutputStream在使用中的区别-----article/48141343.html</item>
+<item>C++重载逗号，括号，类型转换，实现以奇怪的方式给变量赋值-----article/48203729.html</item>
+<item>java 简单的TCP接收数据与发送数据-----article/48291883.html</item>
+<item>简述SAX和DOM解析方式的不同-----article/48292005.html</item>
+<item>输出数据到xml文件（java实现）-----article/48294471.html</item>
+<item>客户端发送xml数据，服务器端接收之-----article/48294587.html</item>
+<item>一个对象null，gc后依然可以绝境求生-----article/48294869.html</item>
+<item>typedef and pointer-----article/48294905.html</item>
+<item>自定义实现输入输出模版的一个例子-----article/48294989.html</item>
+<item>我的乘法分析-----article/48395345.html</item>
+<item>java简单取款机-----article/48565755.html</item>
+<item>全排序 java实现-----article/48751069.html</item>
+<item>无限循环小数转化为分数-----article/48766643.html</item>
+<item>javascript计时器-----article/48932005.html</item>
+<item>图片放大由主要由javascript实现-----article/48932217.html</item>
+<item>java className失败的原因-----article/48932527.html</item>
+<item>快速排序-----article/48937173.html</item>
+<item>javascript操作商品-----article/49003071.html</item>
+<item>javascript的$的操作-----article/49024797.html</item>
+<item>jquery操作商品-----article/49027031.html</item>
+<item>js对象如何实现数组索引功能并且自定义自己的方法 （4种方法）-----article/49027305.html</item>
+<item>表单选择时变色jquery实现-----article/49078601.html</item>
+<item>URLEncoder原码-----article/49253043.html</item>
+<item>编写cgi的一个条件-----article/49256329.html</item>
+<item>对java类override的探讨-----article/49428755.html</item>
+<item>Android-windows下的jni实践之路-----article/49515299.html</item>
+<item>Spring框架配置文件：applicationContext.xml-----article/49533379.html</item>
+<item>java的Constructor和static块-----article/49557265.html</item>
+<item>super.clone的作用-----article/49614055.html</item>
+<item>MyBatis注意事项一-----article/49640351.html</item>
+<item>MyBatis注意事项二-----article/49640407.html</item>
+<item>javascript的prototype实现回调-----article/49642825.html</item>
+<item>windows api 关机代码-----article/49742901.html</item>
+<item>由3a（&quot;aaa&quot;）字符串得到1000字符串-----article/49756897.html</item>
+<item>单例模式优化探索-----article/49797067.html</item>
+<item>spring事务applicationContext.xml-----article/50160121.html</item>
+<item>HibernateTestCase-----article/50396390.html</item>
+<item>EJBCase-----article/50396407.html</item>
+<item>jsf   ActionListener 查找正确的UIComponent-----article/50412239.html</item>
+<item>数据库数据横排显示-----article/50439620.html</item>
+<item>数据库数据横排显示2-----article/50439653.html</item>
+<item>提取表的sql原句-----article/50439734.html</item>
+<item>dataGrid(primefaces)-----article/50457700.html</item>
+<item>dataScroller(primefaces)-----article/50458006.html</item>
+<item>dataList(primefaces)-----article/50458013.html</item>
+<item>carousel(primefaces)-----article/50458021.html</item>
+<item>java生成图片-----article/50484364.html</item>
+<item>struts2的一个杂乱工程-----article/50484838.html</item>
+<item>spring and hibernate mixed-----article/50511893.html</item>
+<item>springandstruts2整合-----article/50512541.html</item>
+<item>javascript json属性用双引号还是单引号-----article/50522381.html</item>
+<item>EJB正确客户端调用（jboss6、jboss7）-----article/50525155.html</item>
+<item>EJB invocations from a remote client using JNDI-----article/50525278.html</item>
+<item>EJB拦截器-----article/50531876.html</item>
+<item>ejb injection-----article/50531899.html</item>
+<item>EJB定时器-----article/50532861.html</item>
+<item>maven打包jar指定 Main-Class-----article/50542371.html</item>
+<item>Maven带jetty服务器插件-----article/50548725.html</item>
+<item>primefaces 伸缩可合可并 panel，datatable的footer下分页-----article/50560629.html</item>
+<item>c++模版实例化继承-----article/50575539.html</item>
+<item>oracle services-----article/50642918.html</item>
+<item>mysql56 service-----article/50672656.html</item>
+<item>boostrap demo-----article/50699567.html</item>
+<item>Bootstrap v2.3.1 进度条设置设置进度-----article/50726218.html</item>
+<item>引入外部css文件时最好加上type属性，否则有可能引入失败-----article/50727944.html</item>
+<item>maven 指定默认的本地仓库-----article/50738417.html</item>
+<item>解决juqery ajax post方式传送数据乱码问题-----article/50749330.html</item>
+<item>java匿名类没有函数名的花括号-----article/50749585.html</item>
+<item>img reload-----article/50757709.html</item>
+<item>jquery 选择器用法例（1）-----article/50768196.html</item>
+<item>c++静态断言的实现方式 编译器遇除数为0报错-----article/50785441.html</item>
+<item>直接给字符指针赋字符串-----article/50815176.html</item>
+<item>C++输出运算重载为成员函数-----article/50816122.html</item>
+<item>hibernate.cfg.xml(2)-----article/50819929.html</item>
+<item>win32程序-----article/50835117.html</item>
+<item>自适应字符环境wind32程序-----article/50837616.html</item>
+<item>TDM-GCC编译win32程序-----article/50838166.html</item>
+<item>windows下gun-gcc的一些编译参数-----article/50838367.html</item>
+<item>vector装入自定义类多个对象的时候复制构造函数参数必须有const修饰-----article/50845040.html</item>
+<item>C++类复制构造函数参数为nonconst和const的重载-----article/50845458.html</item>
+<item>复制构造函数：形参为const和nonconst的调用情形-----article/50845492.html</item>
+<item>获取成员变量的地址和偏移地址-----article/50848396.html</item>
+<item>尝试提取c++类函数地址（1）-----article/50849114.html</item>
+<item>尝试提取类成员地址（2）-----article/50849464.html</item>
+<item>复制构造函数为什么必须是引用？-----article/50849631.html</item>
+<item>objective-c HelloWorld实践 （gcc编译器）-----article/50858089.html</item>
+<item>try __attribute__((weak))-----article/50881371.html</item>
+<item>array and vector-----article/50881381.html</item>
+<item>try getAddress(1)-----article/50881385.html</item>
+<item>JFinal First Demo &quot;Hello World&quot;-----article/50895412.html</item>
+<item>try c++11 foreach(1)-----article/50906685.html</item>
+<item>C++函数返回临时变量的引用运行要出错-----article/50907485.html</item>
+<item>堆分配的内存全局可以用（只要不delete，且指针赋值NULL）-----article/50911279.html</item>
+<item>windows 内存分配尝试（AWE相关API编译器没找到库，所以全部注释）-----article/50914901.html</item>
+<item>HelloWorld(unicode)-----article/50924065.html</item>
+<item>java 多线程（ Future Callable）-----article/50926060.html</item>
+<item>linux下归档-----article/50927207.html</item>
+<item>yum list-----article/50927222.html</item>
+<item>子类覆盖父类的成员变量-----article/50953889.html</item>
+<item>son extends father and override father&#39;s variable-----article/50954059.html</item>
+<item>Global Variable Default Initialized 0-----article/50958740.html</item>
+<item>int8_t int16_t int32_t int64_t-----article/50958950.html</item>
+<item>整型直接二进制数值-----article/50958976.html</item>
+<item>C++运算符优先级-----article/50959093.html</item>
+<item>C++11 nullptr test-----article/50959278.html</item>
+<item>NULL Pointer Reference Test-----article/50959326.html</item>
+<item>C++11 right value-----article/50959360.html</item>
+<item>C++求动态数组长度（windows通过）-----article/50959436.html</item>
+<item>指针引用（OK）和指向引用的指针（ERROR）-----article/50962065.html</item>
+<item>C++获取数组的长度（用模板可以实现）-----article/50965748.html</item>
+<item>通过模板函数获取数组长度深入探讨-----article/50965816.html</item>
+<item>const int * 与 int *const-----article/50965942.html</item>
+<item>log4j.properties-----article/50970643.html</item>
+<item>web hello world-----article/50983366.html</item>
+<item>阻塞与非阻塞文件读取-----article/50983437.html</item>
+<item>nodejs event(有点观察者模式)-----article/50983478.html</item>
+<item>nodejs 加载模块-----article/50983557.html</item>
+<item>通过宏得到Array Length-----article/50991082.html</item>
+<item>桶排序-----article/50991298.html</item>
+<item>没有括号的sizeof，sizeof为关键字-----article/50993233.html</item>
+<item>递归 example ruler-----article/50993860.html</item>
+<item>max * max-----article/51001712.html</item>
+<item>快速转置矩阵-----article/51001956.html</item>
+<item>sybase 修改密码-----article/51004416.html</item>
+<item>C++文件读写 实现文件每行数据齐长输出-----article/51008561.html</item>
+<item>C++ eof-----article/51018121.html</item>
+<item>ArrayList and LinkedList Demo-----article/51043041.html</item>
+<item>HashMap Demo-----article/51043116.html</item>
+<item>HashSet Demo-----article/51043143.html</item>
+<item>File Demo-----article/51043411.html</item>
+<item>Object wait and notify-----article/51043524.html</item>
+<item>Object wait T ms to run again-----article/51043612.html</item>
+<item>static proxy-----article/51043690.html</item>
+<item>dynamic proxy-----article/51043792.html</item>
+<item>Cglib dynamic proxy-----article/51044250.html</item>
+<item>URLConnection Demo-----article/51044469.html</item>
+<item>linux compile objective-c-----article/51052173.html</item>
+<item>objective-c 类-----article/51052256.html</item>
+<item>Objective-C Rectangle Demo-----article/51052908.html</item>
+<item>objective-c inherit-----article/51056196.html</item>
+<item>&amp;hellip;-----article/51100622.html</item>
+<item>在类中声明函数而不去定义编译通过-----article/51112045.html</item>
+<item>spring 与 jsf整合-----article/51147997.html</item>
+<item>Http文件上传服务器端接收的数据格式-----article/51154982.html</item>
+<item>结构体指定成员赋值-----article/51168867.html</item>
+<item>理解this指针-----article/51172315.html</item>
+<item>java继承：属性不具有多态性 和 return this 返回当前对象-----article/51183326.html</item>
+<item>c++继承属性不具有多态性-----article/51183695.html</item>
+<item>C++重载括号和重载类型探索-----article/51194955.html</item>
+<item>windows C/C++自定义函数入口-----article/51202407.html</item>
+<item>Spring事务类型-----article/51205935.html</item>
+<item>java中调用声明没实现方法体的类完全运行正常-----article/51206674.html</item>
+<item>java mysql connection url-----article/51207118.html</item>
+<item>c language chaos coding-----article/51212375.html</item>
+<item>java 线程池批量执行-----article/51220251.html</item>
+<item>java 线程隐含同步错误 包装类-----article/51242671.html</item>
+<item>html获取自定义属性值-----article/51249097.html</item>
+<item>原子类操作也许并不安全-----article/51261515.html</item>
+<item>java输出重定向-----article/51283255.html</item>
+<item>java MD5 加密-----article/51289909.html</item>
+<item>struts2配置并且可以注解-----article/51297506.html</item>
+<item>java 枚举enum的本来源码-----article/51313952.html</item>
+<item>primefaces设置calendar年份范围-----article/51346788.html</item>
+<item>配置文件log4j.properties-----article/51351430.html</item>
+<item>浏览器中嵌入pdf-----article/51357155.html</item>
+<item>服务器将pdf转化为swf在浏览器中查看-----article/51367738.html</item>
+<item>spring 调用getBean得到类不能保证类中@Resource注解成功注入-----article/51375111.html</item>
+<item>当spring报close不能手动控制和rollback不能手动控制-----article/51375174.html</item>
+<item>框架的事务管理-----article/51381585.html</item>
+<item>读取oracle sequence 的currval-----article/51383060.html</item>
+<item>传入参数为函数并且该函数的参数也同时传入-----article/51383423.html</item>
+<item>Template&#39;s Template-----article/51383477.html</item>
+<item>MyBatis正确插入带有主键（使用oracle序列号）的数据到oracle数据库-----article/51394285.html</item>
+<item>取消activity的页面标题栏-----article/51407289.html</item>
+<item>windows assembler helloworld-----article/51407988.html</item>
+<item>breakdebug-----article/51408193.html</item>
+<item>列出受当前处理器支持的指令集扩展-----article/51408224.html</item>
+<item>Primefaces menu中的menuitem过多产生的问题-----article/51416528.html</item>
+<item>JSF可以直接以方法作为属性值-----article/51417986.html</item>
+<item>JSF EL 对应jsp内置对象-----article/51423866.html</item>
+<item>多线程与数据库连接数-----article/51438152.html</item>
+<item>ActiveMQ First Demo-----article/51443006.html</item>
+<item>Interface Default Static-----article/51447163.html</item>
+<item>Scanning Files-----article/51451111.html</item>
+<item>java8 lambda尝试-----article/51452890.html</item>
+<item>WebSphere MQ简单的命令行操作-----article/51454855.html</item>
+<item>java 配置security policy-----article/51459464.html</item>
+<item>IBM MQ Connect Successful Demo-----article/51459788.html</item>
+<item>java8 class::method lambda-----article/51461402.html</item>
+<item>QT Demo-----article/51465373.html</item>
+<item>windows程序错误码到错误信息的转换-----article/51469345.html</item>
+<item>message compiler格式例子-----article/51469602.html</item>
+<item>windows获取进程id和当前进程的会话id-----article/51472115.html</item>
+<item>get current env path string-----article/51472854.html</item>
+<item>获取环境变量-----article/51472919.html</item>
+<item>windows 软件安全策略-----article/51479242.html</item>
+<item>WebSphere MQ Jms 连接-----article/51480731.html</item>
+<item>Java Spi 实践-----article/51481307.html</item>
+<item>Activity中 findViewById 获取控件对象正确的代码位置-----article/51492842.html</item>
+<item>android release版本需要数字签名-----article/51503278.html</item>
+<item>IBM MQQueueManager 直接连接-----article/51537730.html</item>
+<item>IBM MQ 发送 和 接收-----article/51539886.html</item>
+<item>oracle SQL 错误: ORA-02014: 不能从具有 DISTINCT, GROUP BY 等的视图选择 FOR UPDATE-----article/51545610.html</item>
+<item>mybatis报了一个java.sql.SQLSyntaxErrorException: ORA-00911: 无效字符-----article/51545945.html</item>
+<item>eclipse 配置 upstream（配置git仓库地址）-----article/51565551.html</item>
+<item>oracle dbms_output.put_line 输出-----article/51566429.html</item>
+<item>oracle 自动增长更新id-----article/51567512.html</item>
+<item>Android Intent  demo-----article/51570421.html</item>
+<item>java8 lambda 传入方法或者传入匿名函数 尝试理解-----article/51573829.html</item>
+<item>Mybatis直接插入oracle序列号-----article/51578414.html</item>
+<item>随机时间（java代码）-----article/51578630.html</item>
+<item>IBM  MQ 当有数据传输队列的时候通道开启-----article/51580312.html</item>
+<item>JSF1063：警告！将不可序列化属性值设置为 HttpSession（密钥：{0}，值类：{1}）。-----article/51587157.html</item>
+<item>JSF使用注解的时候-----article/51587160.html</item>
+<item>mysql windows service config though mysql info for next new OS or new PC-----article/51588020.html</item>
+<item>Mybatis查询 注意 传入参数-----article/51589797.html</item>
+<item>JSF对应的实体类一定要使用set和get方法-----article/51590749.html</item>
+<item>Cannot serialize session attribute indexView for session-----article/51594026.html</item>
+<item>primefaces 实现保存主题，使主题应用于所有JSF页面-----article/51601060.html</item>
+<item>java web 设置持久session-----article/51602089.html</item>
+<item>启动primefaces和解决mime的问题 在web.xml文件中配置-----article/51615533.html</item>
+<item>itext PDF 分页 并 解决PdfReader not opened with owner password-----article/51636173.html</item>
+<item>javaweb 结合 springmvc 实现的 文件下载（Maybe myself do like this?）-----article/51636186.html</item>
+<item>返回当前实例对象-----article/51661460.html</item>
+<item>constructor while block-----article/51669352.html</item>
+<item>Cpp inner asm block for add operating-----article/51693297.html</item>
+<item>IBM MQ 命令（2）-----article/51701582.html</item>
+<item>solve SetDefaultDllDirectories’ : is not a member of ‘`global namespace” from line 638 in atlcore.h-----article/51712073.html</item>
+<item>windows 语音：根据文字说语音-----article/51712209.html</item>
+<item>获取语音类别进行说话-----article/51712284.html</item>
+<item>Get Java System Properties and Get OS Envs-----article/51742352.html</item>
+<item>获取jar包中资源文件-----article/51743108.html</item>
+<item>服务器——客户端 传递对象-----article/51787913.html</item>
+<item>jni java类中本地方法 对应 C/C++中的函数命名规范-----article/51790649.html</item>
+<item>JNI方法签名规则-----article/51790904.html</item>
+<item>JOGL FirstDemo-----article/51803050.html</item>
+<item>ReturnType operator &quot;&quot; _suffix(Type t){Method&#39;s Body}-----article/51834324.html</item>
+<item>声明模板 和 特化模板-----article/51834337.html</item>
+<item>vs vc 编译选项-----article/51867791.html</item>
+<item>OpenMP First Demo-----article/51875664.html</item>
+<item>编译器 不同的宏-----article/51902171.html</item>
+<item>编译器 内置宏 并且 支持不同c++标准，__cplusplus不同-----article/51902307.html</item>
+<item>c 运算符优先级-----article/52003706.html</item>
+<item>2进制转10进制 模板实现-----article/52004383.html</item>
+<item>spring整合hibernate加sqlite数据库-----article/52051973.html</item>
+<item>冒泡排序优化-----article/52100553.html</item>
+<item>spring 整合 activemq 配置文件-----article/52101070.html</item>
+<item>极限的唯一性:如果数列{Xn}收敛，那么它的极限唯一。-----article/52143517.html</item>
+<item>a^n - b^n 的计算方式-----article/52154034.html</item>
+<item>JavaScript this 关键字 理解要领-----article/52163007.html</item>
+<item>java类对this的探索-----article/52163237.html</item>
+<item>com 引用计数探索-----article/52173511.html</item>
+<item>com组件创建过程图-----article/52173970.html</item>
+<item>java方法重载--参数类型转换-----article/52382012.html</item>
+<item>java--动态单分派，静态多分派-----article/52382327.html</item>
+<item>提取xml中所有节点的text数据-----article/52387094.html</item>
+<item>java解析json--获得json一级的各个属性-----article/52400425.html</item>
+<item>迷宫算法和运算符优先级算法-----article/52419952.html</item>
+<item>KMP算法代码实现和优化（不太能理解具体的过程和该算法思想）-----article/52435489.html</item>
+<item>java多thread 一个runnable-----article/52460569.html</item>
+<item>解析json到对象（java实现，有缺陷：通用性不够好）-----article/52474075.html</item>
+<item>解析json 一级 属性 的正则表到式（修改版）（更加通用）-----article/52474705.html</item>
+<item>json 一级属性解析(二次修改版) 和 json 对象数组解析 （正则表达式，有缺陷）-----article/52476379.html</item>
+<item>mybatis配置文件错误：jdbcType=？  ？类型必须大写-----article/52487538.html</item>
+<item>指向指针数组的指针数组-----article/52535826.html</item>
+<item>关于质数的一些结论和欧拉定理-----article/52573838.html</item>
+<item>My md5 achievement-----article/52702976.html</item>
+<item>My SHA1 Achievement-----article/52710661.html</item>
+<item>windows audio-----article/52786142.html</item>
+<item>tomcat 使用https 和 IOS 请求https URL-----article/52789446.html</item>
+<item>数据库的char和varchar/varchar2-----article/52815436.html</item>
+<item>九宫格算法理解-----article/52903218.html</item>
+<item>java web,a part of APIs&#39; Value-----article/52920631.html</item>
+<item>CImg Library&#39;s Examples Compiling and Linking-----article/52935505.html</item>
+<item>CImg Library&#39;s Examples Compiling and Linking-----article/52936779.html</item>
+<item>邻接矩阵A和A的转置矩阵乘积表示的意义(有向图)-----article/52974451.html</item>
+<item>D3DX11 简单的 编译通过和运行-----article/53018130.html</item>
+<item>谁调用DllMain-----article/53031944.html</item>
+<item>Who calls _tmain or  _tWinMain?-----article/53032029.html</item>
+<item>unicode编码集 和 unicode存储编码 对应规则-----article/53032157.html</item>
+<item>Windows Server 2008 FTP 配置-----article/53066279.html</item>
+<item>云服务器外网不能访问公网IP问题解决方法(successful!)-----article/53114836.html</item>
+<item>js 格式化时间戳-----article/53130271.html</item>
+<item>Spring 全注解配置 bean 和 调用 (1)-----article/53138803.html</item>
+<item>Spring 全注解配置 bean 和 调用 (2) @Profile 自适应不同的模式或环境中-----article/53139116.html</item>
+<item>Spring 全注解配置 bean 和 调用 (3) @Conditonal 条件化的配置bean-----article/53139278.html</item>
+<item>Spring 全注解配置 bean 和 调用 (4) @Primary  自动装配歧义性-----article/53139619.html</item>
+<item>Spring 全注解配置 bean 和 调用 (5) @Qualifier 自动装配歧义性消除-----article/53139846.html</item>
+<item>Spring 全注解配置 bean 和 调用 (6) 自定义注解 自动装配歧义性消除-----article/53140017.html</item>
+<item>Spring 全注解配置 bean 和 调用 (7) properties文件注入-----article/53141840.html</item>
+<item>Spring 全注解配置 bean 和 调用 (8) @Aspect注解不生效解决办法 和 no-static 的警告解决办法-----article/53142516.html</item>
+<item>Spring 全注解配置 bean 和 调用 (9) 5种通知-----article/53142687.html</item>
+<item>SpringMVC 全注解实现 (1) servlet3.0以上的容器支持-----article/53144885.html</item>
+<item>Spring 纯java配置 让spring mvc 生效的 web.xml 配置-----article/53165066.html</item>
+<item>apache uploadfile 文件上传注意事项-----article/53196211.html</item>
+<item>Java for handling Excel (Utility Class 1)-----article/53196612.html</item>
+<item>远程桌面全屏-----article/53199484.html</item>
+<item>tomcat 服务器 乱码解决方案 (1)-----article/53216160.html</item>
+<item>java 正则表达式 特殊构造（非捕获）理解 (1)-----article/53257837.html</item>
+<item>java 正则表达式 特殊构造（非捕获）理解 (2)-----article/53258124.html</item>
+<item>spring mvc ResponseBody 输出乱码解决方案-----article/53307765.html</item>
+<item>有时候脑壳冒包 java Stirng 字符串-----article/53309508.html</item>
+<item>汇编编译成功且运行-----article/53316867.html</item>
+<item>mybatis sql语句条件中变量 对应java类大写成员变量时 首字母可能小写-----article/53324297.html</item>
+<item>form 表单提交submit 和 ajax 混用可能导致后台 错误-----article/53332990.html</item>
+<item>Mybaits 数据库的 CLOB 类型 与 java 类型 String-----article/53350272.html</item>
+<item>ckeditor 上传图片 关键过程和代码-----article/53376039.html</item>
+<item>win32汇编冒泡排序 且 编译通过-----article/53406321.html</item>
+<item>cpu cmpxchg 指令理解 (CAS)-----article/53406432.html</item>

@@ -1,0 +1,61 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        dynamic proxy            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632488" snippet_file_name="blog_20160402_1_5683483"  code_snippet_id="1632488" snippet_file_name="blog_20160402_1_5683483" name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;package com.test.designpattern.proxy.dynamic;<br/>
+<br/>
+import java.lang.reflect.InvocationHandler;<br/>
+import java.lang.reflect.Method;<br/>
+import java.lang.reflect.Proxy;<br/>
+<br/>
+public class ProxyHandler implements InvocationHandler{<br/>
+<br/>
+	private Object obj;<br/>
+	<br/>
+	public Object newProxyInstance(Object obj) {<br/>
+		<br/>
+		this.obj = obj;<br/>
+		<br/>
+		<br/>
+		Class&lt;? extends Object&gt; c = this.obj.getClass();<br/>
+		return Proxy.newProxyInstance(c.getClassLoader(), c.getInterfaces(), this);<br/>
+	}<br/>
+	<br/>
+	@Override<br/>
+	public Object invoke(Object proxy, Method method, Object[] args)<br/>
+			throws Throwable {<br/>
+		System.out.println(&quot;I am Proxyer!&quot;);<br/>
+		<br/>
+		method.invoke(obj, args);//其实args可以为null<br/>
+		System.out.println(&quot;Invoke end!&quot;);<br/>
+		return null;<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632488" snippet_file_name="blog_20160402_2_369294"  name="code" class="java">package com.test.designpattern.proxy.dynamic;<br/>
+<br/>
+import com.test.designpattern.proxy.silence.RealServer;<br/>
+import com.test.designpattern.proxy.silence.Server;<br/>
+<br/>
+public class Main {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Server s = (Server) new ProxyHandler().newProxyInstance(new RealServer());<br/>
+		s.service();<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632488" snippet_file_name="blog_20160402_3_750978"  name="code" class="java">I am Proxyer!<br/>
+Hello Client,I am Server.I will service for you!<br/>
+Invoke end!<br/>
+</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+   <br/>
+</div>

@@ -1,0 +1,254 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        message compiler格式例子            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691352" snippet_file_name="blog_20160521_1_6847875"  name="code" class="cpp">; // EventLogDemoMessages.mc<br/>
+; // ********************************************************<br/>
+<br/>
+; // - Event categories -<br/>
+; // Categories must be numbered consecutively starting at 1.<br/>
+; // ********************************************************<br/>
+<br/>
+MessageId=0x1<br/>
+Severity=Success<br/>
+SymbolicName=INSTALL_CATEGORY<br/>
+Language=English<br/>
+Installation<br/>
+.<br/>
+<br/>
+MessageId=0x2<br/>
+Severity=Success<br/>
+SymbolicName=DATA_CATEGORY<br/>
+Language=English<br/>
+Database Query<br/>
+.<br/>
+<br/>
+MessageId=0x3<br/>
+Severity=Success<br/>
+SymbolicName=UPDATE_CATEGORY<br/>
+Language=English<br/>
+Data Update<br/>
+.<br/>
+<br/>
+MessageId=0x4<br/>
+Severity=Success<br/>
+SymbolicName=NETWORK_CATEGORY<br/>
+Language=English<br/>
+Network Communication<br/>
+.<br/>
+<br/>
+; // - Event messages -<br/>
+; // *********************************<br/>
+<br/>
+MessageId = 1000<br/>
+Severity = Success<br/>
+Facility = Application<br/>
+SymbolicName = MSG_CONNECT_1000<br/>
+Language=English<br/>
+Connection successful.<br/>
+.<br/>
+<br/>
+MessageId = 1001<br/>
+Severity = Error<br/>
+Facility = Application<br/>
+SymbolicName = MSG_CONNECT_FAILED_1001<br/>
+Language=English<br/>
+Could not connect to server %1.<br/>
+.<br/>
+<br/>
+MessageId = 1002<br/>
+Severity = Error<br/>
+Facility = Application<br/>
+SymbolicName = MSG_DB_UPDATE_1002<br/>
+Language=English<br/>
+Database update failed.<br/>
+.<br/>
+<br/>
+MessageId = 1003<br/>
+Severity = Success<br/>
+Facility = Application<br/>
+SymbolicName = APP_UPDATE<br/>
+Language=English<br/>
+Application %%5002 updated.<br/>
+.<br/>
+<br/>
+<br/>
+; // - Event log display name -<br/>
+; // ********************************************************<br/>
+<br/>
+<br/>
+MessageId = 5001<br/>
+Severity = Success<br/>
+Facility = Application<br/>
+SymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID<br/>
+Language=English<br/>
+Professional C# Sample Event Log<br/>
+.<br/>
+<br/>
+<br/>
+<br/>
+; // - Event message parameters -<br/>
+; //   Language independent insertion strings<br/>
+; // ********************************************************<br/>
+<br/>
+<br/>
+MessageId = 5002<br/>
+Severity = Success<br/>
+Facility = Application<br/>
+SymbolicName = EVENT_LOG_SERVICE_NAME_MSGID<br/>
+Language=English<br/>
+hello world <br/>
+.<br/>
+<br/>
+;<br/>
+</pre>.h<br><br/>
+<pre code_snippet_id="1691352" snippet_file_name="blog_20160521_2_9988201"  name="code" class="cpp"> // EventLogDemoMessages.mc<br/>
+ // ********************************************************<br/>
+ // - Event categories -<br/>
+ // Categories must be numbered consecutively starting at 1.<br/>
+ // ********************************************************<br/>
+//<br/>
+//  Values are 32 bit values laid out as follows:<br/>
+//<br/>
+//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1<br/>
+//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0<br/>
+//  +---+-+-+-----------------------+-------------------------------+<br/>
+//  |Sev|C|R|     Facility          |               Code            |<br/>
+//  +---+-+-+-----------------------+-------------------------------+<br/>
+//<br/>
+//  where<br/>
+//<br/>
+//      Sev - is the severity code<br/>
+//<br/>
+//          00 - Success<br/>
+//          01 - Informational<br/>
+//          10 - Warning<br/>
+//          11 - Error<br/>
+//<br/>
+//      C - is the Customer code flag<br/>
+//<br/>
+//      R - is a reserved bit<br/>
+//<br/>
+//      Facility - is the facility code<br/>
+//<br/>
+//      Code - is the facility&#39;s status code<br/>
+//<br/>
+//<br/>
+// Define the facility codes<br/>
+//<br/>
+<br/>
+<br/>
+//<br/>
+// Define the severity codes<br/>
+//<br/>
+<br/>
+<br/>
+//<br/>
+// MessageId: INSTALL_CATEGORY<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Installation<br/>
+//<br/>
+#define INSTALL_CATEGORY                 0x00000001L<br/>
+<br/>
+//<br/>
+// MessageId: DATA_CATEGORY<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Database Query<br/>
+//<br/>
+#define DATA_CATEGORY                    0x00000002L<br/>
+<br/>
+//<br/>
+// MessageId: UPDATE_CATEGORY<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Data Update<br/>
+//<br/>
+#define UPDATE_CATEGORY                  0x00000003L<br/>
+<br/>
+//<br/>
+// MessageId: NETWORK_CATEGORY<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Network Communication<br/>
+//<br/>
+#define NETWORK_CATEGORY                 0x00000004L<br/>
+<br/>
+ // - Event messages -<br/>
+ // *********************************<br/>
+//<br/>
+// MessageId: MSG_CONNECT_1000<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Connection successful.<br/>
+//<br/>
+#define MSG_CONNECT_1000                 0x000003E8L<br/>
+<br/>
+//<br/>
+// MessageId: MSG_CONNECT_FAILED_1001<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Could not connect to server %1.<br/>
+//<br/>
+#define MSG_CONNECT_FAILED_1001          0xC00003E9L<br/>
+<br/>
+//<br/>
+// MessageId: MSG_DB_UPDATE_1002<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Database update failed.<br/>
+//<br/>
+#define MSG_DB_UPDATE_1002               0xC00003EAL<br/>
+<br/>
+//<br/>
+// MessageId: APP_UPDATE<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Application %%5002 updated.<br/>
+//<br/>
+#define APP_UPDATE                       0x000003EBL<br/>
+<br/>
+ // - Event log display name -<br/>
+ // ********************************************************<br/>
+//<br/>
+// MessageId: EVENT_LOG_DISPLAY_NAME_MSGID<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// Professional C# Sample Event Log<br/>
+//<br/>
+#define EVENT_LOG_DISPLAY_NAME_MSGID     0x00001389L<br/>
+<br/>
+ // - Event message parameters -<br/>
+ //   Language independent insertion strings<br/>
+ // ********************************************************<br/>
+//<br/>
+// MessageId: EVENT_LOG_SERVICE_NAME_MSGID<br/>
+//<br/>
+// MessageText:<br/>
+//<br/>
+// hello world <br/>
+//<br/>
+#define EVENT_LOG_SERVICE_NAME_MSGID     0x0000138AL<br/>
+<br/>
+</pre><br/>
+<p>.rc</p><br/>
+<p><pre code_snippet_id="1691352" snippet_file_name="blog_20160521_3_5702823"  name="code" class="cpp">LANGUAGE 0x9,0x1<br/>
+1 11 &quot;MSG00001.bin&quot;<br/>
+</pre><br><br/>
+.bin</p><br/>
+<p><img src="http://img.blog.csdn.net/20160521113514661?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,42 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        理解this指针            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1650329" snippet_file_name="blog_20160417_1_4455783"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+class Base{<br/>
+	public:<br/>
+	virtual void f(){<br/>
+		cout &lt;&lt; &quot;Base::f&quot; &lt;&lt; endl;<br/>
+	}<br/>
+	virtual void g(){<br/>
+		this-&gt;f();//this代表当前对象，在子类中代表子类对象<br/>
+	}<br/>
+};<br/>
+class Derived:public Base{//默认为private继承<br/>
+	public:<br/>
+	void f(){<br/>
+		cout &lt;&lt; &quot;Derived::f&quot; &lt;&lt; endl;<br/>
+	}<br/>
+};<br/>
+int main(){<br/>
+	Base b;<br/>
+	Derived d;<br/>
+	b.g();<br/>
+	d.g();<br/>
+	Base *p = new Derived;<br/>
+	p-&gt;g();<br/>
+	delete p;<br/>
+	p = NULL;<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1650329" snippet_file_name="blog_20160417_2_8424734"  name="code" class="cpp">D:\programming\C++&gt;g++ TestInheritThis.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+Base::f<br/>
+Derived::f<br/>
+Derived::f</pre><br><br/>
+   <br/>
+</div>

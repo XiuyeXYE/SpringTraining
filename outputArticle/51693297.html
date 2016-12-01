@@ -1,0 +1,31 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Cpp inner asm block for add operating            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1719143" snippet_file_name="blog_20160616_1_1723802"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+<br/>
+int main(){<br/>
+	int x=0,y=11;<br/>
+	__asm{<br/>
+		mov eax,y<br/>
+		add eax,4<br/>
+		mov ebx,3<br/>
+		imul ebx<br/>
+		mov x,eax<br/>
+	<br/>
+	}<br/>
+	cout &lt;&lt; (11+4)*3 &lt;&lt; endl;<br/>
+	cout &lt;&lt; y &lt;&lt; endl;<br/>
+	cout &lt;&lt; x &lt;&lt; endl;<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1719143" snippet_file_name="blog_20160616_2_2312446"  name="code" class="cpp">D:\programming\C++&gt;addasm<br/>
+45<br/>
+11<br/>
+45</pre><br><br/>
+   <br/>
+</div>

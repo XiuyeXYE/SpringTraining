@@ -1,0 +1,74 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javaweb 结合 springmvc 实现的 文件下载（Maybe myself do like this?）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1713552" snippet_file_name="blog_20160611_1_6169821"  name="code" class="java">@RequestMapping(&quot;/downloadBook.do&quot;)<br/>
+	@ResponseBody<br/>
+	public void downloadBook(String bookid, HttpServletResponse response,<br/>
+			HttpServletRequest request) {<br/>
+<br/>
+		Book book = this.bookService.getBookByBookid(bookid);<br/>
+		if (book == null) {<br/>
+			return;<br/>
+		}<br/>
+		String bookpath = book.getPath();<br/>
+		int beginIndex = bookpath.lastIndexOf(File.separator);<br/>
+		int endIndex = bookpath.lastIndexOf(&quot;.&quot;);<br/>
+<br/>
+		String filename = bookpath.substring(beginIndex + 1, endIndex);<br/>
+		// System.out.println(filename);<br/>
+		String suffix = bookpath.substring(endIndex);<br/>
+		if (suffix != null &amp;&amp; suffix.length() &gt;= 2) {<br/>
+			suffix = suffix.toLowerCase();<br/>
+			if (suffix.contains(&quot;pdf&quot;)) {<br/>
+				filename += &quot;.pdf&quot;;<br/>
+			} else if (suffix.contains(&quot;txt&quot;)) {<br/>
+				filename += &quot;.txt&quot;;<br/>
+			} else if (suffix.contains(&quot;html&quot;))<br/>
+				filename += &quot;.html&quot;;<br/>
+		}<br/>
+<br/>
+		try {<br/>
+			filename = URLEncoder.encode(filename, &quot;UTF-8&quot;);<br/>
+		} catch (UnsupportedEncodingException e1) {<br/>
+			e1.printStackTrace();<br/>
+		}<br/>
+		log.info(&quot;文件名:&quot; + filename);<br/>
+		response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment;filename=&quot;<br/>
+				+ filename);<br/>
+<br/>
+		BufferedInputStream bis = null;<br/>
+		FileInputStream fis = null;<br/>
+		BufferedOutputStream bos = null;<br/>
+<br/>
+		try {<br/>
+			fis = new FileInputStream(bookpath);<br/>
+			bis = new BufferedInputStream(fis);<br/>
+<br/>
+			int length = bis.available();<br/>
+			response.setContentLength(length);<br/>
+<br/>
+			bos = new BufferedOutputStream(response.getOutputStream());<br/>
+			byte[] data = new byte[1024];<br/>
+			while (bis.read(data) != -1) {<br/>
+				bos.write(data);<br/>
+				bos.flush();<br/>
+			}<br/>
+<br/>
+		} catch (FileNotFoundException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			e.printStackTrace();<br/>
+		} finally {<br/>
+			try {<br/>
+				fis.close();<br/>
+				bis.close();<br/>
+				// 不要关闭服务器输出，否则可能出错<br/>
+<br/>
+			} catch (IOException e) {<br/>
+			}<br/>
+		}<br/>
+<br/>
+	}</pre><br><br/>
+   <br/>
+</div>

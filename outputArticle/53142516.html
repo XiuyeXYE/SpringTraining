@@ -1,0 +1,228 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring 全注解配置 bean 和 调用 (8) @Aspect注解不生效解决办法 和 no-static 的警告解决办法            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1981359" snippet_file_name="blog_20161112_1_8554510"  code_snippet_id="1981359" snippet_file_name="blog_20161112_1_8554510" name="code" class="java">package com.xiuye.config.aspect;<br/>
+<br/>
+import org.aspectj.lang.annotation.Aspect;<br/>
+import org.aspectj.lang.annotation.Before;<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.stereotype.Component;<br/>
+<br/>
+@Aspect<br/>
+//@Configuration<br/>
+public class AspectConfig {<br/>
+<br/>
+	@Before(&quot;execution(** com.xiuye.component.*.description())&quot;)<br/>
+	public void beforeDescription(){<br/>
+		System.out.println(&quot;Before method:description!&quot;);<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981359" snippet_file_name="blog_20161112_2_8935411"  code_snippet_id="1981359" snippet_file_name="blog_20161112_2_8935411" name="code" class="java">package com.xiuye.config;<br/>
+<br/>
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;<br/>
+import org.springframework.context.annotation.Bean;<br/>
+import org.springframework.context.annotation.ComponentScan;<br/>
+import org.springframework.context.annotation.Conditional;<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.context.annotation.EnableAspectJAutoProxy;<br/>
+import org.springframework.context.annotation.Import;<br/>
+import org.springframework.context.annotation.Profile;<br/>
+import org.springframework.context.annotation.PropertySource;<br/>
+import org.springframework.context.annotation.Scope;<br/>
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;<br/>
+<br/>
+import com.xiuye.bean.Car;<br/>
+import com.xiuye.bean.Student;<br/>
+import com.xiuye.bean.WhiteCar;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+import com.xiuye.config.aspect.AspectConfig;<br/>
+import com.xiuye.config.condition.StudentCondition;<br/>
+<br/>
+@Configuration<br/>
+@ComponentScan({<br/>
+		&quot;com.xiuye.component&quot;/* , &quot;com.xiuye.config.aspect&quot; *//*<br/>
+																 * @Aspect可以生效,<br/>
+																 * 但是必须让spring能识别<br/>
+																 * ,如@Component,<br/>
+																 * @<br/>
+																 * Configuration等<br/>
+																 */ })<br/>
+@EnableAspectJAutoProxy<br/>
+@Profile(&quot;dev&quot;)<br/>
+@PropertySource(&quot;test.properties&quot;)<br/>
+@Import({AspectConfig.class})/*@Aspect可以生效,相当于Configuration类作用,都是配置类*/<br/>
+public class BeanConfiguration1 {<br/>
+<br/>
+	/**<br/>
+	 * 启用el表达式 (&quot;${express}&quot;)解析功能,否则原样子语句注入 必须为static否则警告:<br/>
+	 *<br/>
+	 *<br/>
+	 * 警告: @Bean method BeanConfiguration1.pspc is non-static and returns an<br/>
+	 * object assignable to Spring's BeanFactoryPostProcessor interface. This<br/>
+	 * will result in a failure to process annotations such<br/>
+	 * as @Autowired, @Resource and @PostConstruct within the method's<br/>
+	 * declaring @Configuration class. Add the 'static' modifier to this method<br/>
+	 * to avoid these container lifecycle issues; see @Bean javadoc for complete<br/>
+	 * details.<br/>
+	 *<br/>
+	 * @return<br/>
+	 */<br/>
+<br/>
+	@Bean<br/>
+	public static PropertySourcesPlaceholderConfigurer pspc() {<br/>
+		return new PropertySourcesPlaceholderConfigurer();<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	@Conditional(StudentCondition.class)<br/>
+	public Student student() {<br/>
+		return new Student(&quot;xiuye&quot;, &quot;man&quot;, 18, 99);<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * @param name<br/>
+	 * @param sex<br/>
+	 * @param age<br/>
+	 * @param level<br/>
+	 * @return<br/>
+	 */<br/>
+	@Bean<br/>
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // 必须原生,否则no longer has<br/>
+													// any effect<br/>
+	public Student student(String name, String sex, int age, int level) {<br/>
+		return new Student(name, sex, age, level);<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public ComponentForStudent2 cfs2(Student s) {<br/>
+		ComponentForStudent2 cfs2 = new ComponentForStudent2();<br/>
+		cfs2.setStudent(s);<br/>
+		return cfs2;<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public Car car() {<br/>
+		return new Car();<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public WhiteCar wCar() {<br/>
+		return new WhiteCar();<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981359" snippet_file_name="blog_20161112_3_1334983"  code_snippet_id="1981359" snippet_file_name="blog_20161112_3_1334983" name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.junit.BeforeClass;<br/>
+import org.junit.Test;<br/>
+import org.junit.runner.RunWith;<br/>
+import org.springframework.beans.factory.annotation.Value;<br/>
+import org.springframework.core.env.Environment;<br/>
+import org.springframework.test.context.ActiveProfiles;<br/>
+import org.springframework.test.context.ContextConfiguration;<br/>
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;<br/>
+<br/>
+import com.xiuye.bean.Car;<br/>
+import com.xiuye.bean.WhiteCar;<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+@RunWith(SpringJUnit4ClassRunner.class)<br/>
+@ContextConfiguration(classes = BeanConfiguration1.class)<br/>
+@ActiveProfiles(&quot;dev&quot;)<br/>
+<br/>
+public class TestMain {<br/>
+<br/>
+	@Resource<br/>
+	private ComponentForStudent cfs;<br/>
+	@Resource<br/>
+	private ComponentForStudent2 cfs2;<br/>
+<br/>
+	@Resource<br/>
+	private Car car;<br/>
+<br/>
+	@Resource<br/>
+	private Environment env;<br/>
+<br/>
+	@Resource<br/>
+	private WhiteCar wcar;<br/>
+<br/>
+	@BeforeClass<br/>
+	public static void envConfig() {<br/>
+		System.setProperty(&quot;test&quot;, &quot;true&quot;);<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void testCfs() {<br/>
+		cfs.studentInfo();<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void testCfs2() {<br/>
+		cfs2.studentInfo();<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void testCar() {<br/>
+		this.car.configInfo();<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void testWhiteCar() {<br/>
+		this.wcar.configInfo();<br/>
+	}<br/>
+	//必须用&quot;$&quot; 而不是&quot;#&quot;<br/>
+	@Value(&quot;${key}&quot;)<br/>
+	private String value;<br/>
+	@Value(&quot;${programminglang}&quot;)<br/>
+	private String langs;<br/>
+	@Value(&quot;#{systemProperties['key']}&quot;)//注意括号<br/>
+	private String value2;<br/>
+	@Value(&quot;#{systemProperties['programminglang']}&quot;)//注意括号<br/>
+	private String langs2;<br/>
+	@Value(&quot;#{T(System).currentTimeMillis()}&quot;)<br/>
+	private long time;<br/>
+	@Value(&quot;#{T(Math).random()}&quot;)<br/>
+	private double d ;<br/>
+<br/>
+	@Test<br/>
+	public void testPropertiesFile() {<br/>
+			System.out.println(env.getProperty(&quot;key&quot;));<br/>
+			System.out.println(env.getProperty(&quot;programminglang&quot;));<br/>
+			System.out.println(value);<br/>
+			System.out.println(langs);<br/>
+			System.out.println(langs2);<br/>
+			System.out.println(value2);<br/>
+			System.out.println(time);<br/>
+			System.out.println(d);<br/>
+	}<br/>
+<br/>
+<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981359" snippet_file_name="blog_20161112_4_9033688"  code_snippet_id="1981359" snippet_file_name="blog_20161112_4_9033688" name="code" class="java">十一月 12, 2016 7:38:18 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getDefaultTestExecutionListenerClassNames<br/>
+信息: Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]<br/>
+十一月 12, 2016 7:38:18 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper instantiateListeners<br/>
+信息: Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]<br/>
+十一月 12, 2016 7:38:18 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getTestExecutionListeners<br/>
+信息: Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@12cbfa, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@cf57e3, org.springframework.test.context.support.DirtiesContextTestExecutionListener@6e6d5e, org.springframework.test.context.transaction.TransactionalTestExecutionListener@16532d6, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@196751b]<br/>
+十一月 12, 2016 7:38:19 下午 org.springframework.context.support.GenericApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.support.GenericApplicationContext@17d0578: startup date [Sat Nov 12 19:38:18 CST 2016]; root of context hierarchy<br/>
+Active profile := dev<br/>
+test := true<br/>
+Before method:description!<br/>
+I'm car's steer!<br/>
+Before method:description!<br/>
+I'm car's wheels!<br/>
+Before method:description!<br/>
+I'm car's engine!<br/>
+</pre><br><br/>
+   <br/>
+</div>

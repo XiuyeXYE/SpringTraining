@@ -1,0 +1,87 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        一个对象null，gc后依然可以绝境求生            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.unkonwn;<br/>
+<br/>
+public class FinalizeEscapeGC {<br/>
+<br/>
+	public static FinalizeEscapeGC SAVE_HOOK = null;<br/>
+	<br/>
+	public void isAlive(){<br/>
+		System.out.println(&quot;yes,I am still alive :&quot;);<br/>
+	}<br/>
+	<br/>
+	<br/>
+	<br/>
+	@Override<br/>
+	protected void finalize() throws Throwable {<br/>
+		super.finalize();<br/>
+		System.out.println(&quot;finalize method executed!&quot;);<br/>
+		FinalizeEscapeGC.SAVE_HOOK = this;<br/>
+		<br/>
+	}<br/>
+<br/>
+<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		SAVE_HOOK = new FinalizeEscapeGC();<br/>
+		<br/>
+		//first save itself successfully<br/>
+		SAVE_HOOK = null;<br/>
+		System.gc();<br/>
+		<br/>
+		//because of Finalizer&#39;s priority is lower,sleep 0.5s to wait it.<br/>
+		try {<br/>
+			Thread.sleep(500);<br/>
+		} catch (InterruptedException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		if(SAVE_HOOK != null)<br/>
+		{<br/>
+			SAVE_HOOK.isAlive();<br/>
+		}<br/>
+		else<br/>
+		{<br/>
+			System.out.println(&quot;no,I am dead...&quot;);<br/>
+		}<br/>
+		<br/>
+		<br/>
+		//second save itself<br/>
+		SAVE_HOOK = null;<br/>
+		System.gc();<br/>
+		<br/>
+		//because of Finalizer&#39;s priority is lower,sleep 0.5s to wait it.<br/>
+		try {<br/>
+			Thread.sleep(500);<br/>
+		} catch (InterruptedException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		if(SAVE_HOOK != null)<br/>
+		{<br/>
+			SAVE_HOOK.isAlive();<br/>
+		}<br/>
+		else<br/>
+		{<br/>
+			System.out.println(&quot;no,I am dead...&quot;);<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p>结果：</p><br/>
+<p>finalize method executed!<br><br/>
+yes,I am still alive :<br><br/>
+no,I am dead...<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

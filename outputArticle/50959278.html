@@ -1,0 +1,27 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++11 nullptr test            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620213" snippet_file_name="blog_20160322_1_3187344"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+<br/>
+using namespace std;<br/>
+int main(){<br/>
+//	cout &lt;&lt; nullptr &lt;&lt; endl;//error operand types不支持类型<br/>
+	//int a = nullptr;<br/>
+	int *p = nullptr;<br/>
+	//bool b = nullptr;//error <br/>
+	nullptr_t null = nullptr;<br/>
+	//cout &lt;&lt; b &lt;&lt; endl;<br/>
+	/*nullptrTest.cpp:11:7: error: ambiguous overload for &#39;operator&lt;&lt;&#39; (operand types<br/>
+are &#39;std::ostream {aka std::basic_ostream&lt;char&gt;}&#39; and &#39;nullptr_t {aka std::nullp<br/>
+tr_t}&#39;)*/<br/>
+	//cout &lt;&lt; null &lt;&lt; endl;<br/>
+<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1620213" snippet_file_name="blog_20160322_2_2598700"  name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++11 nullptrTest.cpp<br/>
+<br/>
+D:\programming\C++&gt;a</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

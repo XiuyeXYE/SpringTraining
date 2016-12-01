@@ -1,0 +1,68 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        dataScroller(primefaces)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE html&gt;<br/>
+<br/>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;<br/>
+	xmlns:ui=&quot;http://xmlns.jcp.org/jsf/facelets&quot;<br/>
+	xmlns:h=&quot;http://xmlns.jcp.org/jsf/html&quot;<br/>
+	xmlns:f=&quot;http://xmlns.jcp.org/jsf/core&quot;<br/>
+	xmlns:c=&quot;http://xmlns.jcp.org/jsp/jstl/core&quot;<br/>
+	xmlns:fn=&quot;http://xmlns.jcp.org/jsp/jstl/functions&quot;<br/>
+	xmlns:p=&quot;http://primefaces.org/ui&quot; lang=&quot;en&quot;&gt;<br/>
+&lt;h:head&gt;<br/>
+	&lt;title&gt;JSF 2.2 Page&lt;/title&gt;<br/>
+	&lt;meta name=&quot;keywords&quot; content=&quot;enter,your,keywords,here&quot; /&gt;<br/>
+	&lt;meta name=&quot;description&quot; content=&quot;A short description of this page.&quot; /&gt;<br/>
+	&lt;meta name=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;<br/>
+<br/>
+	&lt;!--&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;--&gt;<br/>
+&lt;/h:head&gt;<br/>
+&lt;h:body&gt;<br/>
+<br/>
+	&lt;h:form&gt;<br/>
+<br/>
+		&lt;p:dataScroller value=&quot;#{dataScrollerView.cars}&quot; var=&quot;car&quot;<br/>
+			chunkSize=&quot;10&quot;&gt;<br/>
+<br/>
+			&lt;f:facet name=&quot;header&quot;&gt;<br/>
+					<br/>
+					Scroll Down to Load More Cars<br/>
+				<br/>
+				&lt;/f:facet&gt;<br/>
+<br/>
+			&lt;h:panelGrid columns=&quot;2&quot; style=&quot;width:100%&quot;<br/>
+				columnClasses=&quot;logo,detail&quot;&gt;<br/>
+<br/>
+				&lt;p:graphicImage name=&quot;picture/little_animal_07.png&quot;&gt;&lt;/p:graphicImage&gt;<br/>
+				&lt;p:outputPanel&gt;<br/>
+<br/>
+					&lt;h:panelGrid columns=&quot;2&quot; cellpadding=&quot;5&quot;&gt;<br/>
+<br/>
+						&lt;h:outputText value=&quot;Id:&quot; /&gt;<br/>
+						&lt;h:outputText value=&quot;#{car.id}&quot; style=&quot;font-weight: bold&quot; /&gt;<br/>
+<br/>
+						&lt;h:outputText value=&quot;Year:&quot; /&gt;<br/>
+						&lt;h:outputText value=&quot;#{car.year}&quot; style=&quot;font-weight: bold&quot; /&gt;<br/>
+<br/>
+						&lt;h:outputText value=&quot;Color:&quot; /&gt;<br/>
+						&lt;h:outputText value=&quot;#{car.color}&quot; style=&quot;font-weight: bold&quot; /&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+<br/>
+				&lt;/p:outputPanel&gt;<br/>
+<br/>
+<br/>
+			&lt;/h:panelGrid&gt;<br/>
+<br/>
+<br/>
+		&lt;/p:dataScroller&gt;<br/>
+<br/>
+	&lt;/h:form&gt;<br/>
+<br/>
+&lt;/h:body&gt;<br/>
+&lt;/html&gt;<br/>
+</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,36 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        oracle dbms_output.put_line 输出            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1705273" snippet_file_name="blog_20160602_1_6846290"  name="code" class="sql">set serveroutput on;<br/>
+<br/>
+ declare<br/>
+        --类型定义<br/>
+        cursor cc is select empno,ename,job,sal<br/>
+         from emp;<br/>
+        --定义一个游标变量<br/>
+        ccrec cc%rowtype;<br/>
+      begin<br/>
+         --for循环<br/>
+         for ccrec in cc loop<br/>
+            dbms_output.put_line(ccrec.empno||&#39;-&#39;||ccrec.ename||&#39;-&#39;||ccrec.job||&#39;-&#39;||ccrec.sal);<br/>
+         end loop;       <br/>
+      end;</pre><br><br/>
+<pre code_snippet_id="1705273" snippet_file_name="blog_20160602_2_8940624"  name="code" class="sql">anonymous block completed<br/>
+7369-SMITH-CLERK-800<br/>
+7499-ALLEN-SALESMAN-1600<br/>
+7521-WARD-SALESMAN-1250<br/>
+7566-JONES-MANAGER-2975<br/>
+7654-MARTIN-SALESMAN-1250<br/>
+7698-BLAKE-MANAGER-2850<br/>
+7782-CLARK-MANAGER-2450<br/>
+7788-SCOTT-ANALYST-3000<br/>
+7839-KING-PRESIDENT-5000<br/>
+7844-TURNER-SALESMAN-1500<br/>
+7876-ADAMS-CLERK-1100<br/>
+7900-JAMES-CLERK-950<br/>
+7902-FORD-ANALYST-3000<br/>
+7934-MILLER-CLERK-1300<br/>
+</pre><br><br/>
+   <br/>
+</div>

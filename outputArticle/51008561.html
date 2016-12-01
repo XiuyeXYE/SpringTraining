@@ -1,0 +1,176 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++文件读写 实现文件每行数据齐长输出            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1628178" snippet_file_name="blog_20160329_1_3660287"  code_snippet_id="1628178" snippet_file_name="blog_20160329_1_3660287" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;fstream&gt;<br/>
+#include&lt;cstring&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(int argc ,char *argv[]){<br/>
+	cout &lt;&lt; &quot;input parameters numbers :&quot; &lt;&lt;  argc &lt;&lt; endl;<br/>
+	if(argv &gt; 0){<br/>
+		/*for(auto s : argv){传入参数数组不能使用foreach<br/>
+			cout &lt;&lt; &quot;Input parameter:&quot; &lt;&lt; s &lt;&lt; endl;<br/>
+		}<br/>
+		*/<br/>
+		for(int i = 0;i &lt; argc ;i++){<br/>
+			cout &lt;&lt; &quot;Input parameter: &quot; &lt;&lt; argv[i] &lt;&lt; endl;<br/>
+		}<br/>
+		if(argc &gt;= 2 &amp;&amp; (strcmp(argv[1],&quot;/help&quot;) == 0 || strcmp(argv[1],&quot;--help&quot;) == 0 || strcmp(argv[1],&quot;/?&quot;) == 0)){<br/>
+			cout &lt;&lt; &quot;\t--filename  \t \&#39;filename\&#39;\t:-f\tabbr&quot; &lt;&lt; endl;<br/>
+			cout &lt;&lt; &quot;\t--filename \t \&#39;filepath\&#39;\t:-f\tabbr&quot; &lt;&lt; endl;<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	if(argc &gt;=2 &amp;&amp; (strcmp(argv[1],&quot;--filename&quot;) == 0 || strcmp(argv[1],&quot;-f&quot;) == 0)){<br/>
+		if(argc &gt;= 3){<br/>
+			int maxLength = 0;<br/>
+			char *filename = argv[2];<br/>
+			cout &lt;&lt; &quot;filename:\t&quot; &lt;&lt; filename &lt;&lt; endl;<br/>
+			ifstream in(filename);<br/>
+			if(!in.is_open()){<br/>
+				cout &lt;&lt; &quot;Not found file!Please input correct filename!&quot; &lt;&lt; endl;<br/>
+			       return 0;	<br/>
+			}<br/>
+			char str[100];<br/>
+			int length;<br/>
+			while(!in.eof()){<br/>
+				in &gt;&gt; str;//会忽略回车的<br/>
+				length = strlen(str);<br/>
+				if(maxLength &lt; length)	<br/>
+					maxLength = length;<br/>
+				cout &lt;&lt; str &lt;&lt; &quot;\tsize:&quot; &lt;&lt; length &lt;&lt; endl;//所以加个endl<br/>
+			}<br/>
+			cout &lt;&lt; &quot;maxLength :&quot; &lt;&lt; maxLength &lt;&lt; endl;<br/>
+                        in.clear();//最好还是加上吧<br/>
+                      &#160;in.seekg(0,ios::beg);//重回首cursor<br/>
+			ofstream out(strcat(filename,&quot;__output.txt&quot;));//因为filename长度未知，有隐藏风险！<br/>
+			while(!in.eof()){<br/>
+				in &gt;&gt; str;<br/>
+				length = strlen(str);<br/>
+				//int rest = maxLength + 1 - length;<br/>
+				for(int i = length;i &lt; maxLength + 1; i++){<br/>
+					str[i] = &#39; &#39;;<br/>
+				}<br/>
+				str[maxLength+1] = &#39;\0&#39;;<br/>
+				cout &lt;&lt; str &lt;&lt; &quot;|size: &quot;  &lt;&lt; strlen(str) &lt;&lt; endl;<br/>
+				out &lt;&lt; str &lt;&lt; endl;<br/>
+			}<br/>
+			in.close();<br/>
+			out.close();<br/>
+		}<br/>
+	}<br/>
+<br/>
+<br/>
+	return 0;<br/>
+}<br/>
+<br/>
+<br/>
+</pre><pre code_snippet_id="1628178" snippet_file_name="blog_20160329_2_9833038"  code_snippet_id="1628178" snippet_file_name="blog_20160329_2_9833038" name="code" class="cpp">C:\Users\jackz\Desktop&gt;g++ outputColumnSpaceTxt.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop&gt;a -f columns.txt<br/>
+input parameters numbers :3<br/>
+Input parameter: a<br/>
+Input parameter: -f<br/>
+Input parameter: columns.txt<br/>
+filename:       columns.txt<br/>
+userid  size:6<br/>
+u_version       size:9<br/>
+loginid size:7<br/>
+lastname        size:8<br/>
+firstname       size:9<br/>
+mi      size:2<br/>
+title   size:5<br/>
+phone   size:5<br/>
+deptid  size:6<br/>
+managerid       size:9<br/>
+hiredate        size:8<br/>
+termdate        size:8<br/>
+levelid size:7<br/>
+def_loc size:7<br/>
+term_id size:7<br/>
+last_login      size:10<br/>
+classid size:7<br/>
+struid1 size:7<br/>
+struid2 size:7<br/>
+struid3 size:7<br/>
+struid4 size:7<br/>
+struid5 size:7<br/>
+struid6 size:7<br/>
+struid7 size:7<br/>
+struid8 size:7<br/>
+struid9 size:7<br/>
+struid10        size:8<br/>
+struid11        size:8<br/>
+struid12        size:8<br/>
+struid13        size:8<br/>
+struid14        size:8<br/>
+struid15        size:8<br/>
+company_no      size:10<br/>
+tc_exempt       size:9<br/>
+cost_center     size:11<br/>
+user_loc        size:8<br/>
+payrollname     size:11<br/>
+available_status        size:16<br/>
+absence_start_date      size:18<br/>
+first_day_back_date     size:19<br/>
+blackout        size:8<br/>
+nickname        size:8<br/>
+job_code        size:8<br/>
+global_id       size:9<br/>
+support_company size:15<br/>
+fusion_id       size:9<br/>
+你好    size:4<br/>
+maxLength :19<br/>
+userid              |size: 20<br/>
+u_version           |size: 20<br/>
+loginid             |size: 20<br/>
+lastname            |size: 20<br/>
+firstname           |size: 20<br/>
+mi                  |size: 20<br/>
+title               |size: 20<br/>
+phone               |size: 20<br/>
+deptid              |size: 20<br/>
+managerid           |size: 20<br/>
+hiredate            |size: 20<br/>
+termdate            |size: 20<br/>
+levelid             |size: 20<br/>
+def_loc             |size: 20<br/>
+term_id             |size: 20<br/>
+last_login          |size: 20<br/>
+classid             |size: 20<br/>
+struid1             |size: 20<br/>
+struid2             |size: 20<br/>
+struid3             |size: 20<br/>
+struid4             |size: 20<br/>
+struid5             |size: 20<br/>
+struid6             |size: 20<br/>
+struid7             |size: 20<br/>
+struid8             |size: 20<br/>
+struid9             |size: 20<br/>
+struid10            |size: 20<br/>
+struid11            |size: 20<br/>
+struid12            |size: 20<br/>
+struid13            |size: 20<br/>
+struid14            |size: 20<br/>
+struid15            |size: 20<br/>
+company_no          |size: 20<br/>
+tc_exempt           |size: 20<br/>
+cost_center         |size: 20<br/>
+user_loc            |size: 20<br/>
+payrollname         |size: 20<br/>
+available_status    |size: 20<br/>
+absence_start_date  |size: 20<br/>
+first_day_back_date |size: 20<br/>
+blackout            |size: 20<br/>
+nickname            |size: 20<br/>
+job_code            |size: 20<br/>
+global_id           |size: 20<br/>
+support_company     |size: 20<br/>
+fusion_id           |size: 20<br/>
+你好                |size: 20<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

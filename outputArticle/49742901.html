@@ -1,0 +1,49 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        windows api 关机代码            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="cpp">#include &lt;windows.h&gt;<br/>
+<br/>
+#pragma comment(lib, &quot;user32.lib&quot;)<br/>
+#pragma comment(lib, &quot;advapi32.lib&quot;)<br/>
+<br/>
+BOOL MySystemShutdown()<br/>
+{<br/>
+   HANDLE hToken; <br/>
+   TOKEN_PRIVILEGES tkp; <br/>
+ <br/>
+   // Get a token for this process. <br/>
+ <br/>
+   if (!OpenProcessToken(GetCurrentProcess(), <br/>
+        TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &amp;hToken)) <br/>
+      return( FALSE ); <br/>
+ <br/>
+   // Get the LUID for the shutdown privilege. <br/>
+ <br/>
+   LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, <br/>
+        &amp;tkp.Privileges[0].Luid); <br/>
+ <br/>
+   tkp.PrivilegeCount = 1;  // one privilege to set    <br/>
+   tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; <br/>
+ <br/>
+   // Get the shutdown privilege for this process. <br/>
+ <br/>
+   AdjustTokenPrivileges(hToken, FALSE, &amp;tkp, 0, <br/>
+        (PTOKEN_PRIVILEGES)NULL, 0); <br/>
+ <br/>
+   if (GetLastError() != ERROR_SUCCESS) <br/>
+      return FALSE; <br/>
+ <br/>
+   // Shut down the system and force all applications to close. <br/>
+ <br/>
+   if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, <br/>
+               SHTDN_REASON_MAJOR_OPERATINGSYSTEM |<br/>
+               SHTDN_REASON_MINOR_UPGRADE |<br/>
+               SHTDN_REASON_FLAG_PLANNED)) <br/>
+      return FALSE; <br/>
+<br/>
+   //shutdown was successful<br/>
+   return TRUE;<br/>
+}</pre><br><br/>
+   <br/>
+</div>

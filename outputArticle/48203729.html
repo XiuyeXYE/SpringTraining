@@ -1,0 +1,138 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++重载逗号，括号，类型转换，实现以奇怪的方式给变量赋值            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><br><br/>
+</p><br/>
+<p></p><br/>
+<pre name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;boost/foreach.hpp&gt;<br/>
+#include&lt;boost/assign.hpp&gt;<br/>
+#include&lt;vector&gt;<br/>
+#include&lt;string&gt;<br/>
+<br/>
+using namespace std;<br/>
+using namespace boost::assign;<br/>
+<br/>
+int main()<br/>
+{<br/>
+<br/>
+//用括号赋值？<br/>
+&#160;vector&lt;int&gt; v = (list_of(1),2,3,4,5);<br/>
+  BOOST_FOREACH(int x,v)<br/>
+  {<br/>
+    cout &lt;&lt; x &lt;&lt; endl;<br/>
+<br/>
+  }<br/>
+  cout &lt;&lt; endl;<br/>
+<br/>
+  string str(&quot;boost foreach&quot;);<br/>
+  BOOST_FOREACH(char &amp;c, str)<br/>
+  {<br/>
+    cout &lt;&lt; c &lt;&lt; &quot;-&quot;;<br/>
+  }<br/>
+<br/>
+  int array[5] = {1,2,3,4,5};<br/>
+  for(int &amp;x : array)<br/>
+  {<br/>
+    x *= 2;<br/>
+    cout &lt;&lt; x &lt;&lt;endl;<br/>
+  }<br/>
+<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<pre name="code" class="java">#include&lt;iostream&gt;<br/>
+#include&lt;vector&gt;<br/>
+<br/>
+using namespace std;<br/>
+<br/>
+<br/>
+template&lt;typename T = vector&lt;int&gt; &gt;<br/>
+class list_of<br/>
+{<br/>
+public:<br/>
+  list_of&lt;T&gt; &amp;operator ()(int value);<br/>
+  list_of&lt;T&gt; &amp;operator ,(int value);<br/>
+  operator T() const;<br/>
+<br/>
+private:<br/>
+  T t;<br/>
+};<br/>
+template&lt;typename T&gt;<br/>
+list_of&lt;T&gt; &amp;list_of&lt;T&gt;::operator ()(int value)<br/>
+{<br/>
+  t.push_back(value);<br/>
+  return *this;<br/>
+}<br/>
+<br/>
+template&lt;typename T&gt;<br/>
+list_of&lt;T&gt; &amp;list_of&lt;T&gt;::operator ,(int value)<br/>
+{<br/>
+<br/>
+  t.push_back(value);<br/>
+  return *this;<br/>
+<br/>
+}<br/>
+//强制类型转换实现 T（）必须为空 ，没有返回值类型修饰，成员函数体 必须return 一个值<br/>
+template&lt;typename T&gt;<br/>
+list_of&lt;T&gt;::operator T() const<br/>
+{<br/>
+  return t;<br/>
+}<br/>
+<br/>
+//函数对象只能变量使用，不能是 “类型（）” 如：list_of(value)<br/>
+//是错误的，只能是 “变量名（）”  如：lof(value);<br/>
+list_of&lt; vector&lt;int&gt; &gt; lof;<br/>
+<br/>
+int main()<br/>
+{<br/>
+<br/>
+//强制类型转换<br/>
+  vector&lt;int&gt; v = lof(1);<br/>
+  vector&lt;int&gt;::iterator it = v.begin();<br/>
+  while(it != v.end())<br/>
+  {<br/>
+<br/>
+    cout &lt;&lt; *it &lt;&lt; endl;<br/>
+    it ++;<br/>
+  }<br/>
+  cout &lt;&lt; &quot;=============================&quot; &lt;&lt; endl;<br/>
+  //迭代计算<br/>
+  v = (lof(2),3,5,7);//注意= ， （）的优先级<br/>
+  it = v.begin();<br/>
+  while(it != v.end())<br/>
+  {<br/>
+<br/>
+    cout &lt;&lt; *it &lt;&lt; endl;<br/>
+    it ++;<br/>
+  }<br/>
+<br/>
+  return 0;<br/>
+}<br/>
+</pre><br><br/>
+结果：<br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<p>1<br><br/>
+=============================<br><br/>
+1<br><br/>
+2<br><br/>
+3<br><br/>
+5<br><br/>
+7<br><br/>
+<br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

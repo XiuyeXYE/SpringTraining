@@ -1,0 +1,45 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        MyBatis注意事项二            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE configuration<br/>
+PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;<br/>
+&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;<br/>
+&lt;configuration&gt;<br/>
+<br/>
+	<br/>
+	&lt;environments default=&quot;environment&quot;&gt;<br/>
+        &lt;environment id=&quot;environment&quot;&gt;<br/>
+            <br/>
+              &lt;transactionManager type=&quot;JDBC&quot;&gt;&lt;/transactionManager&gt;<br/>
+            &lt;dataSource type=&quot;POOLED&quot;&gt;<br/>
+              <br/>
+                &lt;property name=&quot;driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;<br/>
+                &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/world&quot;/&gt;<br/>
+                &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;<br/>
+                &lt;property name=&quot;password&quot; value=&quot;123456&quot;/&gt;<br/>
+                <br/>
+            &lt;/dataSource&gt;<br/>
+            <br/>
+            <br/>
+        &lt;/environment&gt;<br/>
+        <br/>
+    &lt;/environments&gt;<br/>
+    <br/>
+   &lt;mappers&gt;<br/>
+        &lt;mapper resource=&quot;mybatis/beans/emp.xml&quot;/&gt;<br/>
+        <br/>
+    &lt;/mappers&gt; <br/>
+	<br/>
+	<br/>
+&lt;/configuration&gt;</pre><pre name="code" class="html"><br/>
+</pre><pre name="code" class="html"><br/>
+</pre><pre name="code" class="html">&lt;environments default=&quot;environment&quot;&gt;</pre><pre name="code" class="html">        &lt;environment id=&quot;environment&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif; font-size: 12px;&quot;&gt;&quot;&gt;&lt;/span&gt;</pre><br/>
+<p>把default和id写成一样的，否则获取的SqlSession获取不了，会报NullPointerExceprion空指针异常</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

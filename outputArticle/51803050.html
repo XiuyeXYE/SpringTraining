@@ -1,0 +1,109 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        JOGL FirstDemo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1739968" snippet_file_name="blog_20160701_1_8390445"  name="code" class="java">package com.xiuye.jogl;<br/>
+<br/>
+import javax.swing.JFrame;<br/>
+<br/>
+import com.jogamp.opengl.GL4;<br/>
+import com.jogamp.opengl.GLAutoDrawable;<br/>
+import com.jogamp.opengl.GLCapabilities;<br/>
+import com.jogamp.opengl.GLEventListener;<br/>
+import com.jogamp.opengl.GLProfile;<br/>
+import com.jogamp.opengl.awt.GLCanvas;<br/>
+<br/>
+public class Game extends JFrame implements GLEventListener {<br/>
+<br/>
+	<br/>
+	<br/>
+	/**<br/>
+	 * <br/>
+	 */<br/>
+	private static final long serialVersionUID = 8623653810668055175L;<br/>
+<br/>
+	final private int width = 800;<br/>
+	final private int height = 600;<br/>
+	<br/>
+	public Game(){<br/>
+		super(&quot;Minimal OpenGL&quot;);<br/>
+		<br/>
+		GLProfile profile = GLProfile.get(GLProfile.GL4);<br/>
+		GLCapabilities capabilities = new GLCapabilities(profile);<br/>
+		GLCanvas canvas = new GLCanvas();<br/>
+		canvas.addGLEventListener(this);<br/>
+		<br/>
+		<br/>
+		this.setName(&quot;Minimal OpenGL&quot;);<br/>
+		<br/>
+		this.getContentPane().add(canvas);<br/>
+		<br/>
+		<br/>
+		this.setSize(width,height);<br/>
+		this.setLocationRelativeTo(null);<br/>
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);<br/>
+		this.setVisible(true);<br/>
+		this.setResizable(false);<br/>
+		canvas.requestFocusInWindow();<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+	public void play(){<br/>
+		<br/>
+	}<br/>
+	<br/>
+	@Override<br/>
+	public void display(GLAutoDrawable drawable) {<br/>
+<br/>
+		GL4 gl =  drawable.getGL().getGL4();<br/>
+		gl.glClear(GL4.GL_COLOR_BUFFER_BIT);<br/>
+		<br/>
+		gl.glFlush();<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void dispose(GLAutoDrawable arg0) {<br/>
+<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void init(GLAutoDrawable drawable) {<br/>
+<br/>
+		GL4 gl = drawable.getGL().getGL4();<br/>
+		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,<br/>
+			int arg4) {<br/>
+<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1739968" snippet_file_name="blog_20160701_2_1356831"  name="code" class="java">package com.xiuye.jogl;<br/>
+<br/>
+public class FirstJOGL {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Game g = new Game();<br/>
+		g.play();<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160701170706840?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160701170720698?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+   <br/>
+</div>

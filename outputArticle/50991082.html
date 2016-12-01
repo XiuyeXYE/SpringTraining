@@ -1,0 +1,49 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        通过宏得到Array Length            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1625325" snippet_file_name="blog_20160327_1_6281703"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+#define gl(a) sizeof(a)/sizeof(a[0]);<br/>
+void f(int *a){<br/>
+	int i = gl(a);//不能在cout中直接输出gl(a)，就因为gl为宏吗<br/>
+	cout &lt;&lt; i &lt;&lt; endl;//1<br/>
+<br/>
+}<br/>
+void g(int a[]){<br/>
+	int i = gl(a);<br/>
+	cout &lt;&lt; i &lt;&lt; endl;//1<br/>
+}<br/>
+int main(){<br/>
+	int a[100];<br/>
+	//cout &lt;&lt; gl(a) &lt;&lt; endl; // error: expected primary-expression before &#39;&lt;&lt;&#39; token<br/>
+	int l = gl(a);<br/>
+	cout &lt;&lt; l &lt;&lt; endl;//100<br/>
+	f(a);<br/>
+	g(a);<br/>
+	return 0;<br/>
+}<br/>
+</pre><br/>
+<p>通过宏获得数组长度应该不能实现自定义函数得到形参数组长度</p><br/>
+<p><pre code_snippet_id="1625325" snippet_file_name="blog_20160327_2_120142"  name="code" class="cpp">D:\programming\C++&gt;g++ getALength.cpp<br/>
+getALength.cpp: In function &#39;void g(int*)&#39;:<br/>
+getALength.cpp:3:23: warning: &#39;sizeof&#39; on array function parameter &#39;a&#39; will retu<br/>
+rn size of &#39;int*&#39; [-Wsizeof-array-argument]<br/>
+ #define gl(a) sizeof(a)/sizeof(a[0]);<br/>
+                       ^<br/>
+getALength.cpp:10:10: note: in expansion of macro &#39;gl&#39;<br/>
+  int i = gl(a);<br/>
+          ^<br/>
+getALength.cpp:9:14: note: declared here<br/>
+ void g(int a[]){<br/>
+              ^<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+100<br/>
+1<br/>
+1<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

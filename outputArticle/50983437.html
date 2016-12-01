@@ -1,0 +1,36 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        阻塞与非阻塞文件读取            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1623935" snippet_file_name="blog_20160325_1_8819498"  name="code" class="javascript">阻塞<br/>
+var fs = require(&quot;fs&quot;);<br/>
+var data = fs.readFileSync(&quot;input.txt&quot;);<br/>
+console.log(data.toString());<br/>
+console.log(&quot;Over&quot;);</pre><br><br/>
+<pre code_snippet_id="1623935" snippet_file_name="blog_20160325_2_3247364"  name="code" class="javascript">xiuye@ubuntu:~/workspace$ nodejs main.js<br/>
+Hello ,I am Xiuye!<br/>
+Studying node js!<br/>
+<br/>
+Over<br/>
+</pre><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="1623935" snippet_file_name="blog_20160325_3_1960608"  name="code" class="javascript">非阻塞<br/>
+var fs = require(&quot;fs&quot;);<br/>
+fs.readFile(&quot;input.txt&quot;,function(err,data){<br/>
+if(err) return console.error(err);<br/>
+console.log(data.toString());<br/>
+});<br/>
+console.log(&quot;Over&quot;);</pre><br><br/>
+<pre code_snippet_id="1623935" snippet_file_name="blog_20160325_4_7642209"  name="code" class="javascript">xiuye@ubuntu:~/workspace$ nodejs main1.js<br/>
+Over<br/>
+Hello ,I am Xiuye!<br/>
+Studying node js!<br/>
+<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

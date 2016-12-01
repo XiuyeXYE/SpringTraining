@@ -1,0 +1,100 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        谁调用DllMain            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1965975" snippet_file_name="blog_20161104_1_8698058"  code_snippet_id="1965975" snippet_file_name="blog_20161104_1_8698058" name="code" class="cpp">static<br/>
+BOOL __cdecl<br/>
+__DllMainCRTStartup(<br/>
+        HANDLE  hDllHandle,<br/>
+        DWORD   dwReason,<br/>
+        LPVOID  lpreserved<br/>
+        );<br/>
+<br/>
+BOOL WINAPI<br/>
+_DllMainCRTStartup(<br/>
+        HANDLE  hDllHandle,<br/>
+        DWORD   dwReason,<br/>
+        LPVOID  lpreserved<br/>
+        )<br/>
+{<br/>
+        if (dwReason == DLL_PROCESS_ATTACH)<br/>
+        {<br/>
+            /*<br/>
+            * The /GS security cookie must be initialized before any exception<br/>
+            * handling targetting the current image is registered.  No function<br/>
+            * using exception handling can be called in the current image until<br/>
+            * after __security_init_cookie has been called.<br/>
+            */<br/>
+            __security_init_cookie();<br/>
+        }<br/>
+<br/>
+        return __DllMainCRTStartup(hDllHandle, dwReason, lpreserved);<br/>
+}<br/>
+<br/>
+__declspec(noinline)<br/>
+BOOL __cdecl<br/>
+__DllMainCRTStartup(<br/>
+        HANDLE  hDllHandle,<br/>
+        DWORD   dwReason,<br/>
+        LPVOID  lpreserved<br/>
+        )<br/>
+{<br/>
+        BOOL retcode = TRUE;<br/>
+<br/>
+    __try {<br/>
+         __native_dllmain_reason = dwReason;<br/>
+        __try{<br/>
+            /*<br/>
+             * If this is a process detach notification, check that there has<br/>
+             * been a prior process attach notification.<br/>
+             */<br/>
+            if ( (dwReason == DLL_PROCESS_DETACH) &amp;&amp; (__proc_attached == 0) ) {<br/>
+                retcode = FALSE;<br/>
+                __leave;<br/>
+            }<br/>
+<br/>
+            if ( dwReason == DLL_PROCESS_ATTACH || dwReason == DLL_THREAD_ATTACH ) {<br/>
+                if ( _pRawDllMain )<br/>
+                    retcode = (*_pRawDllMain)(hDllHandle, dwReason, lpreserved);<br/>
+<br/>
+                if ( retcode )<br/>
+                    retcode = _CRT_INIT(hDllHandle, dwReason, lpreserved);<br/>
+<br/>
+                if ( !retcode )<br/>
+                    __leave;<br/>
+            }<br/>
+<br/>
+            retcode = DllMain(hDllHandle, dwReason, lpreserved);<br/>
+<br/>
+            if ( (dwReason == DLL_PROCESS_ATTACH) &amp;&amp; !retcode ) {<br/>
+                /*<br/>
+                 * The user&#39;s DllMain routine returned failure.  Unwind the init.<br/>
+                 */<br/>
+                DllMain(hDllHandle, DLL_PROCESS_DETACH, lpreserved);<br/>
+                _CRT_INIT(hDllHandle, DLL_PROCESS_DETACH, lpreserved);<br/>
+                if ( _pRawDllMain )<br/>
+                    (*_pRawDllMain)(hDllHandle, DLL_PROCESS_DETACH, lpreserved);<br/>
+            }<br/>
+<br/>
+            if ( (dwReason == DLL_PROCESS_DETACH) ||<br/>
+                 (dwReason == DLL_THREAD_DETACH) ) {<br/>
+                if ( _CRT_INIT(hDllHandle, dwReason, lpreserved) == FALSE ) {<br/>
+                    retcode = FALSE ;<br/>
+                }<br/>
+<br/>
+                if ( retcode &amp;&amp; _pRawDllMain ) {<br/>
+                    retcode = (*_pRawDllMain)(hDllHandle, dwReason, lpreserved);<br/>
+                }<br/>
+            }<br/>
+        } __except ( __CppXcptFilter(GetExceptionCode(), GetExceptionInformation()) ) {<br/>
+            retcode = FALSE;<br/>
+        }<br/>
+    } __finally<br/>
+    {<br/>
+        __native_dllmain_reason = __NO_REASON;<br/>
+    }<br/>
+<br/>
+        return retcode ;<br/>
+}</pre><br><br/>
+   <br/>
+</div>

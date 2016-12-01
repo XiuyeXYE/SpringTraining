@@ -1,0 +1,20 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        breakdebug            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1683638" snippet_file_name="blog_20160514_1_7785278"  name="code" class="cpp">int main(int argc,char *argv[]){<br/>
+	if(argc &lt;= 1) //检验参数个数,保证下面的数组不会发生越界异常<br/>
+		return 0;<br/>
+	if(argv[1][0] == &#39;1&#39;){<br/>
+<br/>
+		__asm{<br/>
+			int 3<br/>
+		}<br/>
+	}<br/>
+	else if(argv[1][0] == &#39;2&#39;){<br/>
+		__debugbreak();//Microsoft编译器内置函数<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

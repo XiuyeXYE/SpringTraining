@@ -1,0 +1,70 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        返回当前实例对象            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1715952" snippet_file_name="blog_20160613_1_8701010"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+class A{<br/>
+<br/>
+public:<br/>
+<br/>
+    A *getCurrentObject(){<br/>
+        return this;<br/>
+    }<br/>
+    void f(){<br/>
+        cout &lt;&lt; &quot;A::f&quot; &lt;&lt; endl;<br/>
+    }<br/>
+<br/>
+};<br/>
+<br/>
+class B :public A{<br/>
+<br/>
+public:<br/>
+<br/>
+void f(){<br/>
+    cout &lt;&lt; &quot;B::f&quot; &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+};<br/>
+<br/>
+class A1{<br/>
+public:<br/>
+   A1 *getCurrentObject(){<br/>
+        return this;<br/>
+    }<br/>
+    virtual void f(){<br/>
+        cout &lt;&lt; &quot;A::f&quot; &lt;&lt; endl;<br/>
+    }<br/>
+<br/>
+<br/>
+};<br/>
+class B1 : public A1{<br/>
+<br/>
+public:<br/>
+void f(){<br/>
+     cout &lt;&lt; &quot;B::f&quot; &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+};<br/>
+<br/>
+int main(){<br/>
+<br/>
+B b;<br/>
+A *a = b.getCurrentObject();<br/>
+a-&gt;f();<br/>
+//delete a;//在堆栈中创建的对象不要delete，否则出错。<br/>
+//a = nullptr;<br/>
+<br/>
+B1 b1;<br/>
+A1 *a1 = b1.getCurrentObject();//返回的是当前的子类的对象<br/>
+a1-&gt;f();//虚函数调用是子类的<br/>
+<br/>
+return 0;<br/>
+<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1715952" snippet_file_name="blog_20160613_2_2256824"  name="code" class="cpp">D:\programming\C++&gt;getcurrentobject<br/>
+A::f<br/>
+B::f</pre><br><br/>
+   <br/>
+</div>

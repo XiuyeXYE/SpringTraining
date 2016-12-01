@@ -1,0 +1,22 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        CImg Library&#39;s Examples Compiling and Linking            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1950195" snippet_file_name="blog_20161026_1_5401574"  name="code" class="cpp">#include&lt;CImg.h&gt;<br/>
+using namespace cimg_library;<br/>
+int main(){<br/>
+	CImg&lt;unsigned char&gt; img(640,400,1,3);<br/>
+	img.fill(0);<br/>
+	unsigned char purple[] = {255,0,255};<br/>
+	img.draw_text(100,100,&quot;Hello World!&quot;,purple);<br/>
+	img.display(&quot;My first CImg code&quot;);<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20161026162257233?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20161026162306241?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

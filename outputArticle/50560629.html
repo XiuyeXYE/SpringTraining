@@ -1,0 +1,239 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        primefaces 伸缩可合可并 panel，datatable的footer下分页            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1561923" snippet_file_name="blog_20160122_1_4225655"  name="code" class="html">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;<br/>
+	xmlns:h=&quot;http://java.sun.com/jsf/html&quot;<br/>
+	xmlns:f=&quot;http://java.sun.com/jsf/core&quot;<br/>
+	xmlns:p=&quot;http://primefaces.org/ui&quot;&gt;<br/>
+<br/>
+&lt;h:head&gt;<br/>
+<br/>
+	&lt;title&gt;Product&lt;/title&gt;<br/>
+<br/>
+<br/>
+<br/>
+&lt;/h:head&gt;<br/>
+&lt;h:body&gt;<br/>
+<br/>
+	&lt;h1 align=&quot;center&quot;&gt;<br/>
+	<br/>
+		&lt;h:outputText value=&quot;Product In This Time&quot; /&gt;<br/>
+	<br/>
+	&lt;/h1&gt;<br/>
+	<br/>
+	&lt;h:form&gt;<br/>
+<br/>
+		&lt;p:accordionPanel id=&quot;showBar&quot; activeIndex=&quot;0,1,2&quot; multiple=&quot;true&quot;&gt;<br/>
+			<br/>
+<br/>
+				<br/>
+				<br/>
+<br/>
+<br/>
+			<br/>
+<br/>
+			&lt;!-- searching --&gt;<br/>
+			&lt;p:tab title=&quot;Search&quot;&gt;<br/>
+<br/>
+				&lt;h:panelGrid cellpadding=&quot;10&quot; columns=&quot;3&quot;<br/>
+					style=&quot;width:100%;border:0px;&quot;&gt;<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;ID:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:inputText&gt;&lt;/p:inputText&gt;<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+<br/>
+						&lt;p:outputLabel value=&quot;Name:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:inputText&gt;&lt;/p:inputText&gt;<br/>
+<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;Owner:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:inputText&gt;&lt;/p:inputText&gt;<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+					&lt;h:panelGrid style=&quot;border:0px;&quot; columns=&quot;6&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;Action Date:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:selectOneMenu&gt;<br/>
+<br/>
+							&lt;f:selectItem itemValue=&quot;create&quot; itemLabel=&quot;create&quot;&gt;&lt;/f:selectItem&gt;<br/>
+							&lt;f:selectItem itemLabel=&quot;complete&quot; itemValue=&quot;complete&quot;&gt;&lt;/f:selectItem&gt;<br/>
+<br/>
+						&lt;/p:selectOneMenu&gt;<br/>
+<br/>
+						&lt;p:outputLabel value=&quot;from&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+<br/>
+						&lt;p:calendar pages=&quot;3&quot;&gt;&lt;/p:calendar&gt;<br/>
+<br/>
+						&lt;p:outputLabel value=&quot;to&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+<br/>
+						&lt;p:calendar pages=&quot;3&quot; /&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+<br/>
+						&lt;p:outputLabel value=&quot;Domain:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+<br/>
+						&lt;p:inputText&gt;&lt;/p:inputText&gt;<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+<br/>
+						&lt;p:commandButton value=&quot;Search&quot;&gt;&lt;/p:commandButton&gt;<br/>
+<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+				&lt;/h:panelGrid&gt;<br/>
+<br/>
+<br/>
+<br/>
+			&lt;/p:tab&gt;<br/>
+<br/>
+			&lt;!-- Dp All Display --&gt;<br/>
+			&lt;p:tab title=&quot;All Dp&quot;&gt;<br/>
+<br/>
+				&lt;p:outputPanel&gt;<br/>
+<br/>
+<br/>
+<br/>
+					&lt;p:dataTable var=&quot;dp&quot; value=&quot;#{dpView.dps}&quot; rows=&quot;6&quot;<br/>
+						paginator=&quot;true&quot; paginatorPosition=&quot;bottom&quot; sortBy=&quot;#{dp.flag}&quot;<br/>
+						paginatorTemplate=&quot;{CurrentPageReport} {FirstPageLink} <br/>
+					  	{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}<br/>
+					  	 {RowsPerPageDropdown}<br/>
+					  	&quot;<br/>
+					  	<br/>
+						rowsPerPageTemplate=&quot;10,15,20&quot;&gt;<br/>
+<br/>
+						&lt;f:facet name=&quot;header&quot;&gt;<br/>
+							<br/>
+							&lt;h:outputText value=&quot;Status Display in This Day On Current time&quot;/&gt; <br/>
+							<br/>
+						&lt;/f:facet&gt;<br/>
+						&lt;p:column headerText=&quot;Flag&quot; sortBy=&quot;#{dp.flag}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;●&quot; style=&quot;font-size:30px;color:#{dp.flag}&quot;&gt;&lt;/h:outputText&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;ID&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.id}&quot;&gt;&lt;/h:outputText&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Name&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.dpName}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Domain&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.bizDomain}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Owner&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.owner}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Status&quot; sortBy=&quot;#{dp.status}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.status}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Dev&quot; sortBy=&quot;#{dp.devWorkHour}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.devWorkHour}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;QC&quot; sortBy=&quot;#{dp.qcWorkHour}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.qcWorkHour}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Case&quot; sortBy=&quot;#{dp.testCase}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.testCase}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;New&quot; sortBy=&quot;#{dp.newBugs}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.newBugs}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Open&quot; sortBy=&quot;#{dp.openBugs}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.openBugs}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Closed&quot; sortBy=&quot;#{dp.closedBugs}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.closedBugs}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Re&quot; sortBy=&quot;#{dp.resyncs}&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.resyncs}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Action&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.action}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+						&lt;p:column headerText=&quot;Comments&quot;&gt;<br/>
+<br/>
+							&lt;h:outputText value=&quot;#{dp.comments}&quot; /&gt;<br/>
+<br/>
+						&lt;/p:column&gt;<br/>
+<br/>
+<br/>
+<br/>
+					&lt;/p:dataTable&gt;<br/>
+<br/>
+				&lt;/p:outputPanel&gt;<br/>
+<br/>
+			&lt;/p:tab&gt;<br/>
+<br/>
+			&lt;!-- Detail Dp Display --&gt;<br/>
+			&lt;p:tab title=&quot;Dp Detail&quot;&gt;<br/>
+<br/>
+				&lt;p:panelGrid columns=&quot;2&quot;&gt;<br/>
+<br/>
+					&lt;p:chart type=&quot;line&quot; style=&quot;height:300px;&quot;<br/>
+						model=&quot;#{chartView.lineModel2}&quot;&gt;&lt;/p:chart&gt;<br/>
+					&lt;p:panel style=&quot;border:0px;&quot;&gt;<br/>
+<br/>
+<br/>
+						&lt;p:dataTable&gt;<br/>
+							<br/>
+							<br/>
+						&lt;/p:dataTable&gt;<br/>
+						<br/>
+<br/>
+<br/>
+					&lt;/p:panel&gt;<br/>
+<br/>
+<br/>
+<br/>
+				&lt;/p:panelGrid&gt;<br/>
+<br/>
+			&lt;/p:tab&gt;<br/>
+<br/>
+<br/>
+		&lt;/p:accordionPanel&gt;<br/>
+<br/>
+	&lt;/h:form&gt;<br/>
+<br/>
+<br/>
+<br/>
+&lt;/h:body&gt;<br/>
+<br/>
+<br/>
+&lt;/html&gt;</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160122111903227?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160122111909064?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+   <br/>
+</div>

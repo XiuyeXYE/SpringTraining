@@ -1,0 +1,70 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        复制构造函数为什么必须是引用？            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><pre code_snippet_id="1605304" snippet_file_name="blog_20160310_1_4877342"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+class A<br/>
+{<br/>
+	public:<br/>
+		void f(){<br/>
+		cout &lt;&lt; &quot;A::f&quot; &lt;&lt; endl;<br/>
+	}<br/>
+	A(A other){<br/>
+	}<br/>
+};<br/>
+<br/>
+int main(){<br/>
+}</pre><pre code_snippet_id="1605304" snippet_file_name="blog_20160310_2_7974241"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ copyconstructor2.cpp<br/>
+copyconstructor2.cpp:9:11: error: invalid constructor; you probably meant &#39;A (co<br/>
+nst A&amp;)&#39;<br/>
+  A(A other){<br/>
+           ^</pre><br><br/>
+<br><br/>
+</p><br/>
+<p>如果复制构造函数形参是指针：</p><br/>
+<p><pre code_snippet_id="1605304" snippet_file_name="blog_20160310_3_9227977"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+class A<br/>
+{<br/>
+	public:<br/>
+		void f(){<br/>
+		cout &lt;&lt; &quot;A::f&quot; &lt;&lt; endl;<br/>
+	}<br/>
+	A(A *o){<br/>
+	}<br/>
+	//A(A other){<br/>
+	//}<br/>
+};<br/>
+<br/>
+int main(){<br/>
+	A a;<br/>
+	A b(&amp;a);<br/>
+	b.f();<br/>
+	return 0;<br/>
+}</pre><pre code_snippet_id="1605304" snippet_file_name="blog_20160310_4_4069764"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ copyconstructor2.cpp<br/>
+copyconstructor2.cpp: In function &#39;int main()&#39;:<br/>
+copyconstructor2.cpp:16:4: error: no matching function for call to &#39;A::A()&#39;<br/>
+  A a;<br/>
+    ^<br/>
+copyconstructor2.cpp:9:2: note: candidate: A::A(A*)<br/>
+  A(A *o){<br/>
+  ^<br/>
+copyconstructor2.cpp:9:2: note:   candidate expects 1 argument, 0 provided<br/>
+copyconstructor2.cpp:3:7: note: candidate: A::A(const A&amp;)<br/>
+ class A<br/>
+       ^<br/>
+copyconstructor2.cpp:3:7: note:   candidate expects 1 argument, 0 provided</pre><br><br/>
+其实就成了普通的构造函数！</p><br/>
+<p><pre code_snippet_id="1605304" snippet_file_name="blog_20160310_5_6436315"  name="code" class="cpp">复制构造函数，形参非引用类型，就是A(A other),则调用的时候：(函数调用会复制拷贝到形参)<br/>
+A a;<br/>
+A b(a); ---&gt; b(atmp(a)) ---&gt; b(atmp（atmp2(a))) ---&gt; ......<br/>
+a实参初始化形参atmp,atmp调用复制构造函数，<br/>
+接着，atmp调用复制构造函数，又要用实参a初始化形参atmp2,<br/>
+应该是如此往复的，递归无尽头？是也不是我不知道，理解对不对？I don&#39;t know?<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+<pre name="code" class="cpp"></pre><br/>
+   <br/>
+</div>

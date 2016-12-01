@@ -1,0 +1,117 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        通过模板函数获取数组长度深入探讨            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1621210" snippet_file_name="blog_20160323_1_775783"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace  std;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+int getArrLen1(int *&amp;a){//error<br/>
+<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+<br/>
+}<br/>
+int getArrLen2(int *a){<br/>
+<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+<br/>
+}<br/>
+template&lt;typename T&gt;<br/>
+int getArrayLength1(T a){<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+}<br/>
+/**<br/>
+正确的获取数组长度的函数（虽然是模板）<br/>
+*/<br/>
+template&lt;typename T&gt;<br/>
+int getArrayLength2(T &amp;a){<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+}<br/>
+/**<br/>
+以上模板函数对应的应该是下面的数组别名类型，然后以其类型声明形参，也许在编译阶段就可确定长度!<br/>
+T&amp;a &lt;=&gt; intArray &amp;a<br/>
+*/<br/>
+typedef int intArray[100];<br/>
+<br/>
+int getIntArrayLength(intArray &amp;a){<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+}<br/>
+int getIntArrayLengthNoReference(intArray a){<br/>
+	return sizeof(a)/sizeof(a[0]);<br/>
+}<br/>
+int main(){<br/>
+	int *p = new int[200];<br/>
+	int size = *(p-4);<br/>
+	cout &lt;&lt; size &lt;&lt; endl;<br/>
+	size = *(p-3);<br/>
+	cout &lt;&lt; size &lt;&lt; endl;<br/>
+	size = *(p-2);<br/>
+	cout &lt;&lt; size &lt;&lt; endl;<br/>
+	size = *(p-1);<br/>
+	cout &lt;&lt; size &lt;&lt; endl;<br/>
+	<br/>
+<br/>
+	int a[100];<br/>
+	cout &lt;&lt; &quot;a address:&quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;&amp;a address:&quot; &lt;&lt; &amp;a &lt;&lt; endl;<br/>
+	/*<br/>
+	C:\Users\jackz\Desktop\codes\cpp&gt;g++ getArrayLength.cpp<br/>
+	getArrayLength.cpp: In function &#39;int main()&#39;:<br/>
+	getArrayLength.cpp:39:22: error: invalid initialization of non-const reference o<br/>
+	f type &#39;int*&amp;&#39; from an rvalue of type &#39;int*&#39;<br/>
+	 cout &lt;&lt; getArrLen1(a) &lt;&lt; endl;<br/>
+                      ^<br/>
+	getArrayLength.cpp:4:5: note:   initializing argument 1 of &#39;int getArrLen1(int*&amp;<br/>
+	)&#39;<br/>
+	int getArrLen1(int *&amp;a){<br/>
+		^<br/>
+<br/>
+	*/	<br/>
+	//cout &lt;&lt; getArrLen1(a) &lt;&lt; endl;//error<br/>
+	//cout &lt;&lt; &quot;&amp;&amp;a address:&quot; &lt;&lt; &amp;&amp;a &lt;&lt; endl;//error<br/>
+	cout &lt;&lt; getArrLen2(a) &lt;&lt; endl;<br/>
+	cout &lt;&lt; getArrayLength1(a) &lt;&lt; endl;//1<br/>
+	cout &lt;&lt; getArrayLength2(a) &lt;&lt; endl;//100<br/>
+	<br/>
+	cout &lt;&lt; &quot;a length:&quot; &lt;&lt; getIntArrayLength(a) &lt;&lt; endl;<br/>
+	intArray b;<br/>
+	cout &lt;&lt; &quot;b length:&quot; &lt;&lt; getIntArrayLength(b) &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;parameter no reference length: &quot; &lt;&lt; getIntArrayLengthNoReference(a) &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;parameter no reference length: &quot; &lt;&lt; getIntArrayLengthNoReference(b) &lt;&lt; endl;<br/>
+	return 0;<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1621210" snippet_file_name="blog_20160323_2_361863"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ getArrayLength.cpp<br/>
+getArrayLength.cpp: In function &#39;int getIntArrayLengthNoReference(int*)&#39;:<br/>
+getArrayLength.cpp:38:17: warning: &#39;sizeof&#39; on array function parameter &#39;a&#39; will<br/>
+ return size of &#39;int*&#39; [-Wsizeof-array-argument]<br/>
+  return sizeof(a)/sizeof(a[0]);<br/>
+                 ^<br/>
+getArrayLength.cpp:37:43: note: declared here<br/>
+ int getIntArrayLengthNoReference(intArray a){<br/>
+                                           ^<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+0<br/>
+0<br/>
+1442239753<br/>
+134382314<br/>
+a address:0x28fd78<br/>
+&amp;a address:0x28fd78<br/>
+1<br/>
+1<br/>
+100<br/>
+a length:100<br/>
+b length:100<br/>
+parameter no reference length: 1<br/>
+parameter no reference length: 1<br/>
+</pre><pre code_snippet_id="1621210" snippet_file_name="blog_20160323_3_4091616"  name="code" class="cpp">warning: &#39;sizeof&#39; on array function parameter &#39;a&#39; will<br/>
+ return size of &#39;int*&#39; [-Wsizeof-array-argument]<br/>
+这是不是普通指针和指针引用的关系：导致了是否能取数组的长度。<br/>
+intArray &amp;a就是数组的别名，数组本质是指针，那么这样的传参是不是也是指针应用呢？编译器在编译期的时候就可以确定长度了，因为别名数组长度是确定的！<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,43 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java匿名类没有函数名的花括号            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1589003" snippet_file_name="blog_20160226_1_9880446"  name="code" class="java">package test;<br/>
+<br/>
+import java.util.Properties;<br/>
+<br/>
+public class Test1 {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Properties p = new Properties(){<br/>
+			{<br/>
+				put(&quot;url&quot;,&quot;wwwww&quot;);<br/>
+				put(&quot;OK&quot;,&quot;dddddd&quot;);<br/>
+			}<br/>
+		};<br/>
+		System.out.println(p);<br/>
+<br/>
+		A a = new A(){<br/>
+			int a = 100;<br/>
+			{<br/>
+				System.out.println(a);<br/>
+				f();<br/>
+			}<br/>
+		}; <br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+class A{<br/>
+	<br/>
+	public void f(){<br/>
+		<br/>
+		System.out.println(&quot;A::f&quot;);<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

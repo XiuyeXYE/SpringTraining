@@ -1,0 +1,40 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        用缓冲流的方式实现文件的移动            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">import java.io.*;<br/>
+<br/>
+public class demo16<br/>
+{<br/>
+  public static void main(String args[])<br/>
+  {<br/>
+    try<br/>
+    {<br/>
+      FileInputStream fis = new FileInputStream(&quot;pw.txt&quot;);<br/>
+      FileOutputStream fos = new FileOutputStream(&quot;pwcopy2.txt&quot;);<br/>
+<br/>
+      BufferedInputStream bis = new BufferedInputStream(fis);//缓冲输入流<br/>
+      BufferedOutputStream bos = new BufferedOutputStream(fos);//缓冲输出流<br/>
+<br/>
+      int ch = -1;<br/>
+      while((ch = bis.read())!=-1)<br/>
+      {<br/>
+        bos.write(ch);<br/>
+      }<br/>
+      bis.close();<br/>
+      bos.close();<br/>
+      System.out.println(&quot;over&quot;);<br/>
+<br/>
+    }<br/>
+    catch(Exception e)<br/>
+    {<br/>
+      System.out.println(e.getMessage());<br/>
+    }<br/>
+<br/>
+<br/>
+<br/>
+  }<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

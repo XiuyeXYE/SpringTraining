@@ -1,0 +1,67 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        son extends father and override father&#39;s variable            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1619242" snippet_file_name="blog_20160322_1_4211260"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+class A{<br/>
+	public:<br/>
+		int a = {99};<br/>
+		virtual void f(){<br/>
+			cout &lt;&lt; &quot;father-&gt;a:&quot; &lt;&lt; a &lt;&lt; endl;<br/>
+			cout &lt;&lt; &quot;father-&gt;b:&quot; &lt;&lt; b &lt;&lt; endl;<br/>
+		}<br/>
+	private:<br/>
+		int b = {11};<br/>
+};<br/>
+class B:public A{ //默认的为私有继承，所以要加public<br/>
+	public:<br/>
+		int a = {88};<br/>
+		void f(){<br/>
+			cout &lt;&lt; &quot;son-&gt;a:&quot; &lt;&lt; a &lt;&lt; endl;<br/>
+			cout &lt;&lt; &quot;son-&gt;b:&quot; &lt;&lt; b &lt;&lt; endl;<br/>
+			cout &lt;&lt; &quot;son call father a:&quot; &lt;&lt; A::a &lt;&lt; endl;//son call father&#39;s variable of method<br/>
+			//cout &lt;&lt; &quot;son call father b:&quot; &lt;&lt; A::b &lt;&lt; endl;// error: &#39;int A::b&#39; is private<br/>
+		}<br/>
+	private:<br/>
+		int b = {55};<br/>
+};<br/>
+int main(){<br/>
+	A *a = new B;<br/>
+	(*a).f();//&quot;.&quot;的优先级高于&quot;*&quot;<br/>
+	B *b = new B;<br/>
+	b-&gt;f();<br/>
+	static_cast&lt;B*&gt;(a)-&gt;f();// 因为是指针，所以别用成员符号&quot;.&quot;,而是&quot;-&gt;&quot;<br/>
+	static_cast&lt;A*&gt;(a)-&gt;f();<br/>
+	cout &lt;&lt; &quot;===================&quot; &lt;&lt; endl;<br/>
+	cout &lt;&lt; static_cast&lt;A*&gt;(a)-&gt;a &lt;&lt; endl;<br/>
+	<br/>
+	cout &lt;&lt; a-&gt;a &lt;&lt; endl;<br/>
+	cout &lt;&lt; b-&gt;a &lt;&lt; endl;<br/>
+<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1619242" snippet_file_name="blog_20160322_2_2019432"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ -std=c++11 subExtensFatherVariable.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+son-&gt;a:88<br/>
+son-&gt;b:55<br/>
+son call father a:99<br/>
+son-&gt;a:88<br/>
+son-&gt;b:55<br/>
+son call father a:99<br/>
+son-&gt;a:88<br/>
+son-&gt;b:55<br/>
+son call father a:99<br/>
+son-&gt;a:88<br/>
+son-&gt;b:55<br/>
+son call father a:99<br/>
+===================<br/>
+99<br/>
+99<br/>
+88<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,62 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        max * max            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1627074" snippet_file_name="blog_20160328_1_7408908"  code_snippet_id="1627074" snippet_file_name="blog_20160328_1_7408908" name="code" class="cpp">#include&lt;stdio.h&gt;<br/>
+#include&lt;stdlib.h&gt;<br/>
+#include&lt;string.h&gt;<br/>
+#define N 100<br/>
+//将数组中的字符串转成数字存到int数组中<br/>
+void getdigits(int *a,char *s)<br/>
+{<br/>
+    int i;<br/>
+    char digit;<br/>
+    int len=strlen(s);<br/>
+    //对数组初始化<br/>
+    for(i=0;i&lt;N;i++)<br/>
+        *(a+i)=0;<br/>
+    for(i=0;i&lt;len;i++)<br/>
+    {<br/>
+        digit=*(s+i);<br/>
+        *(a+len-1-i)=digit-&#39;0&#39;;<br/>
+    }<br/>
+}<br/>
+//将数组a与数组b逐位相乘后存入c<br/>
+void multiply(int *a,int *b,int *c)<br/>
+{<br/>
+    int i,j;<br/>
+    //数组初始化<br/>
+    for(i=0;i&lt;2*N;++i)<br/>
+        *(c+i)=0;<br/>
+    ///将数组a与数组b逐位相乘后存入c<br/>
+    for(i=0;i&lt;N;i++)<br/>
+        for(j=0;j&lt;N;j++)<br/>
+            *(c+i+j)+=*(a+i)**(b+j);<br/>
+    for(i=0;i&lt;2*N-1;i++)<br/>
+    {<br/>
+        *(c+i+1)+=*(c+i)/10;<br/>
+        *(c+i)=*(c+i)%10;<br/>
+    }<br/>
+}<br/>
+int main(){<br/>
+    <br/>
+    int a[N],b[N],c[2*N];<br/>
+    char s1[N],s2[N];<br/>
+    int j=2*N-1;<br/>
+    int i;<br/>
+    printf(&quot;input the first number:&quot;);<br/>
+    scanf(&quot;%s&quot;,s1);<br/>
+    printf(&quot;\ninput the second number:&quot;);<br/>
+    scanf(&quot;%s&quot;,s2);<br/>
+    getdigits(a,s1);<br/>
+    getdigits(b,s2);<br/>
+    multiply(a,b,c);<br/>
+    while(c[j]==0)j--;<br/>
+    for(i=j;i&gt;=0;i--)<br/>
+        printf(&quot;%d&quot;,c[i]);<br/>
+    printf(&quot;\n&quot;);<br/>
+    return 0;<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,18 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++函数返回临时变量的引用运行要出错            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1612544" snippet_file_name="blog_20160316_1_5486433"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int &amp; f(){<br/>
+	int a = 10;<br/>
+	return a;<br/>
+}<br/>
+int main(){<br/>
+	int a = f();//warning :返回临时变量的应用（编译警告通过，但运行出错）<br/>
+	cout &lt;&lt; a &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

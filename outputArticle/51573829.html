@@ -1,0 +1,44 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java8 lambda 传入方法或者传入匿名函数 尝试理解            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1706233" snippet_file_name="blog_20160603_1_6286615"  name="code" class="java">public class HelloWorld{<br/>
+<br/>
+     public static void main(String []args){<br/>
+        <br/>
+        f(()-&gt;System.out.println(&quot;OK&quot;));//传lambda表达式 一个匿名函数对应一个方法<br/>
+        g(Math::random);<br/>
+        f(A::f);//双冒号 即直接传方法参数 方法必须为静态方法<br/>
+     }<br/>
+     public static void f(VoidTest v){<br/>
+         v.f();<br/>
+     }<br/>
+     public static void g(ReturnTest r){<br/>
+         System.out.println(r.f());<br/>
+     }<br/>
+}<br/>
+<br/>
+class A{<br/>
+    public static void f(){<br/>
+        System.out.println(&quot;a.f&quot;);<br/>
+        <br/>
+    }<br/>
+}<br/>
+/**<br/>
+ * 可以声明FunctionalInterface注解或者不声明都起作用<br/>
+ * <br/>
+ * /<br/>
+@FunctionalInterface<br/>
+interface ReturnTest{<br/>
+    double f();<br/>
+}<br/>
+<br/>
+interface VoidTest{<br/>
+    public void f();<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1706233" snippet_file_name="blog_20160603_2_3364440"  name="code" class="java">sh-4.3$ java -Xmx128M -Xms16M HelloWorld                                                                                                                                                         <br/>
+OK                                                                                                                                                                                               <br/>
+0.40518138123687863                                                                                                                                                                              <br/>
+a.f     </pre><br><br/>
+   <br/>
+</div>

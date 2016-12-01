@@ -1,0 +1,73 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        win32汇编冒泡排序 且 编译通过            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="2017558" snippet_file_name="blog_20161130_1_57470"  name="code" class="cpp">.386<br/>
+.model flat,stdcall<br/>
+option casemap:none<br/>
+include windows.inc<br/>
+include user32.inc<br/>
+includelib user32.lib<br/>
+include kernel32.inc<br/>
+includelib kernel32.lib<br/>
+.data<br/>
+ArrayA dword 3,1,7,5,2<br/>
+szCaption db 'MessageBox',0<br/>
+szText db 100 dup(0)<br/>
+szCharsFormat db 'After Bubble Sort : ArrayA :%d,%d,%d,%d,%d',0<br/>
+.code<br/>
+BubbleSort proc uses eax ecx esi,<br/>
+	pArray:ptr dword,<br/>
+	Count:dword<br/>
+local @exchange:dword<br/>
+	mov ecx,Count<br/>
+	dec ecx<br/>
+	mov @exchange,0<br/>
+		L1:<br/>
+			push ecx<br/>
+			mov esi,pArray<br/>
+			mov @exchange,0<br/>
+				L2:<br/>
+					mov eax,[esi]<br/>
+					cmp [esi+4],eax<br/>
+					jge L3<br/>
+					xchg eax,[esi+4]<br/>
+					mov [esi],eax<br/>
+					mov @exchange,1<br/>
+						L3:<br/>
+							add esi,4<br/>
+				loop L2<br/>
+			cmp @exchange,0<br/>
+			je L4<br/>
+			pop ecx<br/>
+		loop L1<br/>
+	L4:ret<br/>
+BubbleSort endp<br/>
+start:<br/>
+invoke BubbleSort,addr ArrayA,5<br/>
+invoke wsprintf,addr szText,addr szCharsFormat,ArrayA,ArrayA+4,ArrayA+8,\<br/>
+ArrayA+12,ArrayA+16<br/>
+invoke MessageBox,NULL,offset szText,offset szCaption,MB_OK<br/>
+invoke ExitProcess,NULL<br/>
+end start<br/>
+</pre><br><br/>
+<pre code_snippet_id="2017558" snippet_file_name="blog_20161130_2_6022479"  name="code" class="cpp">D:\programming\assembler&gt;ml /IE:\masm32\include bubbleSort.asm /c<br/>
+Microsoft (R) Macro Assembler Version 12.00.21005.1<br/>
+Copyright (C) Microsoft Corporation.  All rights reserved.<br/>
+<br/>
+ Assembling: bubbleSort.asm<br/>
+<br/>
+***********<br/>
+ASCII build<br/>
+***********<br/>
+<br/>
+<br/>
+D:\programming\assembler&gt;link /subsystem:windows bubbleSort.obj<br/>
+Microsoft (R) Incremental Linker Version 12.00.21005.1<br/>
+Copyright (C) Microsoft Corporation.  All rights reserved.<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20161130121858896?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

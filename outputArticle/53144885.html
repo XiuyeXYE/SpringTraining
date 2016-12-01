@@ -1,0 +1,103 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        SpringMVC 全注解实现 (1) servlet3.0以上的容器支持            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1981680" snippet_file_name="blog_20161112_1_5274746"  code_snippet_id="1981680" snippet_file_name="blog_20161112_1_5274746" name="code" class="java">package com.xiuye.web.config;<br/>
+<br/>
+<br/>
+<br/>
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;<br/>
+public class SpringWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {<br/>
+<br/>
+	@Override<br/>
+	protected Class&lt;?&gt;[] getRootConfigClasses() {<br/>
+		return new Class&lt;?&gt;[]{RootConfig.class};<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected Class&lt;?&gt;[] getServletConfigClasses() {<br/>
+		return new Class&lt;?&gt;[]{WebConfig.class};<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected String[] getServletMappings() {<br/>
+		return new String[]{&quot;/&quot;};<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p></p><br/>
+<pre code_snippet_id="1981680" snippet_file_name="blog_20161112_2_2701235"  code_snippet_id="1981680" snippet_file_name="blog_20161112_2_2701235" name="code" class="java">package com.xiuye.web.config;<br/>
+<br/>
+import org.springframework.context.annotation.Bean;<br/>
+import org.springframework.context.annotation.ComponentScan;<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.web.servlet.ViewResolver;<br/>
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;<br/>
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;<br/>
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;<br/>
+import org.springframework.web.servlet.view.InternalResourceViewResolver;<br/>
+<br/>
+@Configuration<br/>
+@EnableWebMvc<br/>
+@ComponentScan(&quot;com.xiuye.web.controller&quot;) // 必须在此种类中开启包扫描,否则无效<br/>
+public class WebConfig extends WebMvcConfigurerAdapter {<br/>
+<br/>
+	@Override<br/>
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {<br/>
+<br/>
+		// 开启静态资源的请求转发到默认servlet上,不配置页面报错404,(默认servlet不是DispatcherServlet!理解的)<br/>
+		configurer.enable();<br/>
+<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public ViewResolver viewResolver() {<br/>
+<br/>
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();<br/>
+		resolver.setPrefix(&quot;WEB-INF/views/&quot;);<br/>
+		resolver.setSuffix(&quot;.html&quot;);<br/>
+		resolver.setExposeContextBeansAsAttributes(true);<br/>
+		return resolver;<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981680" snippet_file_name="blog_20161112_3_5002529"  code_snippet_id="1981680" snippet_file_name="blog_20161112_3_5002529" name="code" class="java">package com.xiuye.web.config;<br/>
+<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+<br/>
+@Configuration<br/>
+//@ComponentScan(basePackages = { &quot;com.xiuye.web&quot; }, excludeFilters = {<br/>
+//		@Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class) })<br/>
+public class RootConfig {<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981680" snippet_file_name="blog_20161112_4_6747416"  code_snippet_id="1981680" snippet_file_name="blog_20161112_4_6747416" name="code" class="java">package com.xiuye.web.controller;<br/>
+<br/>
+import org.springframework.stereotype.Controller;<br/>
+import org.springframework.web.bind.annotation.RequestMapping;<br/>
+import org.springframework.web.bind.annotation.RequestMethod;<br/>
+<br/>
+@Controller<br/>
+public class HelloController {<br/>
+<br/>
+	@RequestMapping(value=&quot;/&quot;,method=RequestMethod.GET)<br/>
+	public String helloWorld(){<br/>
+		System.out.println(&quot;hello&quot;);<br/>
+		return &quot;hello&quot;;<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<img src="http://img.blog.csdn.net/20161112235436008?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+<p></p><br/>
+<p><img src="http://img.blog.csdn.net/20161112235445758?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p>下载:<a target="_blank" href="http://download.csdn.net/detail/xiuye2015/9681377">demo源代码</a></p><br/>
+   <br/>
+</div>

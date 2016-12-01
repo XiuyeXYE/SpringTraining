@@ -1,0 +1,66 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        极限的唯一性:如果数列{Xn}收敛，那么它的极限唯一。            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><img src="http://img.blog.csdn.net/20160807170412364?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1814520" snippet_file_name="blog_20160807_1_1430962"  code_snippet_id="1814520" snippet_file_name="blog_20160807_1_1430962" name="code" class="cpp">为什么取（b-a）/2; 2|Xn| &gt;= |Xn-a|+|Xn-b| &gt;= |a-b|;  |Xn| &gt;= |a-b|/2 或 |b-a|/2;极限值取|b-a|/2;<br/>
+是什么啊，难道又是什么？</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160807172912638?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre code_snippet_id="1814520" snippet_file_name="blog_20160807_2_7881670"  name="code" class="cpp">绝对值重要不等式推导过程<br/>
+我们知道<br/>
+|x|={x，(x&gt;0);x，(x=0);-x，(x&lt;0);<br/>
+因此，有：<br/>
+-|a|≤a≤|a| ......①<br/>
+-|b|≤b≤|b| ......②<br/>
+-|b|≤-b≤|b|......③<br/>
+由①+②得：<br/>
+-(|a|+|b|)≤a+b≤|a|+|b|<br/>
+即 |a+b|≤|a|+|b| ......④<br/>
+由①+③得：<br/>
+-(|a|+|b|)≤a-b≤|a|+|b|<br/>
+即 |a-b|≤|a|+|b| ......⑤<br/>
+另：<br/>
+|a|=|(a+b)-b|=|(a-b)+b|<br/>
+|b|=|(b+a)-a|=|(b-a)+a|<br/>
+由④知：<br/>
+|a|=|(a+b)-b|≤|a+b|+|-b| =&gt; |a|-|b|≤|a+b|.......⑥<br/>
+|b|=|(b+a)-a|≤|b+a|+|-a| =&gt; |a|-|b|≥-|a+b|.......⑦<br/>
+|a|=|(a-b)+b|≤|a-b|+|b| =&gt; |a|-|b|≤|a-b|.......⑧<br/>
+|b|=|(b-a)+a|≤|b-a|+|a| =&gt; |a|-|b|≥-|a-b|.......⑨<br/>
+由⑥，⑦得：<br/>
+| |a|-|b| |≤|a+b|......⑩<br/>
+由⑧，⑨得：<br/>
+| |a|-|b| |≤|a-b|......⑪<br/>
+综合④⑤⑩⑪得到有关 绝对值(absolute value)的重要不等式<br/>
+|a|-|b|≤|a&#177;b|≤|a|+|b|<br/>
+要注意等号成立的条件（特别是求最值），即：<br/>
+|a-b|=|a|+|b|→ab≤0<br/>
+|a|-|b|=|a+b|→b(a+b)≤0<br/>
+|a|-|b|=|a-b|→b(a-b)≥0<br/>
+注：|a|-|b|=|a+b|→|a|=|a+b|+|b|→|（a+b）-b|=|a+b|+|b|→b(a+b)≤0<br/>
+同理可得|a|-|b|=|a-b|→b(a-b)≥0<br/>
+另 “→”指可双向推出<br/>
+解法<br/>
+解决与绝对值有关的问题（如解绝对值不等式，解绝对值方程，研究含有绝对值符号的函数等等），其关键往往在于去掉绝对值符号。而去掉绝对值符号的基本方法有二。<br/>
+以下，具体说说绝对值不等式的解法：<br/>
+其一为平方，所谓平方，比如，|x|=3，可化为x^2=9，绝对值符号没有了！<br/>
+其二为讨论，所谓讨论，即x≥0时，|x|=x ；x&lt;0时，|x|=-x，绝对值符号也没有了！<br/>
+说到讨论，就是令绝对值中的式子等于0，分出x的段，然后根据每段讨论得出的x值，取交集，综上所述即可。<br/>
+其三为数形结合法，即在数轴上将各点画出，将数转换为长度的概念求解。</pre><br><br/>
+<br><br/>
+</p><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

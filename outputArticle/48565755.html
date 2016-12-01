@@ -1,0 +1,459 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java简单取款机            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.oracle;<br/>
+<br/>
+import java.sql.Connection;<br/>
+import java.sql.Driver;<br/>
+import java.sql.DriverManager;<br/>
+import java.sql.ResultSet;<br/>
+import java.sql.SQLException;<br/>
+import java.sql.Statement;<br/>
+import java.util.Scanner;<br/>
+<br/>
+import oracle.jdbc.OracleDriver;<br/>
+<br/>
+public class jdbc10 {<br/>
+<br/>
+	private static Connection conn = null;<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		/**<br/>
+		 * 1.选择界面：取钱，存钱，转账 2.取钱 1）钱够就取 2）不够提示“余额不足” 3.存钱 1）存 4.转账 5.提示一下成功。<br/>
+		 * <br/>
+		 */<br/>
+		Driver driver = new OracleDriver();<br/>
+<br/>
+		Statement stmt = null;<br/>
+		try {<br/>
+			DriverManager.registerDriver(driver);<br/>
+			conn = DriverManager.getConnection(<br/>
+					&quot;jdbc:oracle:thin:@localhost:1521:orcl&quot;, &quot;scott&quot;, &quot;123456&quot;);<br/>
+<br/>
+			stmt = conn.createStatement();<br/>
+<br/>
+		} catch (SQLException e) {<br/>
+<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+<br/>
+		Scanner in = new Scanner(System.in);<br/>
+<br/>
+		/**<br/>
+		 * 关闭自动提交，方便安全的处理数据。<br/>
+		 * 因为sql的执行会自动提交，关闭自动提交<br/>
+		 * 相当与在内存中操作了数据，如果数据有误<br/>
+		 * 就可以rollback.<br/>
+		 * <br/>
+		 * <br/>
+		 */<br/>
+<br/>
+		try {<br/>
+			/**<br/>
+			 * <br/>
+			 * 关闭自动提交<br/>
+			 */<br/>
+			conn.setAutoCommit(false);<br/>
+			<br/>
+			/**<br/>
+			 * 核实用户并处理相关业务。<br/>
+			 * <br/>
+			 * <br/>
+			 */<br/>
+			checkAndHandle(stmt, in);<br/>
+<br/>
+		} catch (SQLException e) {<br/>
+<br/>
+			System.out.println(&quot;数据操作失败！&quot;);<br/>
+			//e.printStackTrace();<br/>
+		} catch (InterruptedException e) {<br/>
+			System.out.println(&quot;异常中断请重新选择！&quot;);<br/>
+			//e.printStackTrace();<br/>
+		}catch(Exception e)<br/>
+		{<br/>
+			System.out.println(&quot;输入非法字符！&quot;);<br/>
+			<br/>
+			//e.printStackTrace();<br/>
+		}<br/>
+		finally {<br/>
+			try {<br/>
+				System.out.println(&quot;您已退出!请取卡!&quot;);<br/>
+				stmt.close();<br/>
+				conn.close();<br/>
+			} catch (SQLException e) {<br/>
+<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 检验用户名密码，和事务处理。<br/>
+	 * 事务包括：<br/>
+	 * 1.取钱,<br/>
+	 * 2.存钱,<br/>
+	 * 3.转账,<br/>
+	 * 4.改密,<br/>
+	 * 5.退出<br/>
+	 * <br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 * @throws InterruptedException<br/>
+	 */<br/>
+	private static void checkAndHandle(Statement stmt, Scanner in)<br/>
+			throws SQLException, InterruptedException {<br/>
+<br/>
+		//检查用户名和密码是否正确<br/>
+		validateUser(stmt, in);<br/>
+		<br/>
+		while (true) {<br/>
+			//选项<br/>
+			System.out.println(&quot;选项:1.取钱,2.存钱,3.转账,4.改密,5.退出\n&quot;);<br/>
+			int selectedIndex = in.nextInt();<br/>
+			//因为nextInt()后的字符会自动到下一个nextXXX()，所以最好多加一句nextLine()<br/>
+			//把回车消灭掉。<br/>
+			in.nextLine();<br/>
+			<br/>
+			switch (selectedIndex) {<br/>
+			case 1:<br/>
+				userGetMoney(stmt, in);//取钱<br/>
+				break;<br/>
+			case 2:<br/>
+				userSaveMoney(stmt, in);//存钱<br/>
+				break;<br/>
+			case 3:<br/>
+				userTransferAccounts(stmt, in);//转账<br/>
+				break;<br/>
+			case 4:<br/>
+				changeUserPassword(stmt, in);//改密<br/>
+				break;<br/>
+			case 5:<br/>
+				//退出<br/>
+				return;<br/>
+<br/>
+			}<br/>
+		}<br/>
+<br/>
+	}<br/>
+	<br/>
+	<br/>
+	/**<br/>
+	 * 改密功能：<br/>
+	 * 即修改用户密码，<br/>
+	 * 1.首先查询旧密码，如果成功就继续下一步。（虽然开始登录的时候已经保存了旧密码，但为了安全还是再次确认下。）<br/>
+	 * 2.输入新密码，再次输入新密码。<br/>
+	 * 3.两次输入密码确认是否相等，如果相等就执行下一步<br/>
+	 * 4.进行数据库sql语句操作。<br/>
+	 * 5.如果上一步正确，commit()提交数据;<br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 */<br/>
+	private static void changeUserPassword(Statement stmt, Scanner in)<br/>
+			throws SQLException {<br/>
+<br/>
+		System.out.println(&quot;请输入旧密码:&quot;);<br/>
+		String oldPwd = in.nextLine();<br/>
+<br/>
+		String sql = &quot;select password from userinfo where username =&#39;&quot;<br/>
+				+ username + &quot;&#39; and password=&#39;&quot; + oldPwd + &quot;&#39;&quot;;<br/>
+<br/>
+		ResultSet rs = stmt.executeQuery(sql);<br/>
+<br/>
+		if (rs.next()) {<br/>
+			<br/>
+			System.out.println(&quot;请输入新密码:&quot;);<br/>
+			String newPwd = in.nextLine();<br/>
+<br/>
+			System.out.println(&quot;再次输入新密码:&quot;);<br/>
+			String repeatedNewPwd = in.nextLine();<br/>
+<br/>
+			if (newPwd.equals(repeatedNewPwd)) {<br/>
+				sql = &quot;update userinfo set password=&#39;&quot; + repeatedNewPwd + &quot;&#39;&quot;<br/>
+						+ &quot; where username=&#39;&quot; + username + &quot;&#39;&quot;;<br/>
+				int flag = stmt.executeUpdate(sql);<br/>
+<br/>
+				if (flag &gt; 0) {<br/>
+					System.out.println(&quot;改密成功!&quot;);<br/>
+				} else {<br/>
+					System.out.println(&quot;改密失败!&quot;);<br/>
+				}<br/>
+			} else {<br/>
+				System.out.println(&quot;两次密码输入不一致!&quot;);<br/>
+			}<br/>
+<br/>
+		} else {<br/>
+			System.out.println(&quot;输入旧密码错误!&quot;);<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	// 转账错误计数	<br/>
+	private static int transferErrorCount = 0;<br/>
+<br/>
+	<br/>
+	/**<br/>
+	 * 用户转账操作<br/>
+	 * 1.输入对方帐号，先对对方帐号进行确认，如果查不到，出错，提示没有那个帐号。<br/>
+	 * 2.以上正确，输入转账金额。<br/>
+	 * 3.对自己的帐号资金进行扣除，如果正确进行下一步。<br/>
+	 * 4.对对方帐号资金进行增加操作，如果成功就正确。<br/>
+	 * 5.所有扣除，增加均是在sql语句中进行。<br/>
+	 * <br/>
+	 * 本帐号系统不支持透支<br/>
+	 *其实应该有对自己的资金多少进行判断，如果转账金额过大就应该终止。<br/>
+	 * 3次输入有错误，在本次程序执行期间都会无法转账，除非重新登录。<br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 * @throws InterruptedException<br/>
+	 */<br/>
+	private static void userTransferAccounts(Statement stmt, Scanner in)<br/>
+			throws SQLException, InterruptedException {<br/>
+<br/>
+		if (transferErrorCount &gt;= 3) {<br/>
+			System.out.println(&quot;对不起，您已转账失败3次，请取卡重新插卡转账。或者帐号无误请到银行柜台办理业务。&quot;);<br/>
+			<br/>
+			return;<br/>
+		}<br/>
+<br/>
+		System.out.println(&quot;请输入转账帐号:&quot;);<br/>
+<br/>
+		int otherID = in.nextInt();<br/>
+<br/>
+		String getOwnMoneySql = &quot;select account from userinfo where id=&quot;<br/>
+				+ otherID;<br/>
+<br/>
+		ResultSet rs = stmt.executeQuery(getOwnMoneySql);<br/>
+<br/>
+		int otherOwnMoney = 0;<br/>
+<br/>
+		if (rs.next()) {<br/>
+			otherOwnMoney = rs.getInt(1);<br/>
+			rs.close();<br/>
+		} else {<br/>
+			transferErrorCount++;<br/>
+			System.out.println(&quot;查找不到对方帐号，请核对后再试！&quot;);<br/>
+			return;<br/>
+		}<br/>
+<br/>
+		System.out.println(&quot;请输入转账金额(整数):&quot;);<br/>
+<br/>
+		int transferMoney = in.nextInt();<br/>
+<br/>
+		//验证账户金额数是否会超支<br/>
+		String sql = &quot;select account from userinfo where username=&#39;&quot; + username<br/>
+				+ &quot;&#39; and password=&#39;&quot; + password + &quot;&#39;&quot;;<br/>
+		rs = stmt.executeQuery(sql);<br/>
+		<br/>
+		if(rs.next())<br/>
+		{<br/>
+			int moneyNum = rs.getInt(1);<br/>
+			if(moneyNum &lt; transferMoney)<br/>
+			{<br/>
+				System.out.println(&quot;转出款项超过本帐号存款数，不支持本次转账！&quot;);<br/>
+				return;<br/>
+			}<br/>
+		}<br/>
+		<br/>
+		<br/>
+		String mySql = &quot;update userinfo set account=account-&quot; + transferMoney<br/>
+				+ &quot; where username=&#39;&quot; + username + &quot;&#39; &quot; + &quot;and password=&#39;&quot;<br/>
+				+ password + &quot;&#39;&quot;;<br/>
+<br/>
+		int flag = stmt.executeUpdate(mySql);<br/>
+<br/>
+		if (flag == 0) {<br/>
+<br/>
+			transferErrorCount++;<br/>
+			System.out.println(&quot;转账失败！请稍候再试！&quot;);<br/>
+<br/>
+			return;<br/>
+		}<br/>
+<br/>
+		String otherSql = &quot;update userinfo set account=account+&quot;<br/>
+				+ transferMoney + &quot; where id=&quot; + otherID;<br/>
+<br/>
+		flag = stmt.executeUpdate(otherSql);<br/>
+<br/>
+		if (flag &gt; 0) {<br/>
+			System.out.print(&quot;正在转账&quot;);<br/>
+			printTimerDot();<br/>
+			Thread.sleep(1000);<br/>
+			System.out.println(&quot;转账完毕！&quot;);<br/>
+			conn.commit();<br/>
+		} else {<br/>
+			transferErrorCount++;<br/>
+			conn.rollback();<br/>
+			System.out.println(&quot;转帐失败!&quot;);<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 存款操作：<br/>
+	 * 1.输入金额<br/>
+	 * 2.插入sql语句<br/>
+	 * 3.执行操作，然后commit。<br/>
+	 * <br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 * @throws InterruptedException<br/>
+	 */<br/>
+	private static void userSaveMoney(Statement stmt, Scanner in)<br/>
+			throws SQLException, InterruptedException {<br/>
+<br/>
+		System.out.println(&quot;请输入存款金额:&quot;);<br/>
+<br/>
+		int saveMoney = in.nextInt();<br/>
+<br/>
+		String sql = &quot;update userinfo set account=account+&quot; + saveMoney<br/>
+				+ &quot; where username=&#39;&quot; + username + &quot;&#39; and &quot; + &quot;password=&#39;&quot;<br/>
+				+ password + &quot;&#39;&quot;;<br/>
+<br/>
+		int flag = stmt.executeUpdate(sql);<br/>
+<br/>
+		if (flag &gt; 0) {<br/>
+			System.out.print(&quot;正在点钞请稍候&quot;);<br/>
+			printTimerDot();<br/>
+			Thread.sleep(1000);<br/>
+			System.out.println(&quot;存款完毕！&quot;);<br/>
+			conn.commit();<br/>
+<br/>
+		} else {<br/>
+<br/>
+			System.out.println(&quot;存款失败，请取出！&quot;);<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 取钱操作:<br/>
+	 * 1.输入取款数额，查询现有账户存款，进行对比。<br/>
+	 * 2.如果取款小于存款，继续执行下一步。<br/>
+	 * 3.操作数据库sql语句使账户的存款减少取款额度，执行update操作，然后commit。<br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 * @throws InterruptedException<br/>
+	 */<br/>
+	private static void userGetMoney(Statement stmt, Scanner in)<br/>
+			throws SQLException, InterruptedException {<br/>
+		System.out.println(&quot;请输入取款金额(整数):&quot;);<br/>
+		int account = in.nextInt();<br/>
+		String sql = &quot;select account from userinfo where username=&#39;&quot; + username<br/>
+				+ &quot;&#39; and password=&#39;&quot; + password + &quot;&#39;&quot;;<br/>
+		ResultSet rs = stmt.executeQuery(sql);<br/>
+<br/>
+		if (rs.next()) {<br/>
+<br/>
+			int userAccount = rs.getInt(1);<br/>
+			if (account &gt; userAccount) {<br/>
+				System.out.println(&quot;余额不足!&quot;);<br/>
+				return;<br/>
+			} else {<br/>
+				sql = &quot;update userinfo set account=account-&quot; + account<br/>
+						+ &quot; where username=&#39;&quot; + username + &quot;&#39; and password=&#39;&quot;<br/>
+						+ password + &quot;&#39;&quot;;<br/>
+				int flag = stmt.executeUpdate(sql);<br/>
+				if (flag &gt; 0) {<br/>
+					System.out.print(&quot;正在点钞请稍候&quot;);<br/>
+					printTimerDot();<br/>
+					Thread.sleep(1000);<br/>
+<br/>
+					System.out.println(&quot;您已取款:&quot; + account + &quot;,余额为:&quot;<br/>
+							+ (userAccount - account));<br/>
+<br/>
+					conn.commit();<br/>
+				} else {<br/>
+					System.out.println(&quot;取款失败！&quot;);<br/>
+					return;<br/>
+				}<br/>
+			}<br/>
+<br/>
+		} else {<br/>
+			System.out.println(&quot;未查询到您的账目，请稍后再试，或者到银行处理。&quot;);<br/>
+		}<br/>
+	}<br/>
+<br/>
+	//保存用户名和密码使之用于全局。<br/>
+	private static String username = &quot;&quot;;<br/>
+	private static String password = &quot;&quot;;<br/>
+<br/>
+	/**<br/>
+	 * <br/>
+	 * 验证用户密码<br/>
+	 * 3次登录失败自动退出。<br/>
+	 * <br/>
+	 * @param stmt<br/>
+	 * @param in<br/>
+	 * @throws SQLException<br/>
+	 */<br/>
+	private static void validateUser(Statement stmt, Scanner in)<br/>
+			throws SQLException {<br/>
+		int count = 0;<br/>
+		boolean flag = false;<br/>
+		while (true) {<br/>
+			if (flag) {<br/>
+				break;<br/>
+			}<br/>
+			if (count &gt;= 3) {<br/>
+				System.out.println(&quot;连续3次输入失败，该帐号已被锁定，请到银行解锁...&quot;);<br/>
+				System.out.println(&quot;本次操作结束！&quot;);<br/>
+				System.exit(0);<br/>
+			}<br/>
+			System.out.println(&quot;\t=========ATM=========\n\n&quot;);<br/>
+			System.out.println(&quot;\t请登录...\t\n&quot;);<br/>
+			System.out.println(&quot;请输入用户名:&quot;);<br/>
+			username = in.nextLine();<br/>
+			System.out.println(&quot;输入密码:&quot;);<br/>
+			password = in.nextLine();<br/>
+<br/>
+			String sql = &quot;select * from userinfo where username = &#39;&quot; + username<br/>
+					+ &quot;&#39; and password = &#39;&quot; + password + &quot;&#39;&quot;;<br/>
+			ResultSet rs = stmt.executeQuery(sql);<br/>
+<br/>
+			if (rs.next()) {<br/>
+				System.out.println(&quot;登录成功!&quot;);<br/>
+				flag = true;<br/>
+			} else {<br/>
+				System.out.println(&quot;用户名或密码错误！请重新输入...&quot;);<br/>
+				flag = false;<br/>
+			}<br/>
+<br/>
+			rs.close();<br/>
+<br/>
+			count++;<br/>
+		}<br/>
+		System.out.println(&quot;==============================================\n&quot;);<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 操作计时<br/>
+	 * 就是在计算机执行非人为操作时，即程序自动执行操作时，如点钞，打印小圆点，<br/>
+	 * 模拟操作进度。<br/>
+	 * <br/>
+	 * @throws InterruptedException<br/>
+	 */<br/>
+	private static void printTimerDot() throws InterruptedException {<br/>
+		for (int i = 0; i &lt; 6; i++) {<br/>
+			Thread.sleep(500);<br/>
+			System.out.print(&quot;.&quot;);<br/>
+		}<br/>
+		System.out.println();<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

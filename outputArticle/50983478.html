@@ -1,0 +1,35 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        nodejs event(有点观察者模式)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1623948" snippet_file_name="blog_20160325_1_4264501"  name="code" class="javascript">var events = require(&#39;events&#39;);<br/>
+// 创建 eventEmitter 对象<br/>
+var eventEmitter = new events.EventEmitter();<br/>
+<br/>
+// 创建事件处理程序<br/>
+var connectHandler = function connected() {<br/>
+   console.log(&#39;连接成功。&#39;);<br/>
+  <br/>
+   // 触发 data_received 事件 <br/>
+   eventEmitter.emit(&#39;data_received&#39;);<br/>
+}<br/>
+<br/>
+// 绑定 connection 事件处理程序<br/>
+eventEmitter.on(&#39;connection&#39;, connectHandler);<br/>
+ <br/>
+// 使用匿名函数绑定 data_received 事件<br/>
+eventEmitter.on(&#39;data_received&#39;, function(){<br/>
+   console.log(&#39;数据接收成功。&#39;);<br/>
+});<br/>
+<br/>
+// 触发 connection 事件 <br/>
+eventEmitter.emit(&#39;connection&#39;);<br/>
+<br/>
+console.log(&quot;程序执行完毕。&quot;);</pre><pre code_snippet_id="1623948" snippet_file_name="blog_20160325_2_8135959"  name="code" class="javascript">xiuye@ubuntu:~/workspace$ nodejs event.js<br/>
+连接成功。<br/>
+数据接收成功。<br/>
+程序执行完毕。<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

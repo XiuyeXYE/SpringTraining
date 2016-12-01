@@ -1,0 +1,8 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        tomcat 使用https 和 IOS 请求https URL            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1923856" snippet_file_name="blog_20161011_1_8983978"  name="code" class="java">jdk的keytool为服务器tomcat生成keystore，然后得到该keystore的证书cer，将该cer发给ios客户端，让其开发者使用该证书，tomcat配置好keystore后，接下来的https的链接就能顺利的request和response数据。<br/>
+注：这是自签名证书，不受ios信任，需要开发者，合理绕过程序https的ca机制。具体问题解决方法，搜一搜。此次问题全有ios缺少tomcat的证书引起。</pre><br><br/>
+   <br/>
+</div>

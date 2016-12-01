@@ -1,0 +1,15 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        配置文件log4j.properties            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1675715" snippet_file_name="blog_20160509_1_7838311"  name="code" class="java">log4j.rootLogger=info,ROLLING_FILE<br/>
+log4j.appender.ROLLING_FILE = org.apache.log4j.RollingFileAppender<br/>
+log4j.appender.ROLLING_FILE.encoding=utf-8<br/>
+log4j.appender.ROLLING_FILE.File = app.log<br/>
+log4j.appender.ROLLING_FILE.Append = true<br/>
+log4j.appender.ROLLING_FILE.MaxFileSize= 20MB<br/>
+log4j.appender.ROLLING_FILE.MaxBackupIndex= 2<br/>
+log4j.appender.ROLLING_FILE.layout = org.apache.log4j.PatternLayout<br/>
+log4j.appender.ROLLING_FILE.layout.ConversionPattern=[log] %d - %c - %-4r [%t] %-5p %c %x - %m%n</pre><br><br/>
+   <br/>
+</div>

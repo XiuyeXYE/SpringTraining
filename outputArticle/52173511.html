@@ -1,0 +1,118 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        com 引用计数探索            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1821161" snippet_file_name="blog_20160810_1_7248858"  code_snippet_id="1821161" snippet_file_name="blog_20160810_1_7248858" name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+class base{<br/>
+    public:<br/>
+    virtual int __stdcall query(int id,void ** p)=0;<br/>
+    virtual int __stdcall addRef()=0;<br/>
+    virtual int __stdcall release()=0;<br/>
+};<br/>
+class A:public base{<br/>
+<br/>
+    public:<br/>
+    virtual void __stdcall fa()=0;<br/>
+<br/>
+};<br/>
+class B:public base{<br/>
+   <br/>
+    public:<br/>
+    <br/>
+    virtual void __stdcall fb()=0;<br/>
+};<br/>
+class derived:public A,public B{<br/>
+ private:<br/>
+    unsigned long m_refcount;<br/>
+    public:<br/>
+    int __stdcall query(int id,void **p);<br/>
+    int __stdcall addRef();<br/>
+    int __stdcall release();<br/>
+    void __stdcall fa();<br/>
+    void __stdcall fb();<br/>
+    derived():m_refcount(1){<br/>
+<br/>
+        InterlockedIncrement(&amp;m_refcount);<br/>
+    }<br/>
+    ~derived(){<br/>
+        InterlockedDecrement(&amp;m_refcount);<br/>
+        cout &lt;&lt; &quot;count:&quot; &lt;&lt; m_refcount &lt;&lt; endl;<br/>
+    }<br/>
+};<br/>
+<br/>
+int __stdcall derived::query(int id,void **p){<br/>
+  <br/>
+    if(id == 1){<br/>
+        *p = reinterpret_cast&lt;base*&gt;(this);//static_cast会报base *const 到base*转换异常，我也不知道为什么？<br/>
+    }<br/>
+    else if(id == 2){<br/>
+        *p = static_cast&lt;A*&gt;(this);//默认derive的首地址应该与A相同吧，由c++类的内存模型应该可以知道<br/>
+        <br/>
+    }<br/>
+    else if(id == 3){<br/>
+        *p = static_cast&lt;B*&gt;(this);<br/>
+        <br/>
+    }<br/>
+    else{<br/>
+        return -1;<br/>
+    }<br/>
+    reinterpret_cast&lt;base*&gt;(*p)-&gt;addRef();<br/>
+    cout &lt;&lt; &quot;count:&quot; &lt;&lt; m_refcount &lt;&lt; endl;<br/>
+    return 0;<br/>
+}<br/>
+int __stdcall derived::addRef(){<br/>
+    return InterlockedIncrement(&amp;m_refcount);<br/>
+}<br/>
+int __stdcall derived::release(){<br/>
+    if(0 == InterlockedDecrement(&amp;m_refcount)){<br/>
+        delete this;<br/>
+        <br/>
+        return 0;<br/>
+    }<br/>
+    return m_refcount;<br/>
+}<br/>
+<br/>
+void __stdcall derived::fa(){<br/>
+    cout &lt;&lt; &quot;A count:&quot; &lt;&lt; m_refcount &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+void __stdcall derived::fb(){<br/>
+    cout &lt;&lt; &quot;B count:&quot; &lt;&lt; m_refcount &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+int main(){<br/>
+<br/>
+    derived *d = new derived;<br/>
+    base* b = NULL;<br/>
+    d-&gt;query(1,reinterpret_cast&lt;void**&gt;(&amp;b));<br/>
+    cout &lt;&lt; &quot;count:&quot; &lt;&lt; b-&gt;release() &lt;&lt; endl;<br/>
+<br/>
+    A *a = NULL;<br/>
+    b-&gt;query(2,reinterpret_cast&lt;void**&gt;(&amp;a));<br/>
+    a-&gt;fa();<br/>
+    cout &lt;&lt; &quot;count:&quot; &lt;&lt; a-&gt;release() &lt;&lt; endl;<br/>
+    B *b1 = NULL;<br/>
+    b-&gt;query(3,reinterpret_cast&lt;void**&gt;(&amp;b1));<br/>
+    b1-&gt;fb();<br/>
+    cout &lt;&lt; &quot;count:&quot; &lt;&lt; b1-&gt;release() &lt;&lt; endl;<br/>
+    <br/>
+<br/>
+    cout &lt;&lt; &quot;count:&quot; &lt;&lt; d-&gt;release() &lt;&lt; endl;<br/>
+    delete d;<br/>
+<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1821161" snippet_file_name="blog_20160810_2_7706989"  code_snippet_id="1821161" snippet_file_name="blog_20160810_2_7706989" name="code" class="cpp">count:3<br/>
+count:2<br/>
+count:3<br/>
+A count:3<br/>
+count:2<br/>
+count:3<br/>
+B count:3<br/>
+count:2<br/>
+count:1<br/>
+count:0</pre><br><br/>
+   <br/>
+</div>

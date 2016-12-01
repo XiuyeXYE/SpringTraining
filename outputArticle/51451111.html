@@ -1,0 +1,75 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Scanning Files            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1688845" snippet_file_name="blog_20160519_1_3697829"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import java.io.BufferedReader;<br/>
+import java.io.File;<br/>
+import java.io.FileFilter;<br/>
+import java.io.FileInputStream;<br/>
+import java.io.FileNotFoundException;<br/>
+import java.io.IOException;<br/>
+import java.io.InputStreamReader;<br/>
+<br/>
+public class ScannerFile {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		File f = new File(&quot;.&quot;);<br/>
+		if(args.length &lt;2){<br/>
+			return;<br/>
+		}<br/>
+		f(f, args[0],args[1]);<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void f(File f, String content,String suffix) {<br/>
+<br/>
+		if (f.isDirectory()) {<br/>
+			File[] fs = f.listFiles();<br/>
+			for (File file : fs) {<br/>
+				<br/>
+					f(file, content,suffix);<br/>
+				<br/>
+<br/>
+			}<br/>
+		} else {<br/>
+			try {<br/>
+				if(!f.getName().endsWith(suffix)){<br/>
+					return;<br/>
+				}<br/>
+				FileInputStream fis = new FileInputStream(f);<br/>
+				InputStreamReader isr = new InputStreamReader(fis);<br/>
+				BufferedReader br = new BufferedReader(isr);<br/>
+				String readLine = null;<br/>
+				while ((readLine = br.readLine()) != null) {<br/>
+					if (readLine.contains(content)) {<br/>
+						System.out.println(f);<br/>
+						break;<br/>
+					}<br/>
+				}<br/>
+<br/>
+			} catch (FileNotFoundException e) {<br/>
+				e.printStackTrace();<br/>
+			} catch (IOException e) {<br/>
+				e.printStackTrace();<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160519092610754?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre code_snippet_id="1688845" snippet_file_name="blog_20160519_2_7318116"  name="code" class="java">.\src\com\xiuye\activemq\Receiver.java<br/>
+.\src\com\xiuye\activemq\Sender.java<br/>
+.\src\com\xiuye\test\FirstDemo.java<br/>
+.\src\com\xiuye\test\ScannerFile.java<br/>
+.\src\conm\xiuye\ibmmq\Sender.java<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

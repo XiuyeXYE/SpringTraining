@@ -1,0 +1,38 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        unicode编码集 和 unicode存储编码 对应规则            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1966040" snippet_file_name="blog_20161104_1_3208236"  code_snippet_id="1966040" snippet_file_name="blog_20161104_1_3208236" name="code" class="cpp">   |  Unicode符号范围      |  UTF-8编码方式<br/>
+ n |  (十六进制)           | (二进制)<br/>
+---+-----------------------+------------------------------------------------------<br/>
+ 1 | 0000 0000 - 0000 007F |                                              0xxxxxxx<br/>
+ 2 | 0000 0080 - 0000 07FF |                                     110xxxxx 10xxxxxx<br/>
+ 3 | 0000 0800 - 0000 FFFF |                            1110xxxx 10xxxxxx 10xxxxxx<br/>
+ 4 | 0001 0000 - 0010 FFFF |                   11110xxx 10xxxxxx 10xxxxxx 10xxxxxx<br/>
+ 5 | 0020 0000 - 03FF FFFF |          111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx<br/>
+ 6 | 0400 0000 - 7FFF FFFF | 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx<br/>
+<br/>
+                    表 1. UTF-8的编码规则</pre><br><br/>
+<pre code_snippet_id="1966040" snippet_file_name="blog_20161104_2_5759918"  code_snippet_id="1966040" snippet_file_name="blog_20161104_2_5759918" name="code" class="cpp">已知&quot;严&quot;的unicode是4E25(1001110 00100101), 根据上表, 可以发现4E25处在第三行的<br/>
+范围内(0000 0800 - 0000 FFFF), 因此&quot;严&quot;的UTF-8编码需要三个字节, 即格式是<br/>
+&quot;1110xxxx 10xxxxxx 10xxxxxx&quot;. 然后, 从&quot;严&quot;的最后一个二进制位开始, 依次从后向前<br/>
+填入格式中的x, 多出的位补0. 这样就得到了, &quot;严&quot;的UTF-8编码是 &quot;11100100 10111000<br/>
+10100101&quot;, 转换成十六进制就是E4B8A5.</pre><br><br/>
+<pre code_snippet_id="1966040" snippet_file_name="blog_20161104_3_4506182"  code_snippet_id="1966040" snippet_file_name="blog_20161104_3_4506182" name="code" class="cpp">Unicode规范中定义, 每一个文件的最前面分别加入一个表示编码顺序的字符, 这个字符<br/>
+的名字叫做&quot;零宽度非换行空格&quot;(ZERO WIDTH NO-BREAK SPACE), 用FEFF表示. 这正好是<br/>
+两个字节, 而且FF比FE大1.<br/>
+// Big Endian(FEFF)    Little Endian(FFFE)<br/>
+<br/>
+NOTE:<br/>
+如果一个文本文件的头两个字节是FE FF, 就表示该文件采用大头方式; 如果头两个字节<br/>
+是FF FE, 就表示该文件采用小头方式.</pre><br><br/>
+<pre code_snippet_id="1966040" snippet_file_name="blog_20161104_4_6076345"  code_snippet_id="1966040" snippet_file_name="blog_20161104_4_6076345" name="code" class="cpp">上一节已经提到, Unicode码可以采用UCS-2格式直接存储. 以汉字&quot;严&quot;为例, Unicode码<br/>
+是4E25, 需要用两个字节存储, 一个字节是4E, 另一个字节是25. 存储的时候, 4E在前,<br/>
+25在后, 就是Big endian方式; 25在前, 4E在后, 就是Little endian方式.<br/>
+// Big Endian(4E25)    Little Endian(254E)<br/>
+<br/>
+因此, 第一个字节在前, 就是&quot;大头方式&quot;(Big endian), 第二个字节在前就是&quot;小头方式<br/>
+&quot;(Little endian).</pre><br><br/>
+<a target="_blank" target="_blank" href="http://blog.csdn.net/chary8088/article/details/21226375">参考链接</a><br/>
+   <br/>
+</div>

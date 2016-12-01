@@ -1,0 +1,53 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        图片放大由主要由javascript实现            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!doctype html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;utf-8&quot;&gt;<br/>
+&lt;title&gt;无标题文档&lt;/title&gt;<br/>
+<br/>
+&lt;style type=&quot;text/css&quot;&gt;<br/>
+<br/>
+	.image{<br/>
+		width:20%;<br/>
+		height:20%;<br/>
+	}<br/>
+	<br/>
+	/*<br/>
+	仍然相当于放大为原图片大小的百分比！<br/>
+	*/<br/>
+	<br/>
+	.big{<br/>
+		width:50%;<br/>
+		height:50%;<br/>
+	}<br/>
+	<br/>
+&lt;/style&gt;<br/>
+<br/>
+&lt;script&gt;<br/>
+<br/>
+	function showBig()<br/>
+	{<br/>
+		var img = document.getElementById(&quot;img&quot;);<br/>
+		img.className=&quot;big&quot;;<br/>
+		//主要为了过了一定时间后清除属性，还原<br/>
+		var id = setTimeout(function(){<br/>
+				img.className = &quot;image&quot;;<br/>
+				clearTimeout(id);<br/>
+			},2000);<br/>
+		<br/>
+	}<br/>
+<br/>
+&lt;/script&gt;<br/>
+&lt;/head&gt;<br/>
+<br/>
+&lt;body&gt;<br/>
+<br/>
+&lt;img id=&quot;img&quot; class=&quot;image&quot; src=&quot;../../images/1.jpg&quot; onMouseOver=&quot;showBig();&quot;/&gt;<br/>
+<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,145 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Who calls _tmain or  _tWinMain?            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1965986" snippet_file_name="blog_20161104_1_1917432"  code_snippet_id="1965986" snippet_file_name="blog_20161104_1_1917432" name="code" class="cpp">static<br/>
+int<br/>
+__tmainCRTStartup(<br/>
+         void<br/>
+         );<br/>
+<br/>
+int<br/>
+_tmainCRTStartup(<br/>
+        void<br/>
+        )<br/>
+{<br/>
+        /*<br/>
+         * The /GS security cookie must be initialized before any exception<br/>
+         * handling targetting the current image is registered.  No function<br/>
+         * using exception handling can be called in the current image until<br/>
+         * after __security_init_cookie has been called.<br/>
+         */<br/>
+        __security_init_cookie();<br/>
+<br/>
+        return __tmainCRTStartup();<br/>
+}<br/>
+<br/>
+__declspec(noinline)<br/>
+int<br/>
+__tmainCRTStartup(<br/>
+         void<br/>
+         )<br/>
+{<br/>
+        int initret;<br/>
+        int mainret=0;<br/>
+        int managedapp;<br/>
+#ifdef _WINMAIN_<br/>
+        _TUCHAR *lpszCommandLine = NULL;<br/>
+        WORD showWindowMode = 0;<br/>
+<br/>
+#ifndef _KERNELX<br/>
+        showWindowMode = __crtGetShowWindowMode();<br/>
+        __set_app_type(_GUI_APP);<br/>
+#endif  /* _KERNELX */<br/>
+<br/>
+#else /* _WINMAIN_ */<br/>
+<br/>
+  #ifndef _KERNELX<br/>
+        __set_app_type(_CONSOLE_APP);<br/>
+#endif  /* _CRT_APP */<br/>
+<br/>
+#endif  /* _WINMAIN_ */<br/>
+<br/>
+        /*<br/>
+         * Determine if this is a managed application<br/>
+         */<br/>
+        managedapp = check_managed_app();<br/>
+<br/>
+        if ( !_heap_init() )                /* initialize heap */<br/>
+            fast_error_exit(_RT_HEAPINIT);  /* write message and die */<br/>
+<br/>
+        if( !_mtinit() )                    /* initialize multi-thread */<br/>
+            fast_error_exit(_RT_THREAD);    /* write message and die */<br/>
+<br/>
+        /* Enable buffer count checking if linking against static lib */<br/>
+        _CrtSetCheckCount(TRUE);<br/>
+<br/>
+        /*<br/>
+         * Initialize the Runtime Checks stuff<br/>
+         */<br/>
+#if defined (_RTC)<br/>
+        _RTC_Initialize();<br/>
+#endif  /* defined (_RTC) */<br/>
+        /*<br/>
+         * Guard the remainder of the initialization code and the call<br/>
+         * to user&#39;s main, or WinMain, function in a __try/__except<br/>
+         * statement.<br/>
+         */<br/>
+<br/>
+        __try {<br/>
+<br/>
+            if (_ioinit() &lt; 0)<br/>
+                fast_error_exit(_RT_LOWIOINIT);  /* write message and die */<br/>
+<br/>
+#if !defined (_KERNELX)<br/>
+            /* get wide cmd line info */<br/>
+            _tcmdln = (_TSCHAR *)GetCommandLineT();<br/>
+<br/>
+            /* get wide environ info */<br/>
+            _tenvptr = (_TSCHAR *)GetEnvironmentStringsT();<br/>
+<br/>
+            if ( _tsetargv() &lt; 0 )<br/>
+                _amsg_exit(_RT_SPACEARG);<br/>
+            if ( _tsetenvp() &lt; 0 )<br/>
+                _amsg_exit(_RT_SPACEENV);<br/>
+#endif  /* !defined (_CRT_APP) */<br/>
+<br/>
+            initret = _cinit(TRUE);                  /* do C data initialize */<br/>
+            if (initret != 0)<br/>
+                _amsg_exit(initret);<br/>
+<br/>
+#ifdef _WINMAIN_<br/>
+<br/>
+#if !defined (_KERNELX)<br/>
+            lpszCommandLine = _twincmdln();<br/>
+#endif /* _KERNELX */<br/>
+<br/>
+            mainret = _tWinMain( (HINSTANCE)&amp;__ImageBase,<br/>
+                                 NULL,<br/>
+                                 lpszCommandLine,<br/>
+                                 showWindowMode<br/>
+                                );<br/>
+#else   /* _WINMAIN_ */<br/>
+#if !defined (_KERNELX)<br/>
+            _tinitenv = _tenviron;<br/>
+            mainret = _tmain(__argc, _targv, _tenviron);<br/>
+#else  /* !defined (_KERNELX) */<br/>
+            mainret = _tmain(0, NULL, NULL);<br/>
+#endif  /* !defined (_KERNELX) */<br/>
+#endif  /* _WINMAIN_ */<br/>
+<br/>
+            if ( !managedapp )<br/>
+                exit(mainret);<br/>
+<br/>
+            _cexit();<br/>
+<br/>
+        }<br/>
+        __except ( _XcptFilter(GetExceptionCode(), GetExceptionInformation()) )<br/>
+        {<br/>
+            /*<br/>
+             * Should never reach here<br/>
+             */<br/>
+<br/>
+            mainret = GetExceptionCode();<br/>
+<br/>
+            if ( !managedapp )<br/>
+                _exit(mainret);<br/>
+<br/>
+            _c_exit();<br/>
+<br/>
+        } /* end of try - except */<br/>
+<br/>
+        return mainret;<br/>
+}</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,565 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        HibernateTestCase            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE hibernate-configuration PUBLIC &quot;-//Hibernate/Hibernate Configuration DTD 3.0//EN&quot;<br/>
+	&quot;http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd&quot;<br/>
+&gt;<br/>
+<br/>
+ &lt;hibernate-configuration&gt;<br/>
+&lt;session-factory&gt;<br/>
+	&lt;property name=&quot;connection.url&quot;&gt;<br/>
+		jdbc:mysql://localhost:3306/hibernate<br/>
+	&lt;/property&gt;<br/>
+	&lt;property name=&quot;connection.username&quot;&gt;root&lt;/property&gt;<br/>
+	&lt;property name=&quot;connection.password&quot;&gt;123456&lt;/property&gt;<br/>
+	&lt;property name=&quot;connection.driver_class&quot;&gt;<br/>
+		com.mysql.jdbc.Driver<br/>
+	&lt;/property&gt;<br/>
+	&lt;property name=&quot;dialect&quot;&gt;<br/>
+		org.hibernate.dialect.MySQL5Dialect<br/>
+	&lt;/property&gt;<br/>
+	&lt;property name=&quot;show_sql&quot;&gt;true&lt;/property&gt;<br/>
+	&lt;property name=&quot;format_sql&quot;&gt;true&lt;/property&gt;<br/>
+<br/>
+	&lt;mapping resource=&quot;com/xiuye/mysql/dbclass/emp.hbm.xml&quot; /&gt;<br/>
+	&lt;mapping resource=&quot;com/xiuye/mysql/dbclass/Account.hbm.xml&quot; /&gt;<br/>
+	&lt;mapping resource=&quot;com/xiuye/mysql/dbclass/Service.hbm.xml&quot; /&gt;<br/>
+<br/>
+&lt;/session-factory&gt;<br/>
+<br/>
+&lt;/hibernate-configuration&gt;<br/>
+ </pre><br><br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+<br/>
+&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;<br/>
+&quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;<br/>
+&lt;hibernate-mapping&gt;<br/>
+	&lt;class name=&quot;com.xiuye.mysql.dbclass.Account&quot; table=&quot;ACCOUNT&quot;&gt;<br/>
+		&lt;id name=&quot;id&quot; type=&quot;integer&quot; column=&quot;id&quot;&gt;<br/>
+			&lt;generator class=&quot;native&quot;&gt;<br/>
+				<br/>
+			&lt;/generator&gt;   <br/>
+		&lt;/id&gt;<br/>
+		&lt;property name=&quot;recommenderId&quot; type=&quot;integer&quot; column=&quot;RECOMMENDER_ID&quot; /&gt;<br/>
+		&lt;property name=&quot;loginName&quot; type=&quot;string&quot; column=&quot;LOGIN_NAME&quot; /&gt;<br/>
+		&lt;property name=&quot;loginPassword&quot; type=&quot;string&quot; column=&quot;LOGIN_PASSWD&quot; /&gt;<br/>
+		&lt;property name=&quot;status&quot; type=&quot;string&quot; column=&quot;STATUS&quot; /&gt;<br/>
+		&lt;property name=&quot;createDate&quot; type=&quot;date&quot; column=&quot;CREATE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;pauseDate&quot; type=&quot;date&quot; column=&quot;PAUSE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;closeDate&quot; type=&quot;date&quot; column=&quot;CLOSE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;realName&quot; type=&quot;string&quot; column=&quot;REAL_NAME&quot; /&gt;<br/>
+		&lt;property name=&quot;idcardNo&quot; type=&quot;string&quot; column=&quot;IDCARD_NO&quot; /&gt;<br/>
+		&lt;property name=&quot;birthdate&quot; type=&quot;date&quot; column=&quot;BIRTHDATE&quot; /&gt;<br/>
+		&lt;property name=&quot;gender&quot; type=&quot;string&quot; column=&quot;GENDER&quot; /&gt;<br/>
+		&lt;property name=&quot;occupation&quot; type=&quot;string&quot; column=&quot;OCCUPATION&quot; /&gt;<br/>
+		&lt;property name=&quot;telephone&quot; type=&quot;string&quot; column=&quot;TELEPHONE&quot; /&gt;<br/>
+		&lt;property name=&quot;email&quot; type=&quot;string&quot; column=&quot;EMAIL&quot; /&gt;<br/>
+		&lt;property name=&quot;mailaddress&quot; type=&quot;string&quot; column=&quot;MAILADDRESS&quot; /&gt;<br/>
+		&lt;property name=&quot;zipcode&quot; type=&quot;string&quot; column=&quot;ZIPCODE&quot; /&gt;<br/>
+		&lt;property name=&quot;qq&quot; type=&quot;string&quot; column=&quot;QQ&quot; /&gt;<br/>
+		&lt;property name=&quot;lastLoginTime&quot; type=&quot;date&quot; column=&quot;LAST_LOGIN_TIME&quot; /&gt;<br/>
+		&lt;property name=&quot;lastLoginIp&quot; type=&quot;string&quot; column=&quot;LAST_LOGIN_IP&quot; /&gt;<br/>
+<br/>
+		&lt;set name=&quot;services&quot; lazy=&quot;false&quot; fetch=&quot;join&quot;<br/>
+		cascade=&quot;all&quot; inverse=&quot;true&quot;<br/>
+		&gt;<br/>
+		&lt;!-- 外键 --&gt;<br/>
+			&lt;key column=&quot;ACCOUNT_ID&quot;<br/>
+			<br/>
+			/&gt;<br/>
+			&lt;one-to-many class=&quot;com.xiuye.mysql.dbclass.Service&quot;/&gt;<br/>
+		&lt;/set&gt;<br/>
+<br/>
+	&lt;/class&gt;<br/>
+&lt;/hibernate-mapping&gt;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+</pre><br><br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;<br/>
+&quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;<br/>
+&lt;hibernate-mapping&gt;<br/>
+	&lt;class name=&quot;com.xiuye.mysql.dbclass.Service&quot; table=&quot;SERVICE&quot;&gt;<br/>
+		&lt;id name=&quot;id&quot; type=&quot;integer&quot; column=&quot;id&quot;&gt;<br/>
+			&lt;generator class=&quot;native&quot;&gt;<br/>
+				<br/>
+			&lt;/generator&gt;<br/>
+		&lt;/id&gt;<br/>
+		&lt;!-- &lt;property name=&quot;accountId&quot; type=&quot;integer&quot; column=&quot;ACCOUNT_ID&quot; /&gt; --&gt;<br/>
+		&lt;property name=&quot;unixHost&quot; type=&quot;string&quot; column=&quot;UNIX_HOST&quot; /&gt;<br/>
+		&lt;property name=&quot;osUserName&quot; type=&quot;string&quot; column=&quot;OS_USERNAME&quot; /&gt;<br/>
+		&lt;property name=&quot;loginPassword&quot; type=&quot;string&quot; column=&quot;LOGIN_PASSWD&quot; /&gt;<br/>
+		&lt;property name=&quot;status&quot; type=&quot;string&quot; column=&quot;STATUS&quot; /&gt;<br/>
+		&lt;property name=&quot;createDate&quot; type=&quot;date&quot; column=&quot;CREATE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;pauseDate&quot; type=&quot;date&quot; column=&quot;PAUSE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;closeDate&quot; type=&quot;date&quot; column=&quot;CLOSE_DATE&quot; /&gt;<br/>
+		&lt;property name=&quot;costId&quot; type=&quot;integer&quot; column=&quot;COST_ID&quot; /&gt;<br/>
+		<br/>
+		&lt;many-to-one lazy=&quot;false&quot; fetch=&quot;join&quot; name=&quot;account&quot; column=&quot;ACCOUNT_ID&quot;<br/>
+			class=&quot;com.xiuye.mysql.dbclass.Account&quot; /&gt;<br/>
+	&lt;/class&gt;<br/>
+&lt;/hibernate-mapping&gt;</pre><pre name="code" class="java">package com.xiuye.mysql.dbclass;<br/>
+<br/>
+import java.sql.Date;<br/>
+<br/>
+public class Service {<br/>
+	@Override<br/>
+	public String toString() {<br/>
+		return &quot;Service [id=&quot; + id + &quot;, unixHost=&quot; + unixHost + &quot;, osUserName=&quot;<br/>
+				+ osUserName + &quot;, loginPassword=&quot; + loginPassword + &quot;, status=&quot;<br/>
+				+ status + &quot;, createDate=&quot; + createDate + &quot;, pauseDate=&quot;<br/>
+				+ pauseDate + &quot;, closeDate=&quot; + closeDate + &quot;, costId=&quot; + costId<br/>
+				+ &quot;]&quot;;<br/>
+	}<br/>
+<br/>
+	private Integer id;<br/>
+	// private Integer accountId;<br/>
+	private String unixHost;<br/>
+	private String osUserName;<br/>
+	private String loginPassword;<br/>
+	private String status;<br/>
+	private Date createDate;<br/>
+	private Date pauseDate;<br/>
+	private Date closeDate;<br/>
+	private Integer costId;<br/>
+	private Account account;<br/>
+<br/>
+	public Account getAccount() {<br/>
+		return account;<br/>
+	}<br/>
+<br/>
+	public void setAccount(Account account) {<br/>
+		this.account = account;<br/>
+	}<br/>
+<br/>
+	public Integer getId() {<br/>
+		return id;<br/>
+	}<br/>
+<br/>
+	public void setId(Integer id) {<br/>
+		this.id = id;<br/>
+	}<br/>
+<br/>
+	/*public Integer getAccountId() {<br/>
+		return accountId;<br/>
+	}<br/>
+<br/>
+	public void setAccountId(Integer accountId) {<br/>
+		this.accountId = accountId;<br/>
+	}*/<br/>
+<br/>
+	public String getUnixHost() {<br/>
+		return unixHost;<br/>
+	}<br/>
+<br/>
+	public void setUnixHost(String unixHost) {<br/>
+		this.unixHost = unixHost;<br/>
+	}<br/>
+<br/>
+	public String getOsUserName() {<br/>
+		return osUserName;<br/>
+	}<br/>
+<br/>
+	public void setOsUserName(String osUserName) {<br/>
+		this.osUserName = osUserName;<br/>
+	}<br/>
+<br/>
+	public String getLoginPassword() {<br/>
+		return loginPassword;<br/>
+	}<br/>
+<br/>
+	public void setLoginPassword(String loginPassword) {<br/>
+		this.loginPassword = loginPassword;<br/>
+	}<br/>
+<br/>
+	public String getStatus() {<br/>
+		return status;<br/>
+	}<br/>
+<br/>
+	public void setStatus(String status) {<br/>
+		this.status = status;<br/>
+	}<br/>
+<br/>
+	public Date getCreateDate() {<br/>
+		return createDate;<br/>
+	}<br/>
+<br/>
+	public void setCreateDate(Date createDate) {<br/>
+		this.createDate = createDate;<br/>
+	}<br/>
+<br/>
+	public Date getPauseDate() {<br/>
+		return pauseDate;<br/>
+	}<br/>
+<br/>
+	public void setPauseDate(Date pauseDate) {<br/>
+		this.pauseDate = pauseDate;<br/>
+	}<br/>
+<br/>
+	public Date getCloseDate() {<br/>
+		return closeDate;<br/>
+	}<br/>
+<br/>
+	public void setCloseDate(Date closeDate) {<br/>
+		this.closeDate = closeDate;<br/>
+	}<br/>
+<br/>
+	public Integer getCostId() {<br/>
+		return costId;<br/>
+	}<br/>
+<br/>
+	public void setCostId(Integer costId) {<br/>
+		this.costId = costId;<br/>
+	}<br/>
+}</pre><pre name="code" class="java">package com.xiuye.mysql.dbclass;<br/>
+<br/>
+import java.sql.Date;<br/>
+import java.util.Set;<br/>
+<br/>
+public class Account {<br/>
+	private Integer id;<br/>
+	private Integer recommenderId;<br/>
+	private String loginName;<br/>
+	private String loginPassword;<br/>
+	private String status;<br/>
+	private Date createDate;<br/>
+	private Date pauseDate;<br/>
+	private Date closeDate;<br/>
+	private String realName;<br/>
+	private String idcardNo;<br/>
+	private Date birthdate;<br/>
+	private String gender;<br/>
+	private String occupation;<br/>
+	private String telephone;<br/>
+	private String email;<br/>
+	private String mailaddress;<br/>
+	private String zipcode;<br/>
+	private String qq;<br/>
+	private Date lastLoginTime;<br/>
+	private String lastLoginIp;<br/>
+<br/>
+	private Set&lt;Service&gt; services;<br/>
+	<br/>
+	<br/>
+	<br/>
+	@Override<br/>
+	public String toString() {<br/>
+		return &quot;Account [id=&quot; + id + &quot;, recommenderId=&quot; + recommenderId<br/>
+				+ &quot;, loginName=&quot; + loginName + &quot;, loginPassword=&quot;<br/>
+				+ loginPassword + &quot;, status=&quot; + status + &quot;, createDate=&quot;<br/>
+				+ createDate + &quot;, pauseDate=&quot; + pauseDate + &quot;, closeDate=&quot;<br/>
+				+ closeDate + &quot;, realName=&quot; + realName + &quot;, idcardNo=&quot;<br/>
+				+ idcardNo + &quot;, birthdate=&quot; + birthdate + &quot;, gender=&quot; + gender<br/>
+				+ &quot;, occupation=&quot; + occupation + &quot;, telephone=&quot; + telephone<br/>
+				+ &quot;, email=&quot; + email + &quot;, mailaddress=&quot; + mailaddress<br/>
+				+ &quot;, zipcode=&quot; + zipcode + &quot;, qq=&quot; + qq + &quot;, lastLoginTime=&quot;<br/>
+				+ lastLoginTime + &quot;, lastLoginIp=&quot; + lastLoginIp + &quot;]&quot;;<br/>
+	}<br/>
+<br/>
+	public Set&lt;Service&gt; getServices() {<br/>
+		return services;<br/>
+	}<br/>
+<br/>
+	public void setServices(Set&lt;Service&gt; services) {<br/>
+		this.services = services;<br/>
+	}<br/>
+<br/>
+	public Integer getId() {<br/>
+		return id;<br/>
+	}<br/>
+<br/>
+	public void setId(Integer id) {<br/>
+		this.id = id;<br/>
+	}<br/>
+<br/>
+	public Integer getRecommenderId() {<br/>
+		return recommenderId;<br/>
+	}<br/>
+<br/>
+	public void setRecommenderId(Integer recommenderId) {<br/>
+		this.recommenderId = recommenderId;<br/>
+	}<br/>
+<br/>
+	public String getLoginName() {<br/>
+		return loginName;<br/>
+	}<br/>
+<br/>
+	public void setLoginName(String loginName) {<br/>
+		this.loginName = loginName;<br/>
+	}<br/>
+<br/>
+	public String getLoginPassword() {<br/>
+		return loginPassword;<br/>
+	}<br/>
+<br/>
+	public void setLoginPassword(String loginPassword) {<br/>
+		this.loginPassword = loginPassword;<br/>
+	}<br/>
+<br/>
+	public String getStatus() {<br/>
+		return status;<br/>
+	}<br/>
+<br/>
+	public void setStatus(String status) {<br/>
+		this.status = status;<br/>
+	}<br/>
+<br/>
+	public Date getCreateDate() {<br/>
+		return createDate;<br/>
+	}<br/>
+<br/>
+	public void setCreateDate(Date createDate) {<br/>
+		this.createDate = createDate;<br/>
+	}<br/>
+<br/>
+	public Date getPauseDate() {<br/>
+		return pauseDate;<br/>
+	}<br/>
+<br/>
+	public void setPauseDate(Date pauseDate) {<br/>
+		this.pauseDate = pauseDate;<br/>
+	}<br/>
+<br/>
+	public Date getCloseDate() {<br/>
+		return closeDate;<br/>
+	}<br/>
+<br/>
+	public void setCloseDate(Date closeDate) {<br/>
+		this.closeDate = closeDate;<br/>
+	}<br/>
+<br/>
+	public String getRealName() {<br/>
+		return realName;<br/>
+	}<br/>
+<br/>
+	public void setRealName(String realName) {<br/>
+		this.realName = realName;<br/>
+	}<br/>
+<br/>
+	public String getIdcardNo() {<br/>
+		return idcardNo;<br/>
+	}<br/>
+<br/>
+	public void setIdcardNo(String idcardNo) {<br/>
+		this.idcardNo = idcardNo;<br/>
+	}<br/>
+<br/>
+	public Date getBirthdate() {<br/>
+		return birthdate;<br/>
+	}<br/>
+<br/>
+	public void setBirthdate(Date birthdate) {<br/>
+		this.birthdate = birthdate;<br/>
+	}<br/>
+<br/>
+	public String getGender() {<br/>
+		return gender;<br/>
+	}<br/>
+<br/>
+	public void setGender(String gender) {<br/>
+		this.gender = gender;<br/>
+	}<br/>
+<br/>
+	public String getOccupation() {<br/>
+		return occupation;<br/>
+	}<br/>
+<br/>
+	public void setOccupation(String occupation) {<br/>
+		this.occupation = occupation;<br/>
+	}<br/>
+<br/>
+	public String getTelephone() {<br/>
+		return telephone;<br/>
+	}<br/>
+<br/>
+	public void setTelephone(String telephone) {<br/>
+		this.telephone = telephone;<br/>
+	}<br/>
+<br/>
+	public String getEmail() {<br/>
+		return email;<br/>
+	}<br/>
+<br/>
+	public void setEmail(String email) {<br/>
+		this.email = email;<br/>
+	}<br/>
+<br/>
+	public String getMailaddress() {<br/>
+		return mailaddress;<br/>
+	}<br/>
+<br/>
+	public void setMailaddress(String mailaddress) {<br/>
+		this.mailaddress = mailaddress;<br/>
+	}<br/>
+<br/>
+	public String getZipcode() {<br/>
+		return zipcode;<br/>
+	}<br/>
+<br/>
+	public void setZipcode(String zipcode) {<br/>
+		this.zipcode = zipcode;<br/>
+	}<br/>
+<br/>
+	public String getQq() {<br/>
+		return qq;<br/>
+	}<br/>
+<br/>
+	public void setQq(String qq) {<br/>
+		this.qq = qq;<br/>
+	}<br/>
+<br/>
+	public Date getLastLoginTime() {<br/>
+		return lastLoginTime;<br/>
+	}<br/>
+<br/>
+	public void setLastLoginTime(Date lastLoginTime) {<br/>
+		this.lastLoginTime = lastLoginTime;<br/>
+	}<br/>
+<br/>
+	public String getLastLoginIp() {<br/>
+		return lastLoginIp;<br/>
+	}<br/>
+<br/>
+	public void setLastLoginIp(String lastLoginIp) {<br/>
+		this.lastLoginIp = lastLoginIp;<br/>
+	}<br/>
+}</pre><br><br/>
+<pre name="code" class="java">package test;<br/>
+<br/>
+import java.util.HashSet;<br/>
+import java.util.Set;<br/>
+<br/>
+import org.hibernate.HibernateException;<br/>
+import org.hibernate.Session;<br/>
+import org.hibernate.Transaction;<br/>
+import org.junit.Test;<br/>
+<br/>
+import com.xiuye.mysql.dbclass.Account;<br/>
+import com.xiuye.mysql.dbclass.Service;<br/>
+import com.xiuye.mysql.util.HibernateUtil;<br/>
+<br/>
+public class Test3 {<br/>
+<br/>
+	// @Test<br/>
+	public void test1() {<br/>
+		// onr to many<br/>
+		Session session = HibernateUtil.getSession();<br/>
+<br/>
+		Account account = (Account) session.get(Account.class, 2);<br/>
+		System.out.println(account);<br/>
+		System.out.println(&quot;==========================&quot;);<br/>
+<br/>
+		Set&lt;Service&gt; services = account.getServices();<br/>
+		System.out.println(services.getClass().getName());<br/>
+<br/>
+		for (Service service : services) {<br/>
+<br/>
+			System.out.println(service);<br/>
+<br/>
+		}<br/>
+<br/>
+		session.close();<br/>
+<br/>
+	}<br/>
+<br/>
+	// @Test<br/>
+	public void test4() {<br/>
+<br/>
+		Session session = HibernateUtil.getSession();<br/>
+<br/>
+		Service service = (Service) session.get(Service.class, 100);<br/>
+<br/>
+		System.out.println(service);<br/>
+		System.out.println(&quot;=================&quot;);<br/>
+<br/>
+		System.out.println(service.getAccount());<br/>
+<br/>
+	}<br/>
+<br/>
+	// @Test<br/>
+	public void test3() {<br/>
+		Account a = new Account();<br/>
+		a.setLastLoginIp(&quot;gg&quot;);<br/>
+		a.setLoginName(&quot;wwwwwwww&quot;);<br/>
+		a.setLoginPassword(&quot;123456&quot;);<br/>
+<br/>
+		Service s1 = new Service();<br/>
+		s1.setAccount(a);<br/>
+		s1.setOsUserName(&quot;Unix&quot;);<br/>
+		s1.setLoginPassword(&quot;123456&quot;);<br/>
+<br/>
+		Service s2 = new Service();<br/>
+		s2.setAccount(a);<br/>
+		s2.setOsUserName(&quot;Linux&quot;);<br/>
+		s2.setLoginPassword(&quot;123456&quot;);<br/>
+<br/>
+		a.setServices(new HashSet&lt;Service&gt;());<br/>
+		a.getServices().add(s1);<br/>
+		a.getServices().add(s2);<br/>
+<br/>
+		Session session = HibernateUtil.getSession();<br/>
+		Transaction as = session.beginTransaction();<br/>
+<br/>
+		try {<br/>
+			session.save(a);<br/>
+			as.commit();<br/>
+		} catch (HibernateException e) {<br/>
+<br/>
+			e.printStackTrace();<br/>
+			as.rollback();<br/>
+		} finally {<br/>
+			session.close();<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	//@Test<br/>
+	public void test5() {<br/>
+		Session session = HibernateUtil.getSession();<br/>
+		// 查询出要修改的账务账号<br/>
+		Account account = (Account) session.get(Account.class, 5);<br/>
+		// 模拟对账务账号的修改<br/>
+		account.setLoginName(&quot;pp&quot;);<br/>
+		Set&lt;Service&gt; services = account.getServices();<br/>
+		for (Service service : services) {<br/>
+			// 模拟对业务账号的修改<br/>
+			service.setLoginPassword(&quot;pp&quot;);<br/>
+		}<br/>
+		Transaction ts = session.beginTransaction();<br/>
+		try {<br/>
+			session.update(account);<br/>
+			ts.commit();<br/>
+		} catch (HibernateException e) {<br/>
+			e.printStackTrace();<br/>
+			ts.rollback();<br/>
+		} finally {<br/>
+			session.close();<br/>
+		}<br/>
+	}<br/>
+<br/>
+	//@Test<br/>
+	public void test6() {<br/>
+		Session session = HibernateUtil.getSession();<br/>
+		Account account = (Account) session.get(Account.class, 2);<br/>
+		Transaction ts = session.beginTransaction();<br/>
+		try {<br/>
+			session.delete(account);<br/>
+			ts.commit();<br/>
+		} catch (HibernateException e) {<br/>
+			e.printStackTrace();<br/>
+			ts.rollback();<br/>
+		} finally {<br/>
+			session.close();<br/>
+		}<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

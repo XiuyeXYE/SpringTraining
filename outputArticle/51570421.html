@@ -1,0 +1,567 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Android Intent  demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_1_7835150"  name="code" class="java">package com.xiuye.android;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+import android.app.Activity;<br/>
+import android.content.Intent;<br/>
+import android.net.Uri;<br/>
+import android.os.Bundle;<br/>
+import android.util.Log;<br/>
+import android.view.Menu;<br/>
+import android.view.MenuItem;<br/>
+import android.view.View;<br/>
+import android.view.View.OnClickListener;<br/>
+import android.view.Window;<br/>
+import android.widget.Button;<br/>
+import android.widget.Toast;<br/>
+<br/>
+public class MainActivity extends Activity {<br/>
+<br/>
+	@Override<br/>
+	protected void onCreate(Bundle savedInstanceState) {<br/>
+		super.onCreate(savedInstanceState);<br/>
+		requestWindowFeature(Window.FEATURE_NO_TITLE);<br/>
+		setContentView(R.layout.activity_main);<br/>
+		<br/>
+		if(savedInstanceState != null){//只有程序从create重新开始执行的时候，才会执行下面的，但一般create只在开始执行一次。<br/>
+			String data = savedInstanceState.getString(&quot;savedCache&quot;);<br/>
+			Log.v(&quot;MainActivity:onCreate&quot;, data);<br/>
+			Toast.makeText(this, data, Toast.LENGTH_LONG).show();<br/>
+		}<br/>
+		<br/>
+		Button button1 = (Button) findViewById(R.id.button1);<br/>
+		button1.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				Toast.makeText(MainActivity.this, &quot;你点击了按钮1&quot;, Toast.LENGTH_SHORT).show();<br/>
+			}<br/>
+		});<br/>
+		Button button2 = (Button) findViewById(R.id.button2);<br/>
+		button2.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				<br/>
+				finish();<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Button redirect = (Button) findViewById(R.id.button4);<br/>
+		redirect.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(MainActivity.this,SecondActivity.class);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		Button button5 = (Button) findViewById(R.id.button5);<br/>
+		button5.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				<br/>
+				Intent intent = new Intent(&quot;com.xiuye.android.testImplicitIntent&quot;);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Button button6 = (Button) findViewById(R.id.button6);<br/>
+		button6.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(&quot;com.xiuye.android.testImplicitIntent&quot;);<br/>
+				intent.addCategory(&quot;com.xiuye.android.myOwnCategory&quot;);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		Button browser = (Button) findViewById(R.id.browser);<br/>
+		browser.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(Intent.ACTION_VIEW);<br/>
+				intent.setData(Uri.parse(&quot;https://www.baidu.com&quot;));<br/>
+				startActivity(intent);<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Button dial = (Button) findViewById(R.id.dial);<br/>
+		dial.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(Intent.ACTION_DIAL);<br/>
+				intent.setData(Uri.parse(&quot;tel:10086&quot;));<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		Button parameter = (Button) findViewById(R.id.parameter);<br/>
+		parameter.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(MainActivity.this,SecondActivity.class);<br/>
+				String data = &quot;哈喽，你好呀！&quot;;<br/>
+				intent.putExtra(&quot;extra_data&quot;, data);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		Button result = (Button) findViewById(R.id.result);<br/>
+		result.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(MainActivity.this, SecondActivity.class);<br/>
+				startActivityForResult(intent, 1);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Button third = (Button) findViewById(R.id.thirdActivity);<br/>
+		third.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent(MainActivity.this,ThirdActivity.class);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	<br/>
+<br/>
+	@Override<br/>
+	protected void onSaveInstanceState(Bundle outState) {<br/>
+		super.onSaveInstanceState(outState);<br/>
+		outState.putString(&quot;savedCache&quot;, &quot;保存activity被killed的数据；我觉得应该是整个activity的数据保存在application级别的内存中&quot;);<br/>
+		Log.v(&quot;MainActivity:onSaveInstanceState&quot;, &quot;保存activity被killed的数据；我觉得应该是整个activity的数据保存在application级别的内存中&quot;);<br/>
+	}<br/>
+<br/>
+<br/>
+<br/>
+	@Override<br/>
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {<br/>
+		<br/>
+		switch (requestCode) {<br/>
+		case 1:<br/>
+			if(resultCode == RESULT_OK){<br/>
+				String returnedData = data.getStringExtra(&quot;data_return&quot;);<br/>
+				Toast.makeText(this, returnedData, Toast.LENGTH_LONG).show();<br/>
+			}<br/>
+			break;<br/>
+<br/>
+		default:<br/>
+			//不起任何作用<br/>
+			String returnedData = data.getStringExtra(&quot;data_return&quot;);<br/>
+			Toast.makeText(this, returnedData, Toast.LENGTH_LONG).show();<br/>
+			break;<br/>
+		}<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean onCreateOptionsMenu(Menu menu) {<br/>
+		getMenuInflater().inflate(R.menu.menu, menu);<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean onOptionsItemSelected(MenuItem item) {<br/>
+		<br/>
+		switch(item.getItemId()){<br/>
+		<br/>
+		case R.id.add_item:<br/>
+			Toast.makeText(this, &quot;你点击了增加菜单&quot;, Toast.LENGTH_SHORT).show();;<br/>
+			break;<br/>
+		case R.id.remove_item:<br/>
+			Toast.makeText(this, &quot;你点击了删除菜单项&quot;, Toast.LENGTH_SHORT).show();<br/>
+			break;<br/>
+		default:<br/>
+			Toast.makeText(this, &quot;你点了那个我也不知道，哈哈&quot;, Toast.LENGTH_SHORT).show();<br/>
+			break;<br/>
+			<br/>
+		}<br/>
+		<br/>
+		return true;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_2_3102048"  name="code" class="java">package com.xiuye.android;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+import android.app.Activity;<br/>
+import android.content.Intent;<br/>
+import android.os.Bundle;<br/>
+import android.util.Log;<br/>
+import android.view.View;<br/>
+import android.view.View.OnClickListener;<br/>
+import android.view.Window;<br/>
+import android.widget.Button;<br/>
+import android.widget.Toast;<br/>
+<br/>
+public class SecondActivity extends Activity {<br/>
+<br/>
+	@Override<br/>
+	protected void onCreate(Bundle savedInstanceState) {<br/>
+		<br/>
+		super.onCreate(savedInstanceState);<br/>
+		requestWindowFeature(Window.FEATURE_NO_TITLE);<br/>
+		<br/>
+		setContentView(R.layout.second_layout);<br/>
+		<br/>
+		if(savedInstanceState != null){<br/>
+			String data = savedInstanceState.getString(&quot;savedCache&quot;);<br/>
+			Log.v(&quot;SecondActivity&quot;, data);<br/>
+			Toast.makeText(this, data, Toast.LENGTH_LONG).show();<br/>
+		}<br/>
+		<br/>
+		Button button3 = (Button) findViewById(R.id.button3);<br/>
+		final Intent intent = getIntent();<br/>
+		<br/>
+		<br/>
+		<br/>
+		button3.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				String data = &quot;接收到传递的信息是：&quot;+intent.getStringExtra(&quot;extra_data&quot;);<br/>
+				<br/>
+				Toast.makeText(SecondActivity.this, data, Toast.LENGTH_LONG).show();<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Button returnResult = (Button) findViewById(R.id.returnResult);<br/>
+		returnResult.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+<br/>
+				Intent intent = new Intent();<br/>
+				intent.putExtra(&quot;data_return&quot;, &quot;你好呀，我已经收到了你的消息&quot;);<br/>
+				setResult(RESULT_OK,intent);<br/>
+				finish();<br/>
+			}<br/>
+		});<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void onBackPressed() {<br/>
+		<br/>
+		Intent intent = new Intent();<br/>
+		intent.putExtra(&quot;data_return&quot;, &quot;你好呀，我已经收到了你的消息&quot;);<br/>
+		setResult(RESULT_OK,intent);<br/>
+		finish();//如果没有finish，回退键将不起作用<br/>
+		<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_3_8468004"  name="code" class="java">package com.xiuye.android;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+import android.app.Activity;<br/>
+import android.content.Intent;<br/>
+import android.os.Bundle;<br/>
+import android.util.Log;<br/>
+import android.view.View;<br/>
+<br/>
+import android.view.View.OnClickListener;<br/>
+import android.widget.Button;<br/>
+import android.widget.Toast;<br/>
+<br/>
+public class ThirdActivity extends Activity {<br/>
+<br/>
+	@Override<br/>
+	protected void onCreate(Bundle savedInstanceState) {<br/>
+		<br/>
+		super.onCreate(savedInstanceState);<br/>
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);<br/>
+		setContentView(R.layout.third_layout);<br/>
+<br/>
+		if(savedInstanceState != null){//只有程序从create重新开始执行的时候，才会执行下面的，但一般create只在开始执行一次。<br/>
+			String data = savedInstanceState.getString(&quot;savedCache&quot;);<br/>
+			Log.v(&quot;ThirdActivity:onCreate&quot;, data);<br/>
+			Toast.makeText(this, data, Toast.LENGTH_LONG).show();<br/>
+		}<br/>
+		Button dialogbutton = (Button) findViewById(R.id.openDialog);<br/>
+		dialogbutton.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				<br/>
+				Intent intent = new Intent(ThirdActivity.this,DialogActivity.class);<br/>
+				startActivity(intent);<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onCreate创建&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onStart() {<br/>
+		<br/>
+		super.onStart();<br/>
+		<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onStart开始&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onRestart() {<br/>
+		<br/>
+		super.onRestart();<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onRestart重新开始&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onResume() {<br/>
+		super.onResume();<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onResume恢复&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onPause() {<br/>
+		super.onPause();<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onPause暂停&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onStop() {<br/>
+		super.onStop();<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onStop停止&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void onDestroy() {<br/>
+		super.onDestroy();<br/>
+		Log.v(&quot;ThirdActivity&quot;, &quot;onDestroy销毁&quot;);<br/>
+	}<br/>
+	@Override<br/>
+	protected void onSaveInstanceState(Bundle outState) {<br/>
+		super.onSaveInstanceState(outState);<br/>
+		outState.putString(&quot;savedCache&quot;, &quot;保存activity被killed的数据；我觉得应该是整个activity的数据保存在application级别的内存中&quot;);<br/>
+		Log.v(&quot;ThirdActivity:onSaveInstanceState&quot;, &quot;保存activity被killed的数据；我觉得应该是整个activity的数据保存在application级别的内存中&quot;);<br/>
+	}<br/>
+	<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_4_910220"  name="code" class="java">package com.xiuye.android;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+import android.app.Activity;<br/>
+import android.os.Bundle;<br/>
+<br/>
+public class DialogActivity extends Activity {<br/>
+<br/>
+	@Override<br/>
+	protected void onCreate(Bundle savedInstanceState) {<br/>
+		super.onCreate(savedInstanceState);<br/>
+		setContentView(R.layout.dialog_layout);<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_5_4116586"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br/>
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;<br/>
+    package=&quot;com.xiuye.android&quot;<br/>
+    android:versionCode=&quot;1&quot;<br/>
+    android:versionName=&quot;1.0&quot; &gt;<br/>
+<br/>
+    &lt;uses-sdk<br/>
+        android:minSdkVersion=&quot;8&quot;<br/>
+        android:targetSdkVersion=&quot;17&quot; /&gt;<br/>
+<br/>
+    &lt;application<br/>
+        android:allowBackup=&quot;true&quot;<br/>
+        android:icon=&quot;@drawable/book&quot;<br/>
+        android:label=&quot;@string/app_name&quot;<br/>
+        android:theme=&quot;@style/AppTheme&quot; &gt;<br/>
+        &lt;activity<br/>
+            android:name=&quot;com.xiuye.android.MainActivity&quot;<br/>
+            android:label=&quot;@string/app_name&quot; &gt;<br/>
+            &lt;intent-filter&gt;<br/>
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;<br/>
+<br/>
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;<br/>
+            &lt;/intent-filter&gt;<br/>
+        &lt;/activity&gt;<br/>
+        &lt;activity android:name=&quot;SecondActivity&quot;&gt;<br/>
+            <br/>
+            &lt;intent-filter &gt;<br/>
+                <br/>
+                &lt;action android:name=&quot;com.xiuye.android.testImplicitIntent&quot;/&gt;<br/>
+                &lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;<br/>
+                &lt;category android:name=&quot;com.xiuye.android.myOwnCategory&quot;/&gt;<br/>
+            &lt;/intent-filter&gt;<br/>
+            <br/>
+        &lt;/activity&gt;<br/>
+        &lt;activity android:name=&quot;ThirdActivity&quot; android:icon=&quot;@drawable/book&quot; android:label=&quot;@string/app_name&quot; android:logo=&quot;@string/hello_world&quot;&gt;&lt;/activity&gt;<br/>
+        &lt;activity android:name=&quot;DialogActivity&quot; android:theme=&quot;@android:style/Theme.Dialog&quot;&gt;<br/>
+        &lt;/activity&gt;<br/>
+        <br/>
+        <br/>
+    &lt;/application&gt;<br/>
+<br/>
+&lt;/manifest&gt;<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160602214707591?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre code_snippet_id="1706080" snippet_file_name="blog_20160602_6_911003"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br/>
+&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;<br/>
+    &lt;item android:id=&quot;@+id/add_item&quot; android:title=&quot;Add&quot;&gt;&lt;/item&gt;<br/>
+    &lt;item android:id=&quot;@+id/remove_item&quot; android:title=&quot;Remove&quot;&gt;&lt;/item&gt;<br/>
+    <br/>
+<br/>
+&lt;/menu&gt;<br/>
+</pre><br><br/>
+<pre code_snippet_id="1706080" snippet_file_name="blog_20160602_7_4956402"  name="code" class="html">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;<br/>
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;<br/>
+    android:layout_width=&quot;match_parent&quot;<br/>
+    android:layout_height=&quot;match_parent&quot;<br/>
+    android:gravity=&quot;top&quot;<br/>
+    tools:context=&quot;${relativePackage}.${activityClass}&quot; &gt;<br/>
+<br/>
+    &lt;TextView<br/>
+        android:id=&quot;@+id/textView1&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:text=&quot;@string/hello_world&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/button2&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/button1&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;关闭&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/button4&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/button2&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;显示Intent跳转&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/button5&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/button4&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;隐式Intent跳转&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/button6&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/button5&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;隐式Intent跳转自定义category&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/browser&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/button6&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;打开百度网页&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/parameter&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/browser&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;向第二个页面传递数据&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/button1&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignParentLeft=&quot;true&quot;<br/>
+        android:layout_below=&quot;@+id/textView1&quot;<br/>
+        android:layout_marginTop=&quot;10dp&quot;<br/>
+        android:text=&quot;弹出提示&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/result&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignBaseline=&quot;@+id/button1&quot;<br/>
+        android:layout_alignBottom=&quot;@+id/button1&quot;<br/>
+        android:layout_alignParentRight=&quot;true&quot;<br/>
+        android:text=&quot;返回数据给上一个活动&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/thirdActivity&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_alignBaseline=&quot;@+id/button2&quot;<br/>
+        android:layout_alignBottom=&quot;@+id/button2&quot;<br/>
+        android:layout_alignParentRight=&quot;true&quot;<br/>
+        android:text=&quot;跳转到第三个页面&quot; /&gt;<br/>
+<br/>
+    &lt;Button<br/>
+        android:id=&quot;@+id/dial&quot;<br/>
+        android:layout_width=&quot;wrap_content&quot;<br/>
+        android:layout_height=&quot;wrap_content&quot;<br/>
+        android:layout_above=&quot;@+id/button5&quot;<br/>
+        android:layout_alignParentRight=&quot;true&quot;<br/>
+        android:text=&quot;打10086&quot; /&gt;<br/>
+<br/>
+&lt;/RelativeLayout&gt;</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,23 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        linux compile objective-c            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1633576" snippet_file_name="blog_20160403_1_4546803"  code_snippet_id="1633576" snippet_file_name="blog_20160403_1_4546803" name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+<br/>
+int main (int argc, const char * argv[])<br/>
+{<br/>
+   NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];<br/>
+<br/>
+   NSLog (@&quot;hello world&quot;);<br/>
+   [pool drain];<br/>
+   return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1633576" snippet_file_name="blog_20160403_2_8723497"  code_snippet_id="1633576" snippet_file_name="blog_20160403_2_8723497" name="code" class="objc">gcc `gnustep-config --objc-flags` -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lobjc *.m -o main</pre><br><br/>
+<pre code_snippet_id="1633576" snippet_file_name="blog_20160403_3_6836726"  code_snippet_id="1633576" snippet_file_name="blog_20160403_3_6836726" name="code" class="objc"> gnustep-config --objc-flags                                                                                                                                                              <br/>
+-MMD -MP -DGNUSTEP -DGNUSTEP_BASE_LIBRARY=1 -DGNU_GUI_LIBRARY=1 -DGNU_RUNTIME=1 -DGNUSTEP_BASE_LIBRARY=1 -fno-strict-aliasing -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -f<br/>
+PIC -Wall -DGSWARN -DGSDIAGNOSE -Wno-import -g -O2 -fgnu-runtime -fconstant-string-class=NSConstantString -fexec-charset=UTF-8 -I. -I/home/cg/root/GNUstep/Library/Headers -I/usr/GNUstep/Local/Li<br/>
+brary/Headers -I/usr/GNUstep/System/Library/Headers -I/usr/GNUstep/Local/Library/Headers -I/usr/GNUstep/Local/Library/Headers -I/usr/GNUstep/System/Library/Headers -I/usr/GNUstep/System/Library/<br/>
+Headers -I/usr/include/libxml2 -I/usr/include/p11-kit-1</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

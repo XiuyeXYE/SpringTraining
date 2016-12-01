@@ -1,0 +1,25 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        当spring报close不能手动控制和rollback不能手动控制            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1679258" snippet_file_name="blog_20160511_1_2809163"  code_snippet_id="1679258" snippet_file_name="blog_20160511_1_2809163" name="code" class="java">&lt;bean id=&quot;sqlSessionTemplate&quot; scope=&quot;prototype&quot; class=&quot;org.mybatis.spring.SqlSessionTemplate&quot; destroy-method=&quot;close&quot;&gt;<br/>
+		&lt;constructor-arg index=&quot;0&quot; ref=&quot;sqlSessionFactory&quot;&gt;&lt;/constructor-arg&gt;<br/>
+	&lt;/bean&gt;</pre><br/>
+<p>解决：close不能手动控制</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1679258" snippet_file_name="blog_20160511_2_2710887"  code_snippet_id="1679258" snippet_file_name="blog_20160511_2_2710887" name="code" class="java">try {<br/>
+			this.sqlSessionTemplate.getConnection().setAutoCommit(false);//这句会报connection is closed的错误<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;。。。。。。。<br/>
+			this.sqlSessionTemplate.commit();<br/>
+			return true;<br/>
+		} catch (Exception e) {<br/>
+			//this.sqlSessionTemplate.rollback();//不手动rollback<br/>
+		}</pre><br/>
+<p>解决：rollback不能手动控制</p><br/>
+<p><br><br/>
+</p><br/>
+<p>这种方式还是不能手动控制事务</p><br/>
+<br><br/>
+<p></p><br/>
+   <br/>
+</div>

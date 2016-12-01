@@ -1,0 +1,174 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        primefaces 实现保存主题，使主题应用于所有JSF页面            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1710087" snippet_file_name="blog_20160607_1_6278918"  name="code" class="javascript">$(function() {<br/>
+	//该el表达式失效<br/>
+	//PrimeFaces.changeTheme(&#39;${sessionScope.theme == null?&quot;swanky-purse&quot;:sessionScope.theme}&#39;);<br/>
+	$.ajax({<br/>
+		type:&quot;post&quot;,<br/>
+		url:&quot;currentTheme.do&quot;,<br/>
+		dataType:&quot;text&quot;,<br/>
+		success:function(data){<br/>
+			<br/>
+			PrimeFaces.changeTheme(data?data:&quot;swanky-purse&quot;);<br/>
+				<br/>
+			console.log(data);<br/>
+			<br/>
+		},<br/>
+		error:function(XMLHttpRequest, textStatus, errorThrown){<br/>
+			PrimeFaces.changeTheme(&#39;swanky-purse&#39;);<br/>
+		}<br/>
+	});<br/>
+	<br/>
+});</pre><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="1710087" snippet_file_name="blog_20160607_2_7609101"  name="code" class="java">package com.xiuye.controller;<br/>
+<br/>
+import javax.servlet.http.HttpSession;<br/>
+<br/>
+import org.springframework.stereotype.Controller;<br/>
+import org.springframework.web.bind.annotation.RequestMapping;<br/>
+import org.springframework.web.bind.annotation.ResponseBody;<br/>
+<br/>
+<br/>
+@Controller<br/>
+public class ViewController {<br/>
+<br/>
+	@RequestMapping(&quot;currentTheme.do&quot;)<br/>
+	@ResponseBody<br/>
+	public String theme(HttpSession session){<br/>
+		String theme = (String) session.getAttribute(&quot;theme&quot;);<br/>
+		if(theme == null){<br/>
+			theme = &quot;swanky-purse&quot;;<br/>
+			session.setAttribute(&quot;theme&quot;, theme);<br/>
+		}<br/>
+		return theme;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1710087" snippet_file_name="blog_20160607_3_8307213"  name="code" class="html">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;<br/>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;<br/>
+	xmlns:h=&quot;http://java.sun.com/jsf/html&quot;<br/>
+	xmlns:f=&quot;http://java.sun.com/jsf/core&quot;<br/>
+	xmlns:ui=&quot;http://java.sun.com/jsf/facelets&quot;<br/>
+	xmlns:p=&quot;http://primefaces.org/ui&quot;&gt;<br/>
+<br/>
+<br/>
+&lt;h:head&gt;<br/>
+	&lt;title&gt;用户个人主页&lt;/title&gt;<br/>
+	&lt;h:outputScript  library=&quot;js&quot; name=&quot;current_theme.js&quot;&gt;<br/>
+		<br/>
+	&lt;/h:outputScript&gt;<br/>
+	&lt;h:outputStylesheet&gt;<br/>
+		<br/>
+		.textInCenter{<br/>
+			vertical-align:top;<br/>
+			text-align:center;<br/>
+			margin:auto;<br/>
+		}<br/>
+		<br/>
+	&lt;/h:outputStylesheet&gt;<br/>
+<br/>
+&lt;/h:head&gt;<br/>
+<br/>
+&lt;h:body&gt;<br/>
+<br/>
+<br/>
+<br/>
+	&lt;h:form&gt;<br/>
+<br/>
+		&lt;p:layout fullPage=&quot;true&quot;&gt;<br/>
+<br/>
+<br/>
+			&lt;p:layoutUnit position=&quot;west&quot; resizable=&quot;true&quot; size=&quot;300&quot;&gt;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+			&lt;/p:layoutUnit&gt;<br/>
+			&lt;p:layoutUnit position=&quot;north&quot; resizable=&quot;true&quot;&gt;<br/>
+				&lt;h:panelGrid columns=&quot;1&quot;&gt;<br/>
+					&lt;p:outputLabel value=&quot;欢迎您，尊敬的用户:&quot; title=&quot;dfa&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+				&lt;/h:panelGrid&gt;<br/>
+				&lt;h:panelGrid width=&quot;100%&quot; columns=&quot;3&quot;&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;用户ID: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.userid}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;用户名: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.username}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;性别:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.sex}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;生日: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.birthday}&quot;&gt;<br/>
+							&lt;f:convertDateTime pattern=&quot;yyyy年MM月dd日&quot; /&gt;<br/>
+						&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;Email: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.email}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;QQ: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.qq}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;手机号: &quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.phone}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+					&lt;h:panelGrid columns=&quot;2&quot; rendered=&quot;${sessionScope.user.isAdmin}&quot;&gt;<br/>
+						&lt;p:outputLabel value=&quot;管理员:&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+						&lt;p:outputLabel value=&quot;${sessionScope.user.isAdmin?&#39;是&#39;:&#39;否&#39;}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+					&lt;/h:panelGrid&gt;<br/>
+<br/>
+				&lt;/h:panelGrid&gt;<br/>
+			&lt;/p:layoutUnit&gt;<br/>
+			&lt;p:layoutUnit position=&quot;south&quot; resizable=&quot;true&quot;&gt;<br/>
+				&lt;h:panelGrid styleClass=&quot;textInCenter&quot; columns=&quot;1&quot;&gt;<br/>
+					&lt;p:outputLabel value=&quot;Xiuye Company Copyright &#169; 2016 &quot;&gt;<br/>
+					&lt;/p:outputLabel&gt;<br/>
+					&lt;p:outputLabel value=&quot;All rights reserved.&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+				&lt;/h:panelGrid&gt;<br/>
+			&lt;/p:layoutUnit&gt;<br/>
+<br/>
+			&lt;p:layoutUnit position=&quot;center&quot;&gt;<br/>
+<br/>
+			&lt;/p:layoutUnit&gt;<br/>
+		&lt;/p:layout&gt;<br/>
+	&lt;/h:form&gt;<br/>
+&lt;/h:body&gt;<br/>
+<br/>
+&lt;/html&gt;</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160607033726097?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="1710087" snippet_file_name="blog_20160607_4_4545222"  name="code" class="java">关键部分原理：<br/>
+1.JSF加载js等资源的路径要求是resources文件下的资源文件。<br/>
+2.在浏览器端调用PrimeFaces.changeTheme方法可以runtime的时候，改变主题。<br/>
+3.主题用ajax传到前台，调用2中的方法，用jquery的起始加载直接改变当前页面主题。</pre><br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

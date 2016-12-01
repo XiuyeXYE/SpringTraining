@@ -1,0 +1,122 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        EJB定时器            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package remote;<br/>
+<br/>
+import javax.ejb.Remote;<br/>
+import javax.ejb.Timer;<br/>
+<br/>
+@Remote<br/>
+public interface TimerEJB {<br/>
+<br/>
+	void setTime(java.util.Date init,long interval);<br/>
+	<br/>
+	void check(Timer timer);<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package stateless;<br/>
+<br/>
+import java.util.Date;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+import javax.ejb.SessionContext;<br/>
+import javax.ejb.Stateless;<br/>
+import javax.ejb.Timeout;<br/>
+import javax.ejb.Timer;<br/>
+import javax.ejb.TimerService;<br/>
+<br/>
+import remote.TimerEJB;<br/>
+<br/>
+@Stateless(mappedName=&quot;timerEJBBean&quot;)<br/>
+public class TimerEJBBean implements TimerEJB{<br/>
+<br/>
+	@Resource<br/>
+	private TimerService timerService;<br/>
+	<br/>
+	@Resource<br/>
+	private SessionContext context;<br/>
+	<br/>
+	<br/>
+<br/>
+	@Override<br/>
+	public void setTime(Date init, long interval) {<br/>
+		<br/>
+		System.out.println(timerService);<br/>
+		<br/>
+		timerService.createTimer(init, interval,&quot;新的定时器&quot;);<br/>
+		//this.context.getTimerService().createTimer(init, interval,&quot;新的定时器&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Timeout<br/>
+	@Override<br/>
+	public void check(Timer timer) {<br/>
+		<br/>
+		<br/>
+		System.out.println(&quot;定时器消息:&quot;+timer.getInfo());<br/>
+		<br/>
+		System.out.println(&quot;模拟系统检查&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;timer.cancel();&lt;img src=&quot;http://img.blog.csdn.net/20160117175442464?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;http://img.blog.csdn.net/20160117175442464?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center&quot; alt=&quot;&quot; /&gt;<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package ejb.client.test;<br/>
+<br/>
+import java.util.Date;<br/>
+import java.util.Properties;<br/>
+<br/>
+import javax.naming.Context;<br/>
+import javax.naming.InitialContext;<br/>
+<br/>
+import remote.TimerEJB;<br/>
+import stateless.TimerEJBBean;<br/>
+<br/>
+public class TimerejbClient {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		<br/>
+		try{<br/>
+			<br/>
+			Properties props = new Properties();<br/>
+			<br/>
+			props.setProperty(Context.URL_PKG_PREFIXES, &quot;org.jboss.ejb.client.naming&quot;);<br/>
+			<br/>
+			InitialContext ctx = new InitialContext(props);<br/>
+			<br/>
+			TimerEJB timerejb = (TimerEJB) ctx.lookup(&quot;ejb:&quot;<br/>
+					+ &quot;/timerejb/TimerEJBBean!remote.TimerEJB&quot;);<br/>
+			<br/>
+			//timerejb.setTime(new Date()	, 1000);<br/>
+			timerejb.setTime(new Date(), 10000);<br/>
+			<br/>
+			ctx.close();<br/>
+			<br/>
+		}<br/>
+		catch(Exception e){<br/>
+			<br/>
+			e.printStackTrace();<br/>
+			<br/>
+			<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160117174844747?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160117174852856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160117175442464?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160117175506524?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

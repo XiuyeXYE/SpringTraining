@@ -1,0 +1,110 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        服务器——客户端 传递对象            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1736391" snippet_file_name="blog_20160630_1_7296158"  name="code" class="java">package com.xiuye.rmi;<br/>
+<br/>
+import java.io.Serializable;<br/>
+<br/>
+public interface A extends Serializable{<br/>
+	<br/>
+	public void print();<br/>
+	<br/>
+}</pre><br/>
+<p><pre code_snippet_id="1736391" snippet_file_name="blog_20160630_2_6358849"  name="code" class="java">package com.xiuye.rmi;<br/>
+<br/>
+public class AImpl implements A{<br/>
+<br/>
+	/**<br/>
+	 * <br/>
+	 */<br/>
+	private static final long serialVersionUID = 5113162046021355973L;<br/>
+<br/>
+	@Override<br/>
+	public void print() {<br/>
+		<br/>
+		System.out.println(&quot;hello world&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1736391" snippet_file_name="blog_20160630_3_9565215"  name="code" class="java">package com.xiuye.rmi;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.io.ObjectOutputStream;<br/>
+import java.net.ServerSocket;<br/>
+import java.net.Socket;<br/>
+<br/>
+public class RmiServer {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		try {<br/>
+			ServerSocket server = new ServerSocket(8888);<br/>
+			System.out.println(&quot;服务器准备......&quot;);<br/>
+			Socket socket = server.accept();<br/>
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());<br/>
+			System.out.println(&quot;有新的客户端连接!&quot;);<br/>
+			A a = new AImpl();<br/>
+			oos.writeObject(a);<br/>
+			oos.close();<br/>
+			server.close();<br/>
+			System.out.println(&quot;服务器端结束了.&quot;);<br/>
+		} catch (IOException e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1736391" snippet_file_name="blog_20160630_4_6675277"  name="code" class="java">package com.xiuye.rmi;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.io.ObjectInputStream;<br/>
+import java.net.Socket;<br/>
+import java.net.UnknownHostException;<br/>
+<br/>
+public class RmiClient {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		try {<br/>
+			Socket socket = new Socket(&quot;localhost&quot;,8888);<br/>
+			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());<br/>
+			A a = (A) ois.readObject();<br/>
+			a.print();<br/>
+			<br/>
+			ois.close();<br/>
+			socket.close();<br/>
+			<br/>
+		} catch (UnknownHostException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (ClassNotFoundException e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+服务器准备......<br><br/>
+有新的客户端连接!<br><br/>
+服务器端结束了.<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p>hello world<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

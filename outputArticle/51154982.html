@@ -1,0 +1,56 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Http文件上传服务器端接收的数据格式            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1647773" snippet_file_name="blog_20160414_1_4563479"  name="code" class="java">POST / HTTP/1.1<br/>
+Host: 127.0.0.1:88<br/>
+Connection: keep-alive<br/>
+Content-Length: 892<br/>
+Cache-Control: max-age=0<br/>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br/>
+Origin: null<br/>
+Upgrade-Insecure-Requests: 1<br/>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br/>
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryW5SAkv8iCVa6RYTm<br/>
+Accept-Encoding: gzip, deflate<br/>
+Accept-Language: zh-CN,zh;q=0.8<br/>
+<br/>
+------WebKitFormBoundaryW5SAkv8iCVa6RYTm<br/>
+Content-Disposition: form-data; name=&quot;firstFile&quot;; filename=&quot;sqlserver.java&quot;<br/>
+Content-Type: application/octet-stream<br/>
+<br/>
+import java.sql.Statement;<br/>
+import java.sql.DriverManager;<br/>
+import java.sql.Connection;<br/>
+import java.sql.ResultSet;<br/>
+class sqlserver <br/>
+{<br/>
+	public static void main(String[] args) <br/>
+	{<br/>
+		try<br/>
+		{<br/>
+			Class.forName(&quot;com.microsoft.jdbc.sqlserver.SQLServerDriver&quot;);<br/>
+		    Connection c=DriverManager.getConnection(&quot;jdbc:sqlserver://localhost:1433;DatabaseName=pubs;user=sa;password=123456&quot;);<br/>
+		    Statement s=c.createStatement();<br/>
+			ResultSet rs=s.executeQuery(&quot;select * from authors&quot;);<br/>
+            while(rs.next())<br/>
+			{<br/>
+				System.out.println(rs.getString(&quot;au-id&quot;));<br/>
+			}<br/>
+			c.close();<br/>
+			s.close();<br/>
+		}<br/>
+		catch (Exception e)<br/>
+		{<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+<br/>
+<br/>
+	}<br/>
+}<br/>
+<br/>
+------WebKitFormBoundaryW5SAkv8iCVa6RYTm--<br/>
+</pre><br><br/>
+   <br/>
+</div>

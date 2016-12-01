@@ -1,0 +1,41 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        nodejs 加载模块            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1623970" snippet_file_name="blog_20160325_1_4798887"  name="code" class="javascript">function hello(){<br/>
+	var name;<br/>
+	this.setName = function(n){<br/>
+		name = n;<br/>
+	}<br/>
+	this.sayHello = function(){<br/>
+		console.log(&#39;Hello &#39; + name); <br/>
+	}<br/>
+}<br/>
+module.exports = hello;</pre><br/>
+<p>加载的是类型</p><br/>
+<p><pre code_snippet_id="1623970" snippet_file_name="blog_20160325_2_6162090"  name="code" class="javascript">var hello = require(&#39;./hello&#39;);<br/>
+<br/>
+var h = new hello();<br/>
+h.setName(&#39;xiuye&#39;);<br/>
+h.sayHello();</pre><br><br/>
+<pre code_snippet_id="1623970" snippet_file_name="blog_20160325_3_4908354"  name="code" class="javascript">var a = {a:1,b:2,c:3};<br/>
+<br/>
+module.exports = a;<br/>
+</pre><br><br/>
+加载的是对象实例</p><br/>
+<p><pre code_snippet_id="1623970" snippet_file_name="blog_20160325_4_2890468"  name="code" class="javascript">xiuye@ubuntu:~/workspace$ nodejs<br/>
+&gt; require(&quot;./test&quot;);<br/>
+{ a: 1, b: 2, c: 3 }<br/>
+&gt; a = require(&quot;./test&quot;);<br/>
+{ a: 1, b: 2, c: 3 }<br/>
+&gt; a<br/>
+{ a: 1, b: 2, c: 3 }<br/>
+&gt; a.a<br/>
+1<br/>
+&gt; a.b<br/>
+2<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

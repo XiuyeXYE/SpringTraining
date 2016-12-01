@@ -1,0 +1,68 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        IBM MQ Connect Successful Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1690196" snippet_file_name="blog_20160520_1_8369283"  name="code" class="java">package com.xiuye.ibmmq;<br/>
+<br/>
+import java.io.IOException;<br/>
+<br/>
+import com.ibm.mq.MQC;<br/>
+import com.ibm.mq.MQException;<br/>
+import com.ibm.mq.MQGetMessageOptions;<br/>
+import com.ibm.mq.MQMessage;<br/>
+import com.ibm.mq.MQPutMessageOptions;<br/>
+import com.ibm.mq.MQQueue;<br/>
+import com.ibm.mq.MQQueueManager;<br/>
+<br/>
+public class ConnectMQ {<br/>
+<br/>
+	private String qManager = &quot;QM&quot;;<br/>
+<br/>
+	private MQQueueManager qMgr;<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		new ConnectMQ();<br/>
+<br/>
+	}<br/>
+<br/>
+	public ConnectMQ() {<br/>
+		try {<br/>
+			qMgr = new MQQueueManager(qManager);<br/>
+			int openOptions = MQC.MQOO_INPUT_AS_Q_DEF | MQC.MQOO_OUTPUT;<br/>
+			MQQueue system_default_local_name = qMgr.accessQueue(<br/>
+					&quot;Q&quot;, openOptions);<br/>
+			MQMessage hello_world = new MQMessage();<br/>
+			hello_world.writeUTF(&quot;Hello World!&quot;);<br/>
+			MQPutMessageOptions pmo = new MQPutMessageOptions();<br/>
+			system_default_local_name.put(hello_world, pmo);<br/>
+			MQMessage retrievedMessage = new MQMessage();<br/>
+			retrievedMessage.messageId = hello_world.messageId;<br/>
+			MQGetMessageOptions gmo = new MQGetMessageOptions();<br/>
+			system_default_local_name.get(retrievedMessage, gmo);<br/>
+			String msgText = retrievedMessage.readUTF();<br/>
+			System.out.println(&quot;The Message is: &quot; + msgText);<br/>
+			system_default_local_name.close();<br/>
+			qMgr.disconnect();<br/>
+<br/>
+		} catch (MQException e) {<br/>
+			System.out<br/>
+					.println(&quot;A WebSphere MQ error occurred : Completion code &quot;<br/>
+							+ e.completionCode + &quot; Reason code &quot; + e.reasonCode);<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			{<br/>
+				System.out<br/>
+						.println(&quot;An error occurred whilst writing to the message buffer: &quot;<br/>
+								+ e);<br/>
+				e.printStackTrace();<br/>
+			}<br/>
+<br/>
+		}<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1690196" snippet_file_name="blog_20160520_2_70743"  name="code" class="java">The Message is: Hello World!</pre><br><br/>
+   <br/>
+</div>

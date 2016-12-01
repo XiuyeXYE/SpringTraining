@@ -1,0 +1,28 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        objective-c HelloWorld实践 （gcc编译器）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1606505" snippet_file_name="blog_20160311_1_909685"  name="code" class="objc">#import&lt;Foundation/Foundation.h&gt;<br/>
+int main(){<br/>
+	<br/>
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];<br/>
+	NSLog(@&quot;Programming Object-C!&quot;);<br/>
+	NSLog(@&quot;How are you!&quot;);<br/>
+	[pool drain];<br/>
+	return 0;<br/>
+}</pre><pre code_snippet_id="1606505" snippet_file_name="blog_20160311_2_4257755"  name="code" class="objc">C:\Users\jackz\Desktop\codes\cpp&gt;gcc main.m -ID:\installedSoftware\GNUstep\GNUst<br/>
+ep\System\Library\Headers -LD:\installedSoftware\GNUstep\GNUstep\System\Library\<br/>
+Libraries  -lobjc -lgnustep-base -fconstant-string-class=NSConstantString<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+2016-03-11 18:13:36.028 a[7528] Programming Object-C!<br/>
+2016-03-11 18:13:36.041 a[7528] How are you!</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160311182658777?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160311182703164?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160311182707386?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160311182711980?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160311182716102?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

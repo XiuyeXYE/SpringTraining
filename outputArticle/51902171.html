@@ -1,0 +1,83 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        编译器 不同的宏            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1761221" snippet_file_name="blog_20160713_1_8040942"  code_snippet_id="1761221" snippet_file_name="blog_20160713_1_8040942" name="code" class="cpp"><br/>
+#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+<br/>
+<br/>
+#ifdef __cplusplus<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__cplusplus:&quot; &lt;&lt; __cplusplus &lt;&lt; endl;<br/>
+#endif<br/>
+<br/>
+<br/>
+#ifdef _WIN32<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;_WIN32:&quot;&lt;&lt; _WIN32 &lt;&lt;endl;<br/>
+#endif<br/>
+#ifdef __APPLE__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__APPLE:&quot; &lt;&lt; __APPLE__ &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __linux__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__linux__:&quot; &lt;&lt; __linux__ &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef _MSC_VER<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;_MSC_VER:&quot; &lt;&lt; _MSC_VER &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __INTEL_COMPLIER<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__INTEL_COMPLIER:&quot; &lt;&lt; __INTEL_COMPILER &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __clang__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__clang__:&quot; &lt;&lt; __clang__ &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __GNUC__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__GNUC__:&quot; &lt;&lt; __GNUC__ &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __GNUC_MINOR__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__GNUC_MINOR__:&quot; &lt;&lt; __GNUC_MINOR__ &lt;&lt; endl;<br/>
+#endif<br/>
+#ifdef __GNUC_PATCHLEVEL__<br/>
+&#160; &#160; &#160; &#160; cout &lt;&lt; &quot;__GNUC_PATCHLEVEL__:&quot; &lt;&lt; __GNUC_PATCHLEVEL__ &lt;&lt; endl;<br/>
+#endif<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&#160; &#160; &#160; &#160; return 0;<br/>
+}<br/>
+<br/>
+<br/>
+<br/>
+</pre><pre code_snippet_id="1761221" snippet_file_name="blog_20160713_2_4213695"  code_snippet_id="1761221" snippet_file_name="blog_20160713_2_4213695" name="code" class="cpp"><br/>
+$ g++ demo205.cpp<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ ./a<br/>
+__cplusplus:199711<br/>
+__GNUC__:5<br/>
+__GNUC_MINOR__:4<br/>
+__GNUC_PATCHLEVEL__:0<br/>
+</pre><br><br/>
+<pre code_snippet_id="1761221" snippet_file_name="blog_20160713_3_5435194"  code_snippet_id="1761221" snippet_file_name="blog_20160713_3_5435194" name="code" class="cpp">Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ clang++ demo205.cpp<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ ./a<br/>
+__cplusplus:199711<br/>
+__clang__:1<br/>
+__GNUC__:4<br/>
+__GNUC_MINOR__:2<br/>
+__GNUC_PATCHLEVEL__:1<br/>
+</pre><br/>
+<p></p><br/>
+<pre code_snippet_id="1761221" snippet_file_name="blog_20160713_4_8292896"  code_snippet_id="1761221" snippet_file_name="blog_20160713_4_8292896" name="code" class="cpp">$ cl demo205.cpp<br/>
+<br/>
+$ ./demo205<br/>
+__cplusplus:199711<br/>
+_WIN32:1<br/>
+_MSC_VER:1800</pre><br><br/>
+<br><br/>
+<p></p><br/>
+   <br/>
+</div>

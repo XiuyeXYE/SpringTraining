@@ -1,0 +1,96 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        ArrayList and LinkedList Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632347" snippet_file_name="blog_20160402_1_9607376"  name="code" class="cpp">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;package com.test.collection;<br/>
+<br/>
+import java.util.ArrayList;<br/>
+import java.util.LinkedList;<br/>
+import java.util.List;<br/>
+<br/>
+public class ListTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		List&lt;Integer&gt; array = new ArrayList&lt;Integer&gt;();<br/>
+		List&lt;Character&gt; linked = new LinkedList&lt;Character&gt;();<br/>
+		<br/>
+		//普通的元素添加<br/>
+		array.add(1);<br/>
+		array.add(3);<br/>
+		array.add(5);<br/>
+		<br/>
+		linked.add(&#39;A&#39;);<br/>
+		linked.add(&#39;B&#39;);<br/>
+		linked.add(&#39;C&#39;);<br/>
+		<br/>
+		System.out.println(array);<br/>
+		System.out.println(linked);<br/>
+		<br/>
+		//在指定位置加入元素<br/>
+		//void java.util.List.add(int index, Integer element)<br/>
+		array.add(0,123);//index 从0开始<br/>
+		<br/>
+		linked.add(1,&#39;X&#39;);<br/>
+		<br/>
+		System.out.println(array);<br/>
+		System.out.println(linked);<br/>
+		<br/>
+		//验证是否包含数据<br/>
+		if(array.contains(123)){<br/>
+			System.out.println(&quot;Array contains 123&quot;);<br/>
+		}<br/>
+		else{<br/>
+			System.out.println(&quot;Array not contains 123&quot;);<br/>
+		}<br/>
+		<br/>
+		if(linked.contains(&#39;V&#39;)){<br/>
+			System.out.println(&quot;Linked not contains V&quot;);<br/>
+		}<br/>
+		else{<br/>
+			System.out.println(&quot;Linked not contains V&quot;);<br/>
+		}<br/>
+		<br/>
+		//得到指定位置元素<br/>
+		System.out.println(array.get(2));<br/>
+		System.out.println(linked.get(2));<br/>
+		<br/>
+		//验证是否为空<br/>
+		if(new ArrayList&lt;String&gt;().isEmpty()){<br/>
+			System.out.println(&quot;ArrayList empty&quot;);<br/>
+		}<br/>
+		<br/>
+		if(new LinkedList&lt;Long&gt;().isEmpty()){<br/>
+			System.out.println(&quot;LinkedList empty&quot;);<br/>
+		}<br/>
+		<br/>
+		if(!array.isEmpty() &amp;&amp; !linked.isEmpty()){<br/>
+			System.out.println(&quot;array and linked not empty&quot;);<br/>
+		}<br/>
+		<br/>
+		//得到list的长度<br/>
+		System.out.println(array.size());<br/>
+		System.out.println(linked.size());<br/>
+		<br/>
+	} <br/>
+	<br/>
+<br/>
+}</pre><br><br/>
+<pre></pre><br/>
+<pre code_snippet_id="1632347" snippet_file_name="blog_20160402_2_7339102"  name="code" class="java">[1, 3, 5]<br/>
+[A, B, C]<br/>
+[123, 1, 3, 5]<br/>
+[A, X, B, C]<br/>
+Array contains 123<br/>
+Linked not contains V<br/>
+3<br/>
+B<br/>
+ArrayList empty<br/>
+LinkedList empty<br/>
+array and linked not empty<br/>
+4<br/>
+4<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,24 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        js 格式化时间戳            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1979967" snippet_file_name="blog_20161111_1_5420534"  name="code" class="javascript">function getTime(/** timestamp=0 **/<br/>
+	) {<br/>
+		var ts = arguments[0] || 0;<br/>
+		var t, y, m, d, h, i, s;<br/>
+		t = ts ? new Date(ts * 1000) : new Date();<br/>
+		y = t.getFullYear();<br/>
+		m = t.getMonth() + 1;<br/>
+		d = t.getDate();<br/>
+		h = t.getHours();<br/>
+		i = t.getMinutes();<br/>
+		s = t.getSeconds();<br/>
+		// 可根据需要在这里定义时间格式  <br/>
+		return y + '-' + (m &lt; 10 ? '0' + m : m) + '-' + (d &lt; 10 ? '0' + d : d)<br/>
+				+ ' ' + (h &lt; 10 ? '0' + h : h) + ':' + (i &lt; 10 ? '0' + i : i)<br/>
+				+ ':' + (s &lt; 10 ? '0' + s : s);<br/>
+	}</pre><pre code_snippet_id="1979967" snippet_file_name="blog_20161111_2_1341333"  name="code" class="javascript">因为服务时间戳太长了,截取并返回正确的格式时间:<br/>
+getTime(data.toString().substr(0,10))<br/>
+</pre><br/>
+   <br/>
+</div>

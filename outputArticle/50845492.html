@@ -1,0 +1,64 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        复制构造函数：形参为const和nonconst的调用情形            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1604552" snippet_file_name="blog_20160310_1_7444236"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;vector&gt;<br/>
+using namespace std;<br/>
+class A{<br/>
+	private:<br/>
+	int value;<br/>
+	public:<br/>
+	A(){<br/>
+	cout &lt;&lt; &quot;constructor &quot; &lt;&lt; endl;<br/>
+<br/>
+	}<br/>
+	A(int n){<br/>
+	value=n;<br/>
+	cout &lt;&lt; &quot;constructor &quot; &lt;&lt; endl;<br/>
+	}<br/>
+	A(A &amp;o){<br/>
+		this-&gt;value = o.value;<br/>
+		cout &lt;&lt; &quot;copy non const&quot; &lt;&lt; endl;<br/>
+	}<br/>
+<br/>
+<br/>
+	A(const A &amp;other){<br/>
+	value = other.value;<br/>
+	cout &lt;&lt; &quot;copy const&quot; &lt;&lt; endl; <br/>
+	}<br/>
+/*	A(A o){ //错误的复制构造函数必须是引用形参即：A &amp;o; <br/>
+	value = o.value;<br/>
+	}<br/>
+*/	void print(){<br/>
+	cout &lt;&lt; value &lt;&lt; endl;<br/>
+	}<br/>
+};<br/>
+<br/>
+void print(A a){<br/>
+	a.print();<br/>
+}<br/>
+<br/>
+int main(){<br/>
+	<br/>
+ 	A a(100);<br/>
+	A b(a);<br/>
+	b.print(); <br/>
+	<br/>
+	const A d(10);<br/>
+	A e(d);<br/>
+	e.print();<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1604552" snippet_file_name="blog_20160310_2_3016371"  name="code" class="cpp">$ ./a<br/>
+constructor<br/>
+copy non const<br/>
+100<br/>
+constructor<br/>
+copy const<br/>
+10<br/>
+</pre><br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

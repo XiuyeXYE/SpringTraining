@@ -1,0 +1,49 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Activity中 findViewById 获取控件对象正确的代码位置            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1695311" snippet_file_name="blog_20160524_1_2484928"  name="code" class="java">package com.xiuye.adnroid;<br/>
+<br/>
+import android.app.Activity;<br/>
+import android.content.Intent;<br/>
+import android.os.Bundle;<br/>
+import android.view.View;<br/>
+import android.view.View.OnClickListener;<br/>
+import android.view.Window;<br/>
+import android.widget.Button;<br/>
+import android.widget.Toast;<br/>
+<br/>
+public class SecondActivity extends Activity {<br/>
+<br/>
+	@Override<br/>
+	protected void onCreate(Bundle savedInstanceState) {<br/>
+		<br/>
+		super.onCreate(savedInstanceState);<br/>
+		requestWindowFeature(Window.FEATURE_NO_TITLE);<br/>
+		<br/>
+		setContentView(R.layout.second_layout);//1<br/>
+		Button button3 = (Button) findViewById(R.id.button3);//2<br/>
+		final Intent intent = getIntent();<br/>
+		<br/>
+		<br/>
+		<br/>
+		button3.setOnClickListener(new OnClickListener() {<br/>
+			<br/>
+			@Override<br/>
+			public void onClick(View v) {<br/>
+				String data = &quot;接收到传递的信息是：&quot;+intent.getStringExtra(&quot;extra_data&quot;);<br/>
+				<br/>
+				Toast.makeText(SecondActivity.this, data, Toast.LENGTH_LONG).show();<br/>
+				<br/>
+			}<br/>
+		});<br/>
+		<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1695311" snippet_file_name="blog_20160524_2_6628603"  name="code" class="java">setContentView必须在findViewById的前面，否则要报错，控件对象引用取不到对象报空指针异常NullPointerException</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

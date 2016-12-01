@@ -1,0 +1,66 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        移位运算RGB            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.homework;<br/>
+<br/>
+public class demo26 {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		int r = 255;<br/>
+		int g = 99;<br/>
+		int b = 49;<br/>
+		outRGB(r,g,b);<br/>
+		System.out.println(&quot;===========================&quot;);<br/>
+		r = 0xff;<br/>
+		g = 0xff;<br/>
+		b = 0xff;<br/>
+		<br/>
+		outRGB(r,g,b);<br/>
+		System.out.println(&quot;===========================&quot;);<br/>
+		r = 0x01;<br/>
+		g = 0x01;<br/>
+		b = 0x01;<br/>
+		<br/>
+		outRGB(r,g,b);<br/>
+<br/>
+		System.out.println(&quot;========================&quot;);<br/>
+		outRGBOptimization(r,g,b);<br/>
+		<br/>
+	}<br/>
+<br/>
+	public static void outRGB(int r,int g,int b)<br/>
+	{<br/>
+		/**<br/>
+		 * 0x00 		ff  	ff 		ff<br/>
+		 *  alpha 	red  green blue<br/>
+		 */<br/>
+		r &amp;= 0xff;<br/>
+		g &amp;= 0xff;<br/>
+		b &amp;= 0xff;<br/>
+		int rgb = (r&lt;&lt;16)+(g&lt;&lt;8)+b;<br/>
+		System.out.println(rgb);<br/>
+		System.out.println(Integer.toBinaryString(rgb));<br/>
+		<br/>
+	}<br/>
+	public static void outRGBOptimization(int r,int g,int b)<br/>
+	{<br/>
+		/**<br/>
+		 * 0x00 		ff  	ff 		ff<br/>
+		 *  alpha 	red  green blue<br/>
+		 */<br/>
+		r &amp;= 0xff;<br/>
+		g &amp;= 0xff;<br/>
+		b &amp;= 0xff;<br/>
+		int rgb = (r&lt;&lt;16)|(g&lt;&lt;8)|b;<br/>
+		System.out.println(rgb);<br/>
+		System.out.println(Integer.toBinaryString(rgb));<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

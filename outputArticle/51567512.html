@@ -1,0 +1,13 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        oracle 自动增长更新id            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1705470" snippet_file_name="blog_20160602_1_6423558"  name="code" class="sql">create sequence id;<br/>
+<br/>
+update app set id = id.nextval<br/>
+<br/>
+<br/>
+commit;<br/>
+</pre><br><br/>
+   <br/>
+</div>

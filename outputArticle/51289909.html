@@ -1,0 +1,82 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java MD5 加密            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1668253" snippet_file_name="blog_20160501_1_2393584"  name="code" class="java">package com.test;<br/>
+<br/>
+import java.security.MessageDigest;<br/>
+import java.security.NoSuchAlgorithmException;<br/>
+import java.util.Arrays;<br/>
+<br/>
+public class TestMesssageDigest {<br/>
+<br/>
+	public static void main(String[] args) throws NoSuchAlgorithmException {<br/>
+		//16进制数<br/>
+		char hexDigits[] = { &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39; }; <br/>
+		byte [] a = new byte[10];<br/>
+		MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);<br/>
+		String s = &quot;xiuye&quot;;<br/>
+		md.update(s.getBytes());<br/>
+		byte[] b = md.digest();<br/>
+		System.out.println(Arrays.toString(b));<br/>
+		int[] ints = new int[b.length];<br/>
+		for(int i =0 ;i&lt;b.length;i++ ){<br/>
+			 ints[i] = b[i];<br/>
+			System.out.print(Byte.toString(b[i]));//负号可输出，但意义是负数<br/>
+		}<br/>
+		System.out.println();<br/>
+		for(int i =0 ;i&lt;b.length;i++ ){<br/>
+			 <br/>
+			System.out.print(Integer.toString(ints[i]));<br/>
+		}<br/>
+		System.out.println();<br/>
+		byte t = &#39;-&#39;;//符号输出45<br/>
+		System.out.println(t);<br/>
+		//System.out.println(b+&quot;:&quot;+b.length);<br/>
+		//byte[] data = new byte[10];<br/>
+		//for(int i = 0 ;i&lt; 10;i++){<br/>
+		//	data[i] = (byte) i;<br/>
+		//}<br/>
+		//System.out.println(data);//输出hash值<br/>
+		<br/>
+		int length = b.length;<br/>
+		char []str = new char[length*2];<br/>
+		int k=0;<br/>
+		for(int i=0;i&lt;length;i++){<br/>
+			<br/>
+			byte j = b[i];<br/>
+			System.out.println(j+&quot;,&quot;+(j&gt;&gt;4&amp;0xf)+&quot;,&quot;+(j&amp;0xf));<br/>
+			str[k++] = hexDigits[j &gt;&gt; 4 &amp; 0xf];<br/>
+			str[k++] = hexDigits[j&amp;0xf];<br/>
+		}<br/>
+		System.out.println(str);<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1668253" snippet_file_name="blog_20160501_2_8424632"  name="code" class="java">[34, 105, 16, 3, -45, -72, 47, 9, 107, -47, -67, -86, 101, -44, -33, -128]<br/>
+34105163-45-72479107-47-67-86101-44-33-128<br/>
+34105163-45-72479107-47-67-86101-44-33-128<br/>
+45<br/>
+34,2,2<br/>
+105,6,9<br/>
+16,1,0<br/>
+3,0,3<br/>
+-45,13,3<br/>
+-72,11,8<br/>
+47,2,15<br/>
+9,0,9<br/>
+107,6,11<br/>
+-47,13,1<br/>
+-67,11,13<br/>
+-86,10,10<br/>
+101,6,5<br/>
+-44,13,4<br/>
+-33,13,15<br/>
+-128,8,0<br/>
+22691003d3b82f096bd1bdaa65d4df80<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

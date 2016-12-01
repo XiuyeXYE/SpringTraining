@@ -1,0 +1,49 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring 整合 activemq 配置文件            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1802788" snippet_file_name="blog_20160803_1_1517361"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;<br/>
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd&quot;&gt;<br/>
+	<br/>
+	&lt;bean id=&quot;SMSConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;<br/>
+		&lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot; /&gt;<br/>
+	&lt;/bean&gt;<br/>
+	<br/>
+	<br/>
+	<br/>
+	&lt;bean id=&quot;SMSqueueSend&quot; class=&quot;org.apache.activemq.command.ActiveMQQueue&quot;&gt;<br/>
+<br/>
+		&lt;constructor-arg&gt;<br/>
+			&lt;value&gt;smsSend&lt;/value&gt;<br/>
+		&lt;/constructor-arg&gt;<br/>
+<br/>
+	&lt;/bean&gt; <br/>
+<br/>
+	&lt;bean id=&quot;smsTemplate&quot; class=&quot;org.springframework.jms.core.JmsTemplate&quot;&gt;<br/>
+		&lt;property name=&quot;connectionFactory&quot; ref=&quot;SMSConnectionFactory&quot; /&gt;<br/>
+		&lt;property name=&quot;defaultDestination&quot; ref=&quot;SMSqueueSend&quot; /&gt;<br/>
+		&lt;property name=&quot;pubSubDomain&quot; value=&quot;false&quot; /&gt;<br/>
+	&lt;/bean&gt;<br/>
+	<br/>
+	&lt;bean id=&quot;SMSqueueRecv&quot; class=&quot;org.apache.activemq.command.ActiveMQQueue&quot;&gt;<br/>
+		&lt;constructor-arg&gt;<br/>
+			&lt;value&gt;smsResponse&lt;/value&gt;<br/>
+		&lt;/constructor-arg&gt;<br/>
+	&lt;/bean&gt;<br/>
+	<br/>
+	&lt;!-- 此为接收MQ数据用的配置--&gt;<br/>
+	&lt;bean id=&quot;productViewSMSContainer&quot;<br/>
+		class=&quot;org.springframework.jms.listener.DefaultMessageListenerContainer&quot;&gt;<br/>
+		&lt;property name=&quot;connectionFactory&quot; ref=&quot;SMSConnectionFactory&quot; /&gt;<br/>
+		&lt;property name=&quot;destination&quot; ref=&quot;SMSqueueRecv&quot; /&gt;<br/>
+		&lt;property name=&quot;messageListener&quot;&gt;<br/>
+			&lt;bean class=&quot;com.tienon.listener.RecvSmsNotic&quot; /&gt;<br/>
+		&lt;/property&gt;<br/>
+		&lt;property name=&quot;concurrentConsumers&quot; value=&quot;10&quot; /&gt;<br/>
+	&lt;/bean&gt;<br/>
+	<br/>
+&lt;/beans&gt;</pre><br><br/>
+   <br/>
+</div>

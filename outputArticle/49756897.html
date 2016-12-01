@@ -1,0 +1,40 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        由3a（&quot;aaa&quot;）字符串得到1000字符串            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">//由3a（&quot;aaa&quot;）字符串得到1000字符串<br/>
+		//纯字符串实现<br/>
+		long start = System.currentTimeMillis();<br/>
+		String str = &quot;aaa&quot;;<br/>
+		while(true){<br/>
+			str += str;<br/>
+			if(str.length() &gt; 1000){<br/>
+				break;<br/>
+			}<br/>
+		}<br/>
+		int overFlowLength = str.length() - 1000;<br/>
+		if(overFlowLength &gt; 0){<br/>
+			str = str.substring(0,1000);<br/>
+		}<br/>
+		long end = System.currentTimeMillis();<br/>
+		System.out.println(&quot;time&quot;+(end - start));<br/>
+		System.out.println(str);<br/>
+		System.out.println(str.length());<br/>
+		System.out.println(&quot;=======================&quot;);<br/>
+		<br/>
+		//StringBilder实现<br/>
+		start = System.currentTimeMillis();<br/>
+		StringBuilder sb = new StringBuilder();<br/>
+		for(int i=0;i&lt;333;i++){<br/>
+			<br/>
+			sb.append(&quot;aaa&quot;);<br/>
+			<br/>
+		}<br/>
+		<br/>
+		sb.append(&quot;aaa&quot;.charAt(0));<br/>
+		end = System.currentTimeMillis();<br/>
+		System.out.println(&quot;time&quot;+(end - start));<br/>
+		System.out.println(sb);<br/>
+		System.out.println(sb.length());</pre><br><br/>
+   <br/>
+</div>

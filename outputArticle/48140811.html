@@ -1,0 +1,148 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        实现empList的序列化和反序列化            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>Emp.java</p><br/>
+<p><pre name="code" class="java">package com.xiuye.file;<br/>
+<br/>
+import java.io.Serializable;<br/>
+<br/>
+public class Emp implements Serializable<br/>
+{<br/>
+  private String name;<br/>
+  private String sex;<br/>
+  private String year;<br/>
+  private int age;<br/>
+  private int salary;<br/>
+  public Emp(String name,String sex,String year,int age,int salary)<br/>
+  {<br/>
+    this.name = name;<br/>
+    this.sex = sex;<br/>
+    this.year = year;<br/>
+    this.age = age;<br/>
+    this.salary = salary;<br/>
+  }<br/>
+<br/>
+<br/>
+  public void setName(String name)<br/>
+  {<br/>
+    this.name = name;<br/>
+<br/>
+  }<br/>
+  public void setYear(String year)<br/>
+  {<br/>
+    this.year = year;<br/>
+  }<br/>
+  public void setSex(String sex)<br/>
+  {<br/>
+    this.sex = sex;<br/>
+  }<br/>
+  public void setAge(int age )<br/>
+  {<br/>
+    this.age = age;<br/>
+  }<br/>
+  public void setSalary(int salary )<br/>
+  {<br/>
+    this.salary = salary;<br/>
+  }<br/>
+<br/>
+  public String getName()<br/>
+  {<br/>
+    return name;<br/>
+  }<br/>
+  public int getAge()<br/>
+  {<br/>
+    return age;<br/>
+  }<br/>
+  public String getSex()<br/>
+  {<br/>
+    return sex;<br/>
+  }<br/>
+  public String getYear()<br/>
+  {<br/>
+    return year;<br/>
+  }<br/>
+  public int getSalary()<br/>
+  {<br/>
+    return salary;<br/>
+  }<br/>
+<br/>
+  @Override<br/>
+  public String toString()<br/>
+  {<br/>
+    return name+&quot;,&quot;+age+&quot;,&quot;+sex+&quot;,&quot;<br/>
+      +year+&quot;,&quot;+salary;<br/>
+  }<br/>
+<br/>
+<br/>
+}<br/>
+</pre>OutEmp.java</p><br/>
+<p><pre name="code" class="java">package com.xiuye.file;<br/>
+<br/>
+import java.io.*;<br/>
+import java.util.*;<br/>
+<br/>
+<br/>
+public class OutEmp{<br/>
+  public static void main(String[] args) {<br/>
+<br/>
+      try<br/>
+      {<br/>
+<br/>
+        List&lt;Emp&gt;list = new ArrayList&lt;Emp&gt;();<br/>
+        list.add(new Emp(&quot;wuming&quot;,&quot;man&quot;,&quot;1992&quot;,23,1000000));<br/>
+        list.add(new Emp(&quot;xinhuo&quot;,&quot;man&quot;,&quot;1994&quot;,21,10000));<br/>
+        list.add(new Emp(&quot;jinzhou&quot;,&quot;man&quot;,&quot;1993&quot;,22,100));<br/>
+        list.add(new Emp(&quot;wuping&quot;,&quot;woman&quot;,&quot;1992&quot;,23,10));<br/>
+        list.add(new Emp(&quot;wumdd&quot;,&quot;woman&quot;,&quot;1995&quot;,20,9100));<br/>
+<br/>
+<br/>
+<br/>
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(&quot;Emp.dat&quot;));<br/>
+<br/>
+<br/>
+        oos.writeObject(list);<br/>
+        oos.close();<br/>
+        System.out.println(&quot;over&quot;);<br/>
+<br/>
+<br/>
+      }<br/>
+      catch(Exception e)<br/>
+      {<br/>
+        System.out.println(e.getMessage());<br/>
+      }<br/>
+<br/>
+  }<br/>
+}<br/>
+</pre><br><br/>
+ReadEmp.java</p><br/>
+<p><pre name="code" class="java">package com.xiuye.file;<br/>
+import java.io.*;<br/>
+import java.util.*;<br/>
+<br/>
+<br/>
+public class ReadEmp<br/>
+{<br/>
+  public static void main(String args[])<br/>
+  {<br/>
+    try<br/>
+    {<br/>
+      ObjectInputStream ois = new ObjectInputStream(new FileInputStream(&quot;Emp.dat&quot;));<br/>
+      <br/>
+      List&lt;String&gt; list = (List&lt;String&gt;) ois.readObject();<br/>
+      System.out.println(list);<br/>
+<br/>
+<br/>
+    }<br/>
+    catch(Exception e)<br/>
+    {<br/>
+      System.out.println(e.getMessage());<br/>
+    }<br/>
+  }<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,196 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Maven带jetty服务器插件            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;<br/>
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br/>
+	&lt;groupId&gt;FrontPage&lt;/groupId&gt;<br/>
+	&lt;artifactId&gt;FrontPage&lt;/artifactId&gt;<br/>
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;<br/>
+	&lt;packaging&gt;war&lt;/packaging&gt;<br/>
+	&lt;name&gt;FrontPage&lt;/name&gt;<br/>
+	&lt;description /&gt;<br/>
+	&lt;properties&gt;<br/>
+		&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;<br/>
+	&lt;/properties&gt;<br/>
+	&lt;dependencies&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;bean-validator&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0-JBoss-4.0.2&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.enterprise.deploy&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.jms&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.management.j2ee&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.eclipse.persistence&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.persistence&lt;/artifactId&gt;<br/>
+			&lt;version&gt;2.0.0&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.resource&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.security.auth.message&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.security.jacc&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.servlet&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.servlet.jsp&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.servlet.jsp.jstl&lt;/artifactId&gt;<br/>
+			&lt;version&gt;3.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;jaxb-api-osgi&lt;/artifactId&gt;<br/>
+			&lt;version&gt;2.2.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;javax.ws.rs&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;jsr311-api&lt;/artifactId&gt;<br/>
+			&lt;version&gt;1.1.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish.web&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;jstl-impl&lt;/artifactId&gt;<br/>
+			&lt;version&gt;1.2&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;javax.mail&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;mail&lt;/artifactId&gt;<br/>
+			&lt;version&gt;1.4.3&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;javax.xml&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;webservices-api-osgi&lt;/artifactId&gt;<br/>
+			&lt;version&gt;2.0.1&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.jboss.weld&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;weld-osgi-bundle&lt;/artifactId&gt;<br/>
+			&lt;version&gt;1.0.1-SP3&lt;/version&gt;<br/>
+			&lt;scope&gt;provided&lt;/scope&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.glassfish.web&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;javax.servlet.jsp.jstl&lt;/artifactId&gt;<br/>
+			&lt;version&gt;1.2.2&lt;/version&gt;<br/>
+		&lt;/dependency&gt;<br/>
+		&lt;dependency&gt;<br/>
+			&lt;groupId&gt;org.primefaces&lt;/groupId&gt;<br/>
+			&lt;artifactId&gt;primefaces&lt;/artifactId&gt;<br/>
+			&lt;version&gt;5.3&lt;/version&gt;<br/>
+		&lt;/dependency&gt;<br/>
+<br/>
+	&lt;/dependencies&gt;<br/>
+	&lt;build&gt;<br/>
+		&lt;plugins&gt;<br/>
+			&lt;plugin&gt;<br/>
+				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;<br/>
+				&lt;version&gt;2.3.2&lt;/version&gt;<br/>
+				&lt;configuration&gt;<br/>
+					&lt;source&gt;1.6&lt;/source&gt;<br/>
+					&lt;target&gt;1.6&lt;/target&gt;<br/>
+				&lt;/configuration&gt;<br/>
+			&lt;/plugin&gt;<br/>
+			&lt;plugin&gt;<br/>
+				&lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;<br/>
+				&lt;version&gt;2.2&lt;/version&gt;<br/>
+				&lt;configuration&gt;<br/>
+					&lt;version&gt;3.0&lt;/version&gt;<br/>
+					&lt;failOnMissingWebXml&gt;false&lt;/failOnMissingWebXml&gt;<br/>
+				&lt;/configuration&gt;<br/>
+			&lt;/plugin&gt;<br/>
+			&lt;plugin&gt;<br/>
+				&lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;<br/>
+				&lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;<br/>
+				&lt;version&gt;8.1.5.v20120716&lt;/version&gt;<br/>
+				&lt;configuration&gt;<br/>
+<br/>
+					&lt;stopPort&gt;9966&lt;/stopPort&gt;<br/>
+					&lt;stopKey&gt;foo&lt;/stopKey&gt;<br/>
+					&lt;connectors&gt;<br/>
+<br/>
+						&lt;connector implementation=&quot;org.eclipse.jetty.server.nio.SelectChannelConnector&quot;&gt;<br/>
+<br/>
+							&lt;port&gt;7777&lt;/port&gt;<br/>
+							&lt;maxIdleTime&gt;60000&lt;/maxIdleTime&gt;<br/>
+<br/>
+<br/>
+<br/>
+						&lt;/connector&gt;<br/>
+					&lt;/connectors&gt;<br/>
+<br/>
+<br/>
+				&lt;/configuration&gt;<br/>
+<br/>
+				&lt;dependencies&gt;<br/>
+					&lt;dependency&gt;<br/>
+						&lt;groupId&gt;com.sun.faces&lt;/groupId&gt;<br/>
+						&lt;artifactId&gt;jsf-api&lt;/artifactId&gt;<br/>
+						&lt;version&gt;2.2.12&lt;/version&gt;<br/>
+					&lt;/dependency&gt;<br/>
+					&lt;dependency&gt;<br/>
+						&lt;groupId&gt;com.sun.faces&lt;/groupId&gt;<br/>
+						&lt;artifactId&gt;jsf-impl&lt;/artifactId&gt;<br/>
+						&lt;version&gt;2.2.12&lt;/version&gt;<br/>
+					&lt;/dependency&gt;<br/>
+<br/>
+<br/>
+				&lt;/dependencies&gt;<br/>
+			&lt;/plugin&gt;<br/>
+		&lt;/plugins&gt;<br/>
+	&lt;/build&gt;<br/>
+&lt;/project&gt;</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160120155238069?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160120155242647?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

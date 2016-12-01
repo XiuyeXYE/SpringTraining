@@ -1,0 +1,199 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Java for handling Excel (Utility Class 1)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1989737" snippet_file_name="blog_20161117_1_5201442"  name="code" class="java">package com.xiuye.excel;<br/>
+<br/>
+import java.io.FileInputStream;<br/>
+import java.io.FileNotFoundException;<br/>
+import java.io.FileReader;<br/>
+import java.io.IOException;<br/>
+import java.io.InputStreamReader;<br/>
+import java.io.LineNumberReader;<br/>
+import java.nio.charset.Charset;<br/>
+import java.util.ArrayList;<br/>
+import java.util.HashMap;<br/>
+import java.util.List;<br/>
+import java.util.Map;<br/>
+import java.util.regex.Matcher;<br/>
+import java.util.regex.Pattern;<br/>
+<br/>
+import org.apache.poi.hssf.usermodel.HSSFCell;<br/>
+import org.apache.poi.hssf.usermodel.HSSFRow;<br/>
+import org.apache.poi.hssf.usermodel.HSSFSheet;<br/>
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;<br/>
+import org.apache.poi.xssf.usermodel.XSSFCell;<br/>
+import org.apache.poi.xssf.usermodel.XSSFRow;<br/>
+import org.apache.poi.xssf.usermodel.XSSFSheet;<br/>
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;<br/>
+<br/>
+import com.csvreader.CsvReader;<br/>
+<br/>
+/**<br/>
+ * HSSFWorkbook:是操作Excel2003以前（包括2003）的版本，扩展名是.xls<br/>
+ * XSSFWorkbook:是操作Excel2007的版本，扩展名是.xlsx<br/>
+ *<br/>
+ * @author Administrator<br/>
+ *<br/>
+ */<br/>
+public class ExcelHandler {<br/>
+<br/>
+	public static List&lt;List&lt;String&gt;&gt; HSSFReadFile(String path) throws IOException {<br/>
+		FileInputStream is = new FileInputStream(path);<br/>
+		HSSFWorkbook hssfWorkBook = new HSSFWorkbook(is);<br/>
+		List&lt;List&lt;String&gt;&gt; result = new ArrayList&lt;&gt;();<br/>
+<br/>
+		for (int numSheet = 0; numSheet &lt; hssfWorkBook.getNumberOfSheets(); numSheet++) {<br/>
+			HSSFSheet hssfSheet = hssfWorkBook.getSheetAt(numSheet);<br/>
+			if (hssfSheet == null) {<br/>
+				continue;<br/>
+			}<br/>
+			for (int rowNum = 0; rowNum &lt;= hssfSheet.getLastRowNum(); rowNum++) {<br/>
+				HSSFRow hssfRow = hssfSheet.getRow(rowNum);<br/>
+				if (hssfRow == null) {<br/>
+					continue;<br/>
+				}<br/>
+				int minColIx = hssfRow.getFirstCellNum();<br/>
+				int maxColIx = hssfRow.getLastCellNum();<br/>
+				List&lt;String&gt; rowList = new ArrayList&lt;&gt;();<br/>
+				for (int colIx = minColIx; colIx &lt; maxColIx; colIx++) {<br/>
+					HSSFCell cell = hssfRow.getCell(colIx);<br/>
+					if (cell == null) {<br/>
+						continue;<br/>
+					}<br/>
+					rowList.add(cell.toString());<br/>
+				}<br/>
+				result.add(rowList);<br/>
+			}<br/>
+		}<br/>
+		return result;<br/>
+	}<br/>
+<br/>
+	public static List&lt;List&lt;String&gt;&gt; XSSFReadFile(String path) throws IOException {<br/>
+		FileInputStream is = new FileInputStream(path);<br/>
+		XSSFWorkbook xssfWorkBook = new XSSFWorkbook(is);<br/>
+		List&lt;List&lt;String&gt;&gt; result = new ArrayList&lt;&gt;();<br/>
+<br/>
+		for (int numSheet = 0; numSheet &lt; xssfWorkBook.getNumberOfSheets(); numSheet++) {<br/>
+			XSSFSheet xssfSheet = xssfWorkBook.getSheetAt(numSheet);<br/>
+			if (xssfSheet == null) {<br/>
+				continue;<br/>
+			}<br/>
+			for (int rowNum = 0; rowNum &lt;= xssfSheet.getLastRowNum(); rowNum++) {<br/>
+				XSSFRow xssfRow = xssfSheet.getRow(rowNum);<br/>
+				if (xssfRow == null) {<br/>
+					continue;<br/>
+				}<br/>
+				int minColIx = xssfRow.getFirstCellNum();<br/>
+				int maxColIx = xssfRow.getLastCellNum();<br/>
+				List&lt;String&gt; rowList = new ArrayList&lt;&gt;();<br/>
+				for (int colIx = minColIx; colIx &lt; maxColIx; colIx++) {<br/>
+					XSSFCell cell = xssfRow.getCell(colIx);<br/>
+					if (cell == null) {<br/>
+						continue;<br/>
+					}<br/>
+					rowList.add(cell.toString());<br/>
+				}<br/>
+				result.add(rowList);<br/>
+			}<br/>
+		}<br/>
+		return result;<br/>
+	}<br/>
+<br/>
+	public static List&lt;List&lt;String&gt;&gt; readCSVFile(String path) throws IOException {<br/>
+<br/>
+		LineNumberReader lnr = new LineNumberReader(new FileReader(path));<br/>
+		List&lt;List&lt;String&gt;&gt; result = new ArrayList&lt;&gt;();<br/>
+		String line;<br/>
+		while ((line = lnr.readLine()) != null) {<br/>
+			Pattern p = Pattern.compile(&quot;(\&quot;[^\&quot;]*(\&quot;{2})*[^\&quot;]*\&quot;)*[^,]*,&quot;);<br/>
+			Matcher m = p.matcher(line);<br/>
+			List&lt;String&gt; cells = new ArrayList&lt;&gt;();<br/>
+<br/>
+			while (m.find()) {<br/>
+				String str = m.group();<br/>
+				str = str.replaceAll(&quot;(?sm)\&quot;?([^\&quot;]*(\&quot;{2})*[^\&quot;]*)\&quot;?.*,&quot;, &quot;$1&quot;);<br/>
+				str = str.replaceAll(&quot;(?sm)(\&quot;(\&quot;))&quot;, &quot;$2&quot;);<br/>
+				cells.add(str);<br/>
+				System.out.print(str + &quot;\t&quot;);<br/>
+			}<br/>
+			result.add(cells);<br/>
+			System.out.println();<br/>
+		}<br/>
+<br/>
+		return result;<br/>
+	}<br/>
+<br/>
+	public static List&lt;List&lt;String&gt;&gt; readCSVFile(String path, String encoding) throws IOException {<br/>
+<br/>
+		LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(path), encoding));<br/>
+		List&lt;List&lt;String&gt;&gt; result = new ArrayList&lt;&gt;();<br/>
+		String line;<br/>
+		while ((line = lnr.readLine()) != null) {<br/>
+			Pattern p = Pattern.compile(&quot;(\&quot;[^\&quot;]*(\&quot;{2})*[^\&quot;]*\&quot;)*[^,]*,&quot;);<br/>
+			Matcher m = p.matcher(line);<br/>
+			List&lt;String&gt; cells = new ArrayList&lt;&gt;();<br/>
+<br/>
+			while (m.find()) {<br/>
+				String str = m.group();<br/>
+				str = str.replaceAll(&quot;(?sm)\&quot;?([^\&quot;]*(\&quot;{2})*[^\&quot;]*)\&quot;?.*,&quot;, &quot;$1&quot;);<br/>
+				str = str.replaceAll(&quot;(?sm)(\&quot;(\&quot;))&quot;, &quot;$2&quot;);<br/>
+				cells.add(str);<br/>
+			}<br/>
+			result.add(cells);<br/>
+		}<br/>
+<br/>
+		return result;<br/>
+	}<br/>
+<br/>
+	public static Map&lt;String,Object&gt; readCsv(String path) throws IOException {<br/>
+		CsvReader reader = new CsvReader(path);<br/>
+		reader.readHeaders();<br/>
+		String[] headers = reader.getHeaders();<br/>
+<br/>
+		List&lt;String[]&gt; list = new ArrayList&lt;&gt;();<br/>
+		while (reader.readRecord()) {<br/>
+			list.add(reader.getValues());<br/>
+		}<br/>
+		Map&lt;String,Object&gt; map = new HashMap&lt;&gt;();<br/>
+		map.put(&quot;headers&quot;, headers);<br/>
+		map.put(&quot;data&quot;, list);<br/>
+		return map;<br/>
+<br/>
+<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void readCsv(String path, char delimiter, String encoding) throws IOException {<br/>
+<br/>
+		CsvReader reader = new CsvReader(path, delimiter, Charset.forName(encoding));<br/>
+		reader.readHeaders();<br/>
+		String[] headers = reader.getHeaders();<br/>
+		List&lt;String[]&gt; list = new ArrayList&lt;&gt;();<br/>
+		while (reader.readRecord()) {<br/>
+			list.add(reader.getValues());<br/>
+		}<br/>
+		String[][] datas = new String[list.size()][];<br/>
+		for (int i = 0; i &lt; list.size(); i++) {<br/>
+			datas[i] = list.get(i);<br/>
+		}<br/>
+		for (int i = 0; i &lt; headers.length; i++) {<br/>
+			System.out.print(headers[i] + &quot;\t&quot;);<br/>
+		}<br/>
+		System.out.println(&quot;&quot;);<br/>
+<br/>
+		for (int i = 0; i &lt; datas.length; i++) {<br/>
+			Object[] data = datas[i]; // 取出一组数据<br/>
+			for (int j = 0; j &lt; data.length; j++) {<br/>
+				Object cell = data[j];<br/>
+				System.out.print(cell + &quot;\t&quot;);<br/>
+			}<br/>
+			System.out.println(&quot;&quot;);<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

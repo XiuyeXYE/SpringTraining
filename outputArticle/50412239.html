@@ -1,0 +1,65 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        jsf   ActionListener 查找正确的UIComponent            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.jsf.listener;<br/>
+<br/>
+import javax.faces.component.UIComponent;<br/>
+import javax.faces.component.UIOutput;<br/>
+import javax.faces.component.UIViewRoot;<br/>
+import javax.faces.component.html.HtmlBody;<br/>
+import javax.faces.component.html.HtmlForm;<br/>
+import javax.faces.component.html.HtmlOutputLabel;<br/>
+import javax.faces.context.FacesContext;<br/>
+import javax.faces.event.AbortProcessingException;<br/>
+import javax.faces.event.ActionEvent;<br/>
+import javax.faces.event.ActionListener;<br/>
+<br/>
+public class MyActionListener implements ActionListener{<br/>
+<br/>
+	@Override<br/>
+	public void processAction(ActionEvent arg0) throws AbortProcessingException {<br/>
+		<br/>
+		FacesContext fc = FacesContext.getCurrentInstance();<br/>
+		<br/>
+		UIViewRoot root = fc.getViewRoot();<br/>
+		<br/>
+		UIComponent comp = root.findComponent(&quot;OK&quot;);<br/>
+		/*System.out.println(root.getChildCount());<br/>
+		System.out.println(root.getClientId());<br/>
+		System.out.println(root.getId());<br/>
+		System.out.println(root.getChildren().get(1));<br/>
+		System.out.println(root.getChildren().get(2));<br/>
+		System.out.println(root.getChildren().get(3));*/<br/>
+		//HtmlOutputLabel out = (HtmlOutputLabel)comp;<br/>
+		//xhtml文件跟元素从&lt;html&gt;,h:head, h:body,&lt;/html&gt;开始<br/>
+		//jsp从&lt;f:view&gt;开始<br/>
+		for(UIComponent c : root.getChildren())<br/>
+		{<br/>
+			if(c instanceof HtmlBody){<br/>
+				<br/>
+				for(UIComponent i : c.getChildren()){<br/>
+					//System.out.println(i);<br/>
+					if(i instanceof HtmlForm){<br/>
+						<br/>
+						HtmlOutputLabel label = (HtmlOutputLabel) i.findComponent(&quot;OK&quot;);<br/>
+						if(label != null){<br/>
+							label.setValue(&quot;rrrrrrrrrrrrrrrr&quot;);						<br/>
+						}<br/>
+						<br/>
+					}<br/>
+				}<br/>
+				<br/>
+			}<br/>
+			//System.out.println(c);<br/>
+		}<br/>
+		<br/>
+		//out.setValue(&quot;123456&quot;);<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

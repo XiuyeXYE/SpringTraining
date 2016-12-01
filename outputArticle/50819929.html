@@ -1,0 +1,43 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        hibernate.cfg.xml(2)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1600366" snippet_file_name="blog_20160307_1_2939470"  name="code" class="html">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;<br/>
+&lt;!DOCTYPE hibernate-configuration PUBLIC<br/>
+&quot;-//Hibernate/Hibernate Configuration DTD 3.0//EN&quot;<br/>
+&quot;http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd&quot;&gt;<br/>
+&lt;hibernate-configuration&gt;<br/>
+&lt;session-factory&gt;<br/>
+&lt;!-- Database connection settings --&gt;<br/>
+&lt;property name=&quot;connection.driver_class&quot;<br/>
+&gt;org.hsqldb.jdbcDriver&lt;/property&gt;<br/>
+&lt;property name=&quot;connection.url&quot;<br/>
+&gt;jdbc:hsqldb:hsql://localhost&lt;/property&gt;<br/>
+&lt;property name=&quot;connection.username&quot;<br/>
+&gt;sa&lt;/property&gt;<br/>
+&lt;property name=&quot;connection.password&quot;<br/>
+&gt;&lt;/property&gt;<br/>
+&lt;!-- JDBC connection pool (use the built-in) --&gt;<br/>
+&lt;property name=&quot;connection.pool_size&quot;<br/>
+&gt;1&lt;/property&gt;<br/>
+&lt;!-- SQL dialect --&gt;<br/>
+&lt;property name=&quot;dialect&quot;<br/>
+&gt;org.hibernate.dialect.HSQLDialect&lt;/property&gt;<br/>
+&lt;!-- Enable Hibernate&#39;s automatic session context management --&gt;<br/>
+&lt;property name=&quot;current_session_context_class&quot;<br/>
+&gt;thread&lt;/property&gt;<br/>
+&lt;!-- Disable the second-level cache --&gt;<br/>
+&lt;property name=&quot;cache.provider_class&quot;<br/>
+&gt;org.hibernate.cache.NoCacheProvider&lt;/property&gt;<br/>
+&lt;!-- Echo all executed SQL to stdout --&gt;<br/>
+&lt;property name=&quot;show_sql&quot;<br/>
+&gt;true&lt;/property&gt;<br/>
+&lt;!-- Drop and re-create the database schema on startup --&gt;<br/>
+&lt;property name=&quot;hbm2ddl.auto&quot;<br/>
+&gt;update&lt;/property&gt;<br/>
+&lt;mapping resource=&quot;org/hibernate/tutorial/domain/Event.hbm.xml&quot;/&gt;<br/>
+&lt;/session-factory&gt;<br/>
+&lt;/hibernate-configuration<br/>
+&gt;</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,32 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Template&#39;s Template            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1680482" snippet_file_name="blog_20160512_1_300997"  code_snippet_id="1680482" snippet_file_name="blog_20160512_1_300997" name="code" class="cpp">#include &lt;cstdio&gt;<br/>
+#include &lt;tuple&gt;<br/>
+<br/>
+template&lt; class, class &gt; struct S {<br/>
+  S() { puts(&quot;primary&quot;); }<br/>
+};<br/>
+<br/>
+template&lt;<br/>
+  template&lt; class... &gt; class T, class...TArgs<br/>
+, template&lt; class... &gt; class U, class...UArgs<br/>
+&gt;<br/>
+struct S&lt; T&lt; TArgs... &gt;, U&lt; UArgs... &gt; &gt; {<br/>
+  S() { puts(&quot;specialized&quot;); }<br/>
+};<br/>
+<br/>
+int main()<br/>
+{<br/>
+  S&lt; int, int &gt;  p;                                       // &quot;primary&quot;<br/>
+  S&lt; std::tuple&lt; int, char &gt;, std::tuple&lt; float &gt; &gt;  s;   // &quot;specialised&quot;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1680482" snippet_file_name="blog_20160512_2_9712351"  code_snippet_id="1680482" snippet_file_name="blog_20160512_2_9712351" name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++11 webDemo1.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+primary<br/>
+specialized</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,91 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring 全注解配置 bean 和 调用 (9) 5种通知            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1981377" snippet_file_name="blog_20161112_1_7456182"  code_snippet_id="1981377" snippet_file_name="blog_20161112_1_7456182" name="code" class="java">package com.xiuye.config.aspect;<br/>
+<br/>
+import org.aspectj.lang.ProceedingJoinPoint;<br/>
+import org.aspectj.lang.annotation.After;<br/>
+import org.aspectj.lang.annotation.AfterReturning;<br/>
+import org.aspectj.lang.annotation.AfterThrowing;<br/>
+import org.aspectj.lang.annotation.Around;<br/>
+import org.aspectj.lang.annotation.Aspect;<br/>
+import org.aspectj.lang.annotation.Before;<br/>
+import org.aspectj.lang.annotation.Pointcut;<br/>
+/*import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.stereotype.Component;*/<br/>
+<br/>
+@Aspect<br/>
+//@Configuration<br/>
+public class AspectConfig {<br/>
+<br/>
+	@Before(&quot;execution(** com.xiuye.component.*.description())&quot;)<br/>
+	public void beforeDescription(){<br/>
+		System.out.println(&quot;Before method:description!&quot;);<br/>
+	}<br/>
+	@Pointcut(&quot;execution(** com.xiuye.component.*.description())&quot;)<br/>
+	public void description(){<br/>
+	}<br/>
+<br/>
+	@After(&quot;description()&quot;)<br/>
+	public void afterDescription(){<br/>
+		System.out.println(&quot;After method:description!&quot;);<br/>
+	}<br/>
+	@AfterReturning(&quot;description()&quot;)<br/>
+	public void afterReturningDescription(){<br/>
+		System.out.println(&quot;AfterReturning method:description!&quot;);<br/>
+	}<br/>
+	@AfterThrowing(&quot;description()&quot;)<br/>
+	public void afterThrowingDescription(){<br/>
+		System.out.println(&quot;AfterThrowing method:description!&quot;);<br/>
+	}<br/>
+	@Around(&quot;description()&quot;)//始终在其通知前面执行<br/>
+	public void aroundDescription(ProceedingJoinPoint jp){<br/>
+		System.out.println(&quot;Around method:description!&quot;);<br/>
+		System.out.println(&quot;Hello World!&quot;);<br/>
+		try {<br/>
+			jp.proceed();<br/>
+		} catch (Throwable e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		System.out.println(&quot;Is game over?!&quot;);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1981377" snippet_file_name="blog_20161112_2_2167456"  code_snippet_id="1981377" snippet_file_name="blog_20161112_2_2167456" name="code" class="java">十一月 12, 2016 7:59:21 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getDefaultTestExecutionListenerClassNames<br/>
+信息: Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]<br/>
+十一月 12, 2016 7:59:21 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper instantiateListeners<br/>
+信息: Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]<br/>
+十一月 12, 2016 7:59:21 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getTestExecutionListeners<br/>
+信息: Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@1be98f5, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@1adae5d, org.springframework.test.context.support.DirtiesContextTestExecutionListener@17f6480, org.springframework.test.context.transaction.TransactionalTestExecutionListener@16e8792, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@12cbfa]<br/>
+十一月 12, 2016 7:59:21 下午 org.springframework.context.support.GenericApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.support.GenericApplicationContext@1560810: startup date [Sat Nov 12 19:59:21 CST 2016]; root of context hierarchy<br/>
+Active profile := dev<br/>
+test := true<br/>
+Around method:description!<br/>
+Hello World!<br/>
+Before method:description!<br/>
+I'm car's steer!<br/>
+Is game over?!<br/>
+After method:description!<br/>
+AfterReturning method:description!<br/>
+Around method:description!<br/>
+Hello World!<br/>
+Before method:description!<br/>
+I'm car's wheels!<br/>
+Is game over?!<br/>
+After method:description!<br/>
+AfterReturning method:description!<br/>
+Around method:description!<br/>
+Hello World!<br/>
+Before method:description!<br/>
+I'm car's engine!<br/>
+Is game over?!<br/>
+After method:description!<br/>
+AfterReturning method:description!<br/>
+十一月 12, 2016 7:59:22 下午 org.springframework.context.support.GenericApplicationContext doClose<br/>
+信息: Closing org.springframework.context.support.GenericApplicationContext@1560810: startup date [Sat Nov 12 19:59:21 CST 2016]; root of context hierarchy<br/>
+</pre><br><br/>
+   <br/>
+</div>

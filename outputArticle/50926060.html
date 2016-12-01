@@ -1,0 +1,46 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java 多线程（ Future Callable）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1615337" snippet_file_name="blog_20160318_1_6137027"  name="code" class="java">import java.util.concurrent.*;<br/>
+import java.util.*;<br/>
+<br/>
+<br/>
+public class Threads{<br/>
+	public static void main(String args[])throws InterruptedException,ExecutionException{<br/>
+		int size = 5;<br/>
+		ExecutorService pool = Executors.newFixedThreadPool(size);<br/>
+		List&lt;Future&lt;?&gt;&gt; list = new ArrayList&lt;Future&lt;?&gt;&gt;();<br/>
+		for(int i = 0; i &lt; size ; i++){<br/>
+			Callable&lt;?&gt; c = new MCallable(i+&quot; &quot;);<br/>
+			Future&lt;?&gt; f = pool.submit(c);<br/>
+			list.add(f);<br/>
+		}<br/>
+		pool.shutdown();<br/>
+		for(Future&lt;?&gt; f : list){<br/>
+			System.out.println(&quot;&gt;&gt;&gt;&quot; + f.get().toString());<br/>
+		}<br/>
+<br/>
+	}<br/>
+}<br/>
+class MCallable implements Callable&lt;Object&gt;{<br/>
+	private String str;<br/>
+	MCallable(String str){<br/>
+		this.str = str;<br/>
+	}<br/>
+	public Object call(){<br/>
+		return str + &quot;completed!&quot;;<br/>
+	}<br/>
+}</pre><pre code_snippet_id="1615337" snippet_file_name="blog_20160318_2_5133679"  name="code" class="java">root@ubuntu:/home/xiuye/workspace# javac Threads.java<br/>
+root@ubuntu:/home/xiuye/workspace# java Thread<br/>
+Error: Could not find or load main class Thread<br/>
+root@ubuntu:/home/xiuye/workspace# java Threads<br/>
+&gt;&gt;&gt;0 completed!<br/>
+&gt;&gt;&gt;1 completed!<br/>
+&gt;&gt;&gt;2 completed!<br/>
+&gt;&gt;&gt;3 completed!<br/>
+&gt;&gt;&gt;4 completed!<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

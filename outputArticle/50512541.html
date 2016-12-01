@@ -1,0 +1,165 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        springandstruts2整合            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">applicationContext.xml:&lt;span style=&quot;color:#FF0000;&quot;&gt;/WEB-INF/applicationContext.xml&lt;/span&gt;<br/>
+<br/>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; <br/>
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+        xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; <br/>
+        xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;<br/>
+        xmlns:context=&quot;http://www.springframework.org/schema/context&quot; <br/>
+        xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot;<br/>
+        xsi:schemaLocation=&quot;<br/>
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd<br/>
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd<br/>
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd<br/>
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd<br/>
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd&quot;&gt;<br/>
+    &lt;!-- 开启注解扫描 --&gt;<br/>
+    &lt;context:component-scan base-package=&quot;com.xiuye&quot;/&gt;<br/>
+&lt;/beans&gt;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+</pre><br/>
+<p><br><br/>
+</p><br/>
+<p><pre name="code" class="html">web.xml:<br/>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;3.1&quot;&gt;<br/>
+  &lt;display-name&gt;springandstruts2&lt;/display-name&gt;<br/>
+  &lt;welcome-file-list&gt;<br/>
+    &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.html&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;<br/>
+  &lt;/welcome-file-list&gt;<br/>
+  &lt;listener&gt;<br/>
+  	&lt;listener-class&gt;<br/>
+  		org.springframework.web.context.ContextLoaderListener<br/>
+  	&lt;/listener-class&gt;<br/>
+  &lt;/listener&gt;<br/>
+  <br/>
+  &lt;context-param&gt;<br/>
+  	&lt;span style=&quot;color:#FF0000;&quot;&gt;&lt;param-name&gt;contextConfigureLocation&lt;/param-name&gt;<br/>
+  	&lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;&lt;/span&gt;<br/>
+  &lt;/context-param&gt;<br/>
+  &lt;filter&gt;<br/>
+  	&lt;filter-name&gt;struts2&lt;/filter-name&gt;<br/>
+  	&lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;<br/>
+  &lt;/filter&gt;<br/>
+  &lt;filter-mapping&gt;<br/>
+  	&lt;filter-name&gt;struts2&lt;/filter-name&gt;<br/>
+  	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;<br/>
+  &lt;/filter-mapping&gt;<br/>
+&lt;/web-app&gt;</pre><pre name="code" class="java">package com.xiuye.dao;<br/>
+<br/>
+import org.springframework.stereotype.Repository;<br/>
+<br/>
+@Repository<br/>
+public class HelloDao {<br/>
+<br/>
+	public String say(){<br/>
+		return &quot;Hello,Spring整合struts2&quot;;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package com.xiuye.action;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.springframework.stereotype.Controller;<br/>
+<br/>
+import com.xiuye.dao.HelloDao;<br/>
+<br/>
+<br/>
+@Controller<br/>
+public class HelloAction {<br/>
+<br/>
+	@Resource<br/>
+	private HelloDao dao;<br/>
+	<br/>
+	private String msg;<br/>
+<br/>
+	public String getMsg() {<br/>
+		return msg;<br/>
+	}<br/>
+<br/>
+	public void setMsg(String msg) {<br/>
+		this.msg = msg;<br/>
+	}<br/>
+	<br/>
+	public String execute(){<br/>
+		<br/>
+		msg = dao.say();<br/>
+		return &quot;success&quot;;<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE struts PUBLIC<br/>
+    &quot;-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN&quot;<br/>
+    &quot;http://struts.apache.org/dtds/struts-2.1.7.dtd&quot;&gt;<br/>
+&lt;struts&gt;<br/>
+	<br/>
+	&lt;package name=&quot;demo&quot; namespace=&quot;/demo&quot; extends=&quot;struts-default&quot;&gt;<br/>
+	<br/>
+		&lt;action name=&quot;hello&quot; class=&quot;helloAction&quot;&gt;<br/>
+		<br/>
+			&lt;result name=&quot;success&quot;&gt;<br/>
+				/index.jsp<br/>
+			&lt;/result&gt;<br/>
+			<br/>
+		&lt;/action&gt;<br/>
+		<br/>
+	<br/>
+	&lt;/package&gt;<br/>
+	<br/>
+&lt;/struts&gt;<br/>
+</pre><br><br/>
+<pre name="code" class="html">&lt;%@ page language=&quot;java&quot; import=&quot;java.util.*&quot; pageEncoding=&quot;UTF-8&quot;%&gt;<br/>
+&lt;%<br/>
+String path = request.getContextPath();<br/>
+String basePath = request.getScheme()+&quot;://&quot;+request.getServerName()+&quot;:&quot;+request.getServerPort()+path+&quot;/&quot;;<br/>
+%&gt;<br/>
+&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;/struts-tags&quot; %&gt;<br/>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;<br/>
+&lt;html&gt;<br/>
+  &lt;head&gt;<br/>
+    &lt;base href=&quot;&lt;%=basePath%&gt;&quot;&gt;<br/>
+    <br/>
+    &lt;title&gt;My JSP &#39;index.jsp&#39; starting page&lt;/title&gt;<br/>
+	&lt;meta http-equiv=&quot;pragma&quot; content=&quot;no-cache&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;cache-control&quot; content=&quot;no-cache&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;expires&quot; content=&quot;0&quot;&gt;    <br/>
+	&lt;meta http-equiv=&quot;keywords&quot; content=&quot;keyword1,keyword2,keyword3&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;description&quot; content=&quot;This is my page&quot;&gt;<br/>
+	&lt;!--<br/>
+	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;<br/>
+	--&gt;<br/>
+  &lt;/head&gt;<br/>
+  <br/>
+  &lt;body&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;msg&quot;/&gt;&lt;/h1&gt;<br/>
+  &lt;/body&gt;<br/>
+&lt;/html&gt;<br/>
+</pre><img src="http://img.blog.csdn.net/20160113183726095?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160113183734083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160113183741572?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160113183748758?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+<br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

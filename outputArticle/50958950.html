@@ -1,0 +1,34 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        int8_t int16_t int32_t int64_t            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620136" snippet_file_name="blog_20160322_1_3695018"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+//#include&lt;cstdint&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(){<br/>
+	int8_t a = &#39;a&#39;;<br/>
+	int16_t b = 100;<br/>
+	cout &lt;&lt; sizeof(int8_t)*8 &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof(int16_t)*8 &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof(int32_t)*8 &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof(int64_t)*8 &lt;&lt; endl;<br/>
+<br/>
+	cout &lt;&lt; a &lt;&lt; endl;<br/>
+	cout &lt;&lt; b &lt;&lt; endl;<br/>
+<br/>
+	cout &lt;&lt; &quot;over&quot; &lt;&lt; endl;<br/>
+}<br/>
+</pre><pre code_snippet_id="1620136" snippet_file_name="blog_20160322_2_7358732"  name="code" class="cpp">D:\programming\C++&gt;g++ SizeOfint.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+8<br/>
+16<br/>
+32<br/>
+64<br/>
+a<br/>
+100<br/>
+over</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

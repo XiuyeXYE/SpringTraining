@@ -1,0 +1,45 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        ckeditor 上传图片 关键过程和代码            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>修改ckeditor\plugins\image\dialogs\image.js文件中的</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128122546158?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">&nbsp;&nbsp;和 &nbsp;<img src="http://img.blog.csdn.net/20161128122701694?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>然后上传图片控件就成了下面的样子</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128122957632?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128123002351?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>上传文件的url在ckeditor\config.js中设置:</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128123351184?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>后台代码:</p><br/>
+<p>如果不想上传非需要&#26684;式的文件可在后台加入代码</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128123425228?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>如果需要预览就需要设置图片控件的url,通过后台发送js代码设置:</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128123554593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>操作过程:</p><br/>
+<p>上传文件:</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128123953973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128124003349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128124011739?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128124027209?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128124038068?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>上传图片成功后直接跳转到预览<br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20161128124048990?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

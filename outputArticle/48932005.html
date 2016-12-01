@@ -1,0 +1,81 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javascript计时器            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!doctype html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;utf-8&quot;&gt;<br/>
+&lt;title&gt;无标题文档&lt;/title&gt;<br/>
+<br/>
+&lt;script&gt;<br/>
+<br/>
+	var id = null;<br/>
+	<br/>
+	var hour = 0;<br/>
+	var minute = 0;<br/>
+	var millis = 0;<br/>
+	function time()<br/>
+	{<br/>
+		//alert(&quot;OK&quot;);<br/>
+		millis++;<br/>
+		if(millis == 60)<br/>
+		{<br/>
+			millis = 0;<br/>
+			minute ++;<br/>
+		}<br/>
+		if(minute == 60)<br/>
+		{<br/>
+			minute = 0;<br/>
+			hour ++;<br/>
+			if(hour &gt; 1000000)<br/>
+			{<br/>
+				hour = 0;<br/>
+				minute = 0;<br/>
+				millis = 0;<br/>
+			}<br/>
+		}<br/>
+		//alert(hour+&quot;:&quot;+minute+&quot;:&quot;+millis);<br/>
+		span.innerHTML = hour+&quot;:&quot;+minute+&quot;:&quot;+millis;<br/>
+	}<br/>
+	<br/>
+	function start()<br/>
+	{<br/>
+		id = setInterval(time,1000);<br/>
+	}<br/>
+	function stop()<br/>
+	{<br/>
+		clearInterval(id);<br/>
+	}<br/>
+	function resetTime()<br/>
+	{<br/>
+		stop();<br/>
+		hour = 0;<br/>
+		minute = 0;<br/>
+		millis = 0;<br/>
+		span.innerHTML = &quot;00:00:00&quot;;<br/>
+		<br/>
+	}<br/>
+&lt;/script&gt;<br/>
+<br/>
+&lt;/head&gt;<br/>
+<br/>
+&lt;body&gt;<br/>
+<br/>
+<br/>
+	&lt;p id=&quot;p1&quot;&gt;&lt;span id=&quot;span1&quot;&gt;00:00:00&lt;/span&gt;&lt;/p&gt;<br/>
+	&lt;p&gt;<br/>
+    	&lt;button id=&quot;begin&quot; onClick=&quot;start();&quot;&gt;开始&lt;/button&gt;<br/>
+        &lt;button id=&quot;pause&quot; onClick=&quot;stop();&quot;&gt;停止&lt;/button&gt;<br/>
+        &lt;button id=&quot;cancel&quot; onClick=&quot;resetTime();&quot;&gt;重置&lt;/button&gt; <br/>
+    &lt;/p&gt;<br/>
+&lt;script&gt;<br/>
+	<br/>
+	<br/>
+	var span = document.getElementById(&quot;p1&quot;);<br/>
+	alert(span);<br/>
+&lt;/script&gt;<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</pre>注意全局变量获取元素，应该在该元素产生以后获取元素！<br/>
+   <br/>
+</div>

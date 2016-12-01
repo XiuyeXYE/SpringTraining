@@ -1,0 +1,562 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        struts2的一个杂乱工程            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html"> &lt;!DOCTYPE struts PUBLIC<br/>
+        &quot;-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN&quot;<br/>
+        &quot;http://struts.apache.org/dtds/struts-2.1.7.dtd&quot;&gt;<br/>
+    &lt;struts&gt;<br/>
+        &lt;!-- <br/>
+            package：包，用于对Action进行封装。<br/>
+            1、name：包名，根元素下可以有多个包，彼此之间不能重名。<br/>
+            2、extends：继承，用于指定继承的包，相当于将继承包下的配置信息复制到了当前包下。<br/>
+            3、namespace：命名空间，用于规定Action的访问路径，必须以“/”开头。<br/>
+            4、请求Action时，按照如下格式拼写URL：<br/>
+               http://IP:PORT/ProjectName/NAMESPACE/ACTIONNAME.action<br/>
+        --&gt;<br/>
+        &lt;package name=&quot;day01&quot; namespace=&quot;/demo&quot; extends=&quot;struts-default&quot;&gt;<br/>
+            &lt;!-- <br/>
+                action：业务控制器，用于注册业务控制器组件（类）。<br/>
+                1、name：action名称，用于规定Action的访问路径。<br/>
+                    一个包下可以有多个action，彼此之间不能重名。<br/>
+                2、class：业务控制器组件，用于指定业务控制器对应的类。<br/>
+                3、method：方法，用于指定访问当前action时要调用的方法。<br/>
+             --&gt;<br/>
+            &lt;action name=&quot;hello&quot; class=&quot;action.HelloAction&quot; method=&quot;sayHello&quot;&gt;<br/>
+                &lt;!-- <br/>
+                    result：输出组件，用于转发、重定向、直接输出。<br/>
+                    1、name：名称，一个action下可以有多个result，彼此之间不能重名。<br/>
+                    2、默认做转发，标记内容设置成转发的页面。<br/>
+                 --&gt;<br/>
+                &lt;result name=&quot;success&quot; &gt;<br/>
+                /index.jsp<br/>
+                &lt;/result&gt;<br/>
+                <br/>
+            &lt;/action&gt;<br/>
+            <br/>
+            &lt;action name=&quot;image&quot; class=&quot;action.HelloAction&quot; method=&quot;test&quot;&gt;<br/>
+            	&lt;result name=&quot;image&quot; type=&quot;stream&quot;&gt;<br/>
+                	&lt;param name=&quot;inputName&quot;&gt;imageStream&lt;/param&gt;<br/>
+                &lt;/result&gt;<br/>
+            &lt;/action&gt;<br/>
+            &lt;action name=&quot;redirect&quot; class=&quot;action.HelloAction&quot; method=&quot;redirect&quot;&gt;<br/>
+            	&lt;result name=&quot;redirect&quot;&gt;/redirect.jsp&lt;/result&gt;<br/>
+            &lt;/action&gt;<br/>
+            <br/>
+        &lt;/package&gt;<br/>
+    &lt;/struts&gt;</pre><br><br/>
+<pre name="code" class="html">&lt;%@ page language=&quot;java&quot; import=&quot;java.util.*&quot; pageEncoding=&quot;UTF-8&quot;%&gt;<br/>
+&lt;%<br/>
+String path = request.getContextPath();<br/>
+String basePath = request.getScheme()+&quot;://&quot;+request.getServerName()+&quot;:&quot;+request.getServerPort()+path+&quot;/&quot;;<br/>
+%&gt;<br/>
+&lt;%@taglib prefix=&quot;s&quot; uri=&quot;/struts-tags&quot; %&gt;<br/>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;<br/>
+&lt;html&gt;<br/>
+  &lt;head&gt;<br/>
+    &lt;base href=&quot;&lt;%=basePath%&gt;&quot;&gt;<br/>
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;<br/>
+    &lt;title&gt;My JSP &#39;index.jsp&#39; starting page&lt;/title&gt;<br/>
+	&lt;meta http-equiv=&quot;pragma&quot; content=&quot;no-cache&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;cache-control&quot; content=&quot;no-cache&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;expires&quot; content=&quot;0&quot;&gt;    <br/>
+	&lt;meta http-equiv=&quot;keywords&quot; content=&quot;keyword1,keyword2,keyword3&quot;&gt;<br/>
+	&lt;meta http-equiv=&quot;description&quot; content=&quot;This is my page&quot;&gt;<br/>
+	<br/>
+	&lt;!--<br/>
+	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;<br/>
+	--&gt;<br/>
+  &lt;/head&gt;<br/>
+  <br/>
+  &lt;body&gt;<br/>
+    This is my JSP page. &lt;br&gt;<br/>
+    &lt;form action=&quot;/struts2copy/demo/hello.action&quot; method=&quot;post&quot;&gt;<br/>
+    	<br/>
+    	真实姓名:&lt;input name=&quot;realName&quot;&gt;&lt;br/&gt;<br/>
+    	NickName:&lt;input name=&quot;user.name&quot;&gt;&lt;br/&gt;<br/>
+    	Password:&lt;input name=&quot;user.pwd&quot;&gt;&lt;br/&gt;<br/>
+    	&lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;<br/>
+    	<br/>
+    	<br/>
+    &lt;/form&gt;<br/>
+    &lt;h1&gt;${user }&lt;/h1&gt;<br/>
+    &lt;h1&gt;${realName }&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;some&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;cityArray[1]&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;cityList[1]&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;cityMap.beijing&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;&#39;123456&#39;&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;&#39;abc&#39;.toUpperCase()&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;{&#39;a&#39;,&#39;b&#39;,&#39;c&#39;}&quot;/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;#{&#39;a&#39;:&#39;c&#39;,&#39;b&#39;:&#39;d&#39;}&quot; /&gt; &lt;/h1&gt;<br/>
+    &lt;h1&gt;观察ValueStack的结构&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:debug /&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;栈顶&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property/&gt;&lt;/h1&gt;<br/>
+    &lt;h1&gt;&lt;s:property value=&quot;#action.user.name&quot;/&gt;&lt;/h1&gt;<br/>
+    <br/>
+    &lt;h1&gt;<br/>
+    <br/>
+    	&lt;s:iterator value=&quot;list&quot; var=&quot;s&quot;&gt;<br/>
+    	<br/>
+    		&lt;s:property value=&quot;s&quot;/&gt;<br/>
+    		<br/>
+    	&lt;/s:iterator&gt;<br/>
+    <br/>
+    &lt;/h1&gt;<br/>
+     &lt;h1&gt;<br/>
+    <br/>
+    	&lt;s:iterator begin=&quot;begin&quot; end=&quot;end&quot; value=&quot;list&quot; var=&quot;s&quot;&gt;<br/>
+    	<br/>
+    		&lt;s:property value=&quot;#s&quot;/&gt;<br/>
+    		<br/>
+    	&lt;/s:iterator&gt;<br/>
+    <br/>
+    &lt;/h1&gt;<br/>
+   <br/>
+    &lt;form&gt;<br/>
+    	&lt;input name=&quot;name&quot; value=&quot;&lt;s:property value=&quot;name&quot;/&gt;&quot;/&gt;<br/>
+    	&lt;input value=&quot;submit&quot; type=&quot;submit&quot;&gt;<br/>
+    &lt;/form&gt;<br/>
+    <br/>
+    &lt;form action=&quot;/struts2copy/demo/redirect.action&quot; &gt;<br/>
+    <br/>
+    	&lt;input type=&quot;submit&quot; value=&quot;redirect&quot;/&gt;<br/>
+    &lt;/form&gt;<br/>
+    &lt;img alt=&quot;alt&quot; src=&quot;/struts2copy/demo/image.action&quot;&gt;<br/>
+  &lt;/body&gt;<br/>
+&lt;/html&gt;<br/>
+</pre><br><br/>
+<pre name="code" class="java">package action;<br/>
+<br/>
+import java.io.File;<br/>
+import java.io.FileInputStream;<br/>
+import java.io.FileNotFoundException;<br/>
+import java.io.InputStream;<br/>
+import java.util.ArrayList;<br/>
+import java.util.HashMap;<br/>
+import java.util.List;<br/>
+import java.util.Map;<br/>
+<br/>
+import com.opensymphony.xwork2.ActionContext;<br/>
+<br/>
+import model.User;<br/>
+<br/>
+public class HelloAction {<br/>
+	<br/>
+	public HelloAction(){<br/>
+		<br/>
+		ActionContext context = ActionContext.getContext();<br/>
+		<br/>
+		//imageStream = this.getClass().getResourceAsStream(&quot;screen.png&quot;);<br/>
+		System.out.println(19);<br/>
+		System.out.println(imageStream);<br/>
+		<br/>
+	}<br/>
+	<br/>
+	public String redirect(){<br/>
+		return &quot;redirect&quot;;<br/>
+	}<br/>
+	<br/>
+	public String test() throws FileNotFoundException{<br/>
+		<br/>
+		<br/>
+		imageStream = new FileInputStream(this.getClass().getResource(&quot;/screen.png&quot;).getPath());//new FileInputStream(new File(&quot;screen.png&quot;));<br/>
+		System.out.println(28);<br/>
+		System.out.println(imageStream);<br/>
+		return &quot;image&quot;;<br/>
+		<br/>
+	}<br/>
+	private InputStream imageStream  = this.getClass().getResourceAsStream(&quot;screen.png&quot;);<br/>
+	<br/>
+	public InputStream getImageStream() {<br/>
+		return imageStream;<br/>
+	}<br/>
+<br/>
+	public void setImageStream(InputStream imageStream) {<br/>
+		this.imageStream = imageStream;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 在业务方法中输出“Hello，Action.”<br/>
+	 */<br/>
+	public String sayHello() {<br/>
+		System.out.println(&quot;Hello,Action.&quot;);<br/>
+		System.out.println(user);<br/>
+<br/>
+		cityList.add(&quot;zhengzhou&quot;);<br/>
+		cityList.add(&quot;chongqing&quot;);<br/>
+		cityList.add(&quot;qingdao&quot;);<br/>
+		// 初始化Map数据<br/>
+		cityMap.put(&quot;beijing&quot;, &quot;2300万人口&quot;);<br/>
+		cityMap.put(&quot;shanghai&quot;, &quot;2000万人口&quot;);<br/>
+		cityMap.put(&quot;guangzhou&quot;, &quot;1800万人口&quot;);<br/>
+		list.add(&quot;xiuye&quot;);<br/>
+		list.add(&quot;wuming&quot;);<br/>
+		list.add(&quot;kkkkk&quot;);<br/>
+		System.out.println(name);<br/>
+		return &quot;success&quot;;<br/>
+	}<br/>
+<br/>
+	private String[] cityArray = new String[] { &quot;beijing&quot;, &quot;shanghai&quot;,<br/>
+			&quot;guangzhou&quot; };<br/>
+<br/>
+	private List&lt;String&gt; cityList = new ArrayList&lt;String&gt;();<br/>
+<br/>
+	private Map&lt;String, String&gt; cityMap = new HashMap&lt;String, String&gt;();<br/>
+<br/>
+	private String realName;<br/>
+<br/>
+	public String[] getCityArray() {<br/>
+		return cityArray;<br/>
+	}<br/>
+<br/>
+	public void setCityArray(String[] cityArray) {<br/>
+		this.cityArray = cityArray;<br/>
+	}<br/>
+<br/>
+	public List&lt;String&gt; getCityList() {<br/>
+		return cityList;<br/>
+	}<br/>
+<br/>
+	public void setCityList(List&lt;String&gt; cityList) {<br/>
+		this.cityList = cityList;<br/>
+	}<br/>
+<br/>
+	public Map&lt;String, String&gt; getCityMap() {<br/>
+		return cityMap;<br/>
+	}<br/>
+<br/>
+	public void setCityMap(Map&lt;String, String&gt; cityMap) {<br/>
+		this.cityMap = cityMap;<br/>
+	}<br/>
+<br/>
+	private List&lt;String&gt; list = new ArrayList&lt;String&gt;();<br/>
+	<br/>
+	public List&lt;String&gt; getList() {<br/>
+		return list;<br/>
+	}<br/>
+<br/>
+	public void setList(List&lt;String&gt; list) {<br/>
+		this.list = list;<br/>
+	}<br/>
+<br/>
+	private Integer begin = 1;<br/>
+	private Integer  end = 2;<br/>
+	public Integer getBegin() {<br/>
+		return begin;<br/>
+	}<br/>
+<br/>
+	public void setBegin(Integer begin) {<br/>
+		this.begin = begin;<br/>
+	}<br/>
+<br/>
+	public Integer getEnd() {<br/>
+		return end;<br/>
+	}<br/>
+<br/>
+	public void setEnd(Integer end) {<br/>
+		this.end = end;<br/>
+	}<br/>
+<br/>
+	public String getRealName() {<br/>
+		return realName;<br/>
+	}<br/>
+<br/>
+	public void setRealName(String realName) {<br/>
+		this.realName = realName;<br/>
+		System.out.println(realName);<br/>
+	}<br/>
+<br/>
+	private User user;<br/>
+<br/>
+	private String name;<br/>
+	<br/>
+	public String getName() {<br/>
+		return name;<br/>
+	}<br/>
+<br/>
+	public void setName(String name) {<br/>
+		this.name = name;<br/>
+	}<br/>
+<br/>
+	public User getUser() {<br/>
+		return user;<br/>
+	}<br/>
+<br/>
+	public void setUser(User user) {<br/>
+		this.user = user;<br/>
+		System.out.println(user);<br/>
+	}<br/>
+<br/>
+	private String some = &quot;WUMING&quot;;<br/>
+<br/>
+	public String getSome() {<br/>
+		return some;<br/>
+	}<br/>
+<br/>
+	public void setSome(String some) {<br/>
+		this.some = some;<br/>
+	}<br/>
+<br/>
+}</pre><br><br/>
+<pre name="code" class="java">package test;<br/>
+<br/>
+import static org.junit.Assert.*;<br/>
+<br/>
+import java.io.File;<br/>
+import java.io.FileInputStream;<br/>
+import java.io.FileNotFoundException;<br/>
+import java.io.InputStream;<br/>
+<br/>
+import org.junit.Test;<br/>
+<br/>
+import action.HelloAction;<br/>
+<br/>
+public class test {<br/>
+<br/>
+	@Test<br/>
+	public void test() throws FileNotFoundException {<br/>
+		HelloAction h = new HelloAction();<br/>
+		System.out.println(h.getClass().getClassLoader().getResource(&quot;screen.png&quot;));<br/>
+		String s = null;<br/>
+		try {<br/>
+			s = h.test();<br/>
+		} catch (FileNotFoundException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		File f = new File(&quot;.&quot;);<br/>
+		System.out.println(f.getParent());<br/>
+		System.out.println(s);<br/>
+		System.out.println(this.getClass().getResource(&quot;/screen.png&quot;).getPath());<br/>
+		System.out.println(new FileInputStream(this.getClass().getResource(&quot;/screen.png&quot;).getPath()));<br/>
+		InputStream in = new FileInputStream(&quot;/screen.png&quot;);<br/>
+		<br/>
+		System.out.println(in);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="html">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;<br/>
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br/>
+  &lt;groupId&gt;struts2copy&lt;/groupId&gt;<br/>
+  &lt;artifactId&gt;struts2copy&lt;/artifactId&gt;<br/>
+  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;<br/>
+  &lt;packaging&gt;war&lt;/packaging&gt;<br/>
+  &lt;name&gt;struts2copy&lt;/name&gt;<br/>
+  &lt;description&gt;struts2 example&lt;/description&gt;<br/>
+  &lt;dependencies&gt;<br/>
+  &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;bean-validator&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0-JBoss-4.0.2&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.enterprise.deploy&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    <br/>
+   <br/>
+    &lt;dependency&gt;<br/>
+    <br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.jms&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.management.j2ee&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.eclipse.persistence&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.persistence&lt;/artifactId&gt;<br/>
+      &lt;version&gt;2.0.0&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.resource&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.security.auth.message&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.security.jacc&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.servlet&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.servlet.jsp&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.servlet.jsp.jstl&lt;/artifactId&gt;<br/>
+      &lt;version&gt;3.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;jaxb-api-osgi&lt;/artifactId&gt;<br/>
+      &lt;version&gt;2.2.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;javax.ws.rs&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;jsr311-api&lt;/artifactId&gt;<br/>
+      &lt;version&gt;1.1.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish.web&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;jstl-impl&lt;/artifactId&gt;<br/>
+      &lt;version&gt;1.2&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;javax.mail&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;mail&lt;/artifactId&gt;<br/>
+      &lt;version&gt;1.4.3&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;javax.xml&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;webservices-api-osgi&lt;/artifactId&gt;<br/>
+      &lt;version&gt;2.0.1&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.jboss.weld&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;weld-osgi-bundle&lt;/artifactId&gt;<br/>
+      &lt;version&gt;1.0.1-SP3&lt;/version&gt;<br/>
+      &lt;scope&gt;provided&lt;/scope&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+      &lt;groupId&gt;org.glassfish.web&lt;/groupId&gt;<br/>
+      &lt;artifactId&gt;javax.servlet.jsp.jstl&lt;/artifactId&gt;<br/>
+      &lt;version&gt;1.2.1&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;commons-fileupload&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.3.1&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;commons-io&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-io&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;2.2&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;commons-lang&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-lang&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;2.4&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;3.2&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;commons-logging&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-logging&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.1.3&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;commons-logging&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;commons-logging-api&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.1&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;org.freemarker&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;freemarker&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;2.3.22&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;javassist&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;javassist&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;3.11.0.GA&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;ognl&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;ognl&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;3.0.6&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;org.apache.struts&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;struts2-core&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;2.3.24&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;xmlpull&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;xmlpull&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.1.3.1&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;xpp3&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;xpp3_min&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.1.4c&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;com.thoughtworks.xstream&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;xstream&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;1.4.2&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+    &lt;dependency&gt;<br/>
+    	&lt;groupId&gt;org.apache.struts.xwork&lt;/groupId&gt;<br/>
+    	&lt;artifactId&gt;xwork-core&lt;/artifactId&gt;<br/>
+    	&lt;version&gt;2.3.24&lt;/version&gt;<br/>
+    &lt;/dependency&gt;<br/>
+  &lt;/dependencies&gt;<br/>
+  &lt;build&gt;<br/>
+    &lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;<br/>
+    &lt;resources&gt;<br/>
+      &lt;resource&gt;<br/>
+        &lt;directory&gt;src&lt;/directory&gt;<br/>
+        &lt;excludes&gt;<br/>
+          &lt;exclude&gt;**/*.java&lt;/exclude&gt;<br/>
+        &lt;/excludes&gt;<br/>
+      &lt;/resource&gt;<br/>
+    &lt;/resources&gt;<br/>
+    &lt;plugins&gt;<br/>
+      &lt;plugin&gt;<br/>
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;<br/>
+        &lt;version&gt;3.1&lt;/version&gt;<br/>
+        &lt;configuration&gt;<br/>
+          &lt;source&gt;1.7&lt;/source&gt;<br/>
+          &lt;target&gt;1.7&lt;/target&gt;<br/>
+        &lt;/configuration&gt;<br/>
+      &lt;/plugin&gt;<br/>
+      &lt;plugin&gt;<br/>
+        &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;<br/>
+        &lt;version&gt;2.3&lt;/version&gt;<br/>
+        &lt;configuration&gt;<br/>
+          &lt;warSourceDirectory&gt;WebRoot&lt;/warSourceDirectory&gt;<br/>
+          &lt;failOnMissingWebXml&gt;false&lt;/failOnMissingWebXml&gt;<br/>
+        &lt;/configuration&gt;<br/>
+      &lt;/plugin&gt;<br/>
+    &lt;/plugins&gt;<br/>
+  &lt;/build&gt;<br/>
+&lt;/project&gt;</pre><img src="http://img.blog.csdn.net/20160108190726993?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+   <br/>
+</div>

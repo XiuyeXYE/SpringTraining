@@ -1,0 +1,95 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javascript的$的操作            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!DOCTYPE html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;UTF-8&quot;&gt;<br/>
+&lt;title&gt;Insert title here&lt;/title&gt;<br/>
+&lt;script type=&quot;text/javascript&quot;&gt;<br/>
+	<br/>
+	function array(obj){<br/>
+		this.obj = obj;<br/>
+		this.length = obj.length;<br/>
+		this.getLength = function()<br/>
+		{<br/>
+			return this.length;<br/>
+		}<br/>
+		this.getClass = function(){<br/>
+			return &quot;array&quot;;<br/>
+		}<br/>
+		//return obj;//通过这一步实现了数组，但实际上此变成了函数<br/>
+		//不能自定义实现数组<br/>
+	}<br/>
+	<br/>
+	function $(obj){<br/>
+		if(typeof obj == &quot;string&quot;){<br/>
+			if(obj.startsWith(&quot;#&quot;) ){<br/>
+				<br/>
+				var element = document.getElementById(obj.replace(&quot;#&quot;,&quot;&quot;));<br/>
+				return element;<br/>
+			}<br/>
+			else if(obj.startsWith(&quot;.&quot;)){<br/>
+				var element = document.getElementsByClassName(obj.replace(&quot;.&quot;,&quot;&quot;));<br/>
+				//alert(obj.replace(&quot;.&quot;,&quot;&quot;));\\js中的正则表达式点不需要\\.<br/>
+				return element;<br/>
+			}<br/>
+			else{<br/>
+				try{<br/>
+					var element = document.getElementsByTagName(obj);<br/>
+					return element;<br/>
+				}<br/>
+				catch(e)<br/>
+				{<br/>
+					return null;<br/>
+				}<br/>
+			}<br/>
+		}<br/>
+		else if(typeof obj == &quot;object&quot;){<br/>
+			if(obj.length == undefined){<br/>
+				return obj;<br/>
+			}<br/>
+			else{<br/>
+				return new array(obj);<br/>
+			}<br/>
+		}<br/>
+		else if(typeof obj == &quot;number&quot;){<br/>
+			return obj;<br/>
+		}<br/>
+		return null;<br/>
+	}<br/>
+	<br/>
+	<br/>
+	function f(){<br/>
+		try{<br/>
+		var ps1 = $(&quot;p&quot;);<br/>
+		alert(ps1[0].innerHTML);<br/>
+		var ps2 = $(&quot;.pline&quot;);<br/>
+		alert(ps2[0].innerHTML);<br/>
+		var num = $(123);<br/>
+		alert(num);<br/>
+		var p = $(&quot;#p3&quot;);<br/>
+		alert(p.innerHTML);<br/>
+		}<br/>
+		catch(e)<br/>
+		{<br/>
+			alert(e);<br/>
+		}<br/>
+	}<br/>
+	<br/>
+<br/>
+&lt;/script&gt;<br/>
+&lt;/head&gt;<br/>
+<br/>
+&lt;body&gt;<br/>
+&lt;p&gt;xiuye&lt;/p&gt;<br/>
+&lt;p class=&quot;pline&quot;&gt;wuming&lt;/p&gt;<br/>
+&lt;p id = &quot;p3&quot;&gt;55555&lt;/p&gt;<br/>
+&lt;button onclick=&quot;f();&quot;&gt;button&lt;/button&gt;<br/>
+<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;<br/>
+</pre><br><br/>
+   <br/>
+</div>

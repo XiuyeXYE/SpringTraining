@@ -1,0 +1,10 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        简述RuntimeException和非RuntimeException的区别            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>Java异常可以分为可检测异常，非检测异常：</p><br/>
+<p>1）可检测异常：可检测异常经编译器验证。对于声明抛出异常的任何方法，编译器将强制执行处理或声明规则，不捕捉这个异常，则产生编译错误。</p><br/>
+<p>2）非检测异常：非检测异常不遵循处理或者声明规则。在产生此类异常时，不一定非要采取任何适当操作，编译器不会检查是否已经解决了这样一个异常。</p><br/>
+<p>RuntimeException 类属于非检测异常，因为普通JVM操作引起的运行时异常随时可能发生，此类异常一般是由特定操作引发。但这些操作在java应用程序中会频繁出现。因此它们不受编译器检查与处理或声明规则的限制。非RuntimeException为可检测异常,该异常经编译器验证。</p><br/>
+   <br/>
+</div>

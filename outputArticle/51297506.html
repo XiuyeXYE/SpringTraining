@@ -1,0 +1,127 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        struts2配置并且可以注解            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>web.xml配置文件：</p><br/>
+<p><pre code_snippet_id="1669372" snippet_file_name="blog_20160502_1_6855422"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+	xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;<br/>
+	xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;<br/>
+	id=&quot;WebApp_ID&quot; version=&quot;3.1&quot;&gt;<br/>
+	&lt;display-name&gt;Struts2&lt;/display-name&gt;<br/>
+	&lt;welcome-file-list&gt;<br/>
+		&lt;welcome-file&gt;index.html&lt;/welcome-file&gt;<br/>
+		&lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;<br/>
+		&lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;<br/>
+		&lt;welcome-file&gt;default.html&lt;/welcome-file&gt;<br/>
+		&lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;<br/>
+		&lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;<br/>
+	&lt;/welcome-file-list&gt;<br/>
+	&lt;!-- 可以配置与spring集成的applicationContext配置文件，否则默认次文件应该在WEB-INF目录下 --&gt;<br/>
+	&lt;!-- &lt;context-param&gt;<br/>
+		&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;<br/>
+		&lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;<br/>
+	&lt;/context-param&gt; --&gt;<br/>
+	&lt;!-- struts2入口 --&gt;<br/>
+	&lt;filter&gt;<br/>
+		&lt;filter-name&gt;struts2Filter&lt;/filter-name&gt;<br/>
+		&lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;<br/>
+	&lt;/filter&gt;<br/>
+	&lt;!-- stuts2处理的映射url请求 --&gt;<br/>
+	&lt;filter-mapping&gt;<br/>
+		&lt;filter-name&gt;struts2Filter&lt;/filter-name&gt;<br/>
+		&lt;url-pattern&gt;*.action&lt;/url-pattern&gt;<br/>
+	&lt;/filter-mapping&gt;<br/>
+	&lt;!-- 与spring集成配置的监听器 --&gt;<br/>
+	&lt;!-- &lt;listener&gt;<br/>
+		&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;<br/>
+	&lt;/listener&gt; --&gt;<br/>
+&lt;/web-app&gt;</pre></p><br/>
+<p>struts.xml配置文件：</p><br/>
+<p><pre code_snippet_id="1669372" snippet_file_name="blog_20160502_2_6790166"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE struts PUBLIC<br/>
+	&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;<br/>
+	&quot;http://struts.apache.org/dtds/struts-2.1.7.dtd&quot;<br/>
+	&gt;<br/>
+<br/>
+&lt;struts&gt;<br/>
+	&lt;!-- 这句必须写上指定包，才会扫描，让注解起作用 --&gt;<br/>
+	&lt;constant name=&quot;struts.convention.action.packages&quot; value=&quot;com.test&quot; /&gt;<br/>
+	&lt;package name=&quot;com.test&quot; namespace=&quot;/test&quot; extends=&quot;struts-default&quot;&gt;<br/>
+		&lt;!-- 指定全局的结果 --&gt;<br/>
+		&lt;global-results&gt;<br/>
+			&lt;result name=&quot;testGlobal&quot; type=&quot;&quot;&gt;/testGlobal.jsp&lt;/result&gt;<br/>
+		&lt;/global-results&gt;<br/>
+		&lt;!-- 指定action --&gt;<br/>
+		&lt;action class=&quot;com.test.TestAction&quot; name=&quot;test&quot;&gt;<br/>
+		&lt;!-- 指定action内起作用的结果 --&gt;<br/>
+			&lt;result name=&quot;test&quot;&gt;/test.jsp&lt;/result&gt;<br/>
+		&lt;/action&gt;<br/>
+		&lt;action class=&quot;com.test.TestAction&quot; name=&quot;test2&quot; method=&quot;f&quot;&gt;<br/>
+			&lt;result name=&quot;test&quot;&gt;/test.jsp&lt;/result&gt;<br/>
+		&lt;/action&gt;<br/>
+	&lt;/package&gt;<br/>
+<br/>
+&lt;/struts&gt;</pre>action的java代码：</p><br/>
+<p><pre code_snippet_id="1669372" snippet_file_name="blog_20160502_3_3028175"  name="code" class="java">package com.test;<br/>
+<br/>
+import com.opensymphony.xwork2.ActionSupport;<br/>
+//未使用注解的action<br/>
+public class TestAction extends ActionSupport{<br/>
+	//默认执行action执行execute方法<br/>
+	@Override<br/>
+	public String execute() throws Exception {<br/>
+		<br/>
+		return &quot;testGlobal&quot;;<br/>
+	}<br/>
+<br/>
+	public String f(){<br/>
+		<br/>
+		return &quot;test&quot;;<br/>
+		<br/>
+	}<br/>
+	<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1669372" snippet_file_name="blog_20160502_4_7629981"  name="code" class="java">package com.test;<br/>
+<br/>
+import org.apache.struts2.convention.annotation.Action;<br/>
+import org.apache.struts2.convention.annotation.Namespace;<br/>
+import org.apache.struts2.convention.annotation.ParentPackage;<br/>
+import org.apache.struts2.convention.annotation.Result;<br/>
+import org.apache.struts2.convention.annotation.Results;<br/>
+<br/>
+//使用注解的action<br/>
+@Namespace(value=&quot;/test2&quot;)//指定空间名<br/>
+@ParentPackage(value=&quot;struts-default&quot;)//集成父package<br/>
+@Results({//全局结果返回结果指定<br/>
+	//location指定返回的jsp页面<br/>
+	@Result(name=&quot;test&quot;,location=&quot;/test.jsp&quot;)<br/>
+})<br/>
+<br/>
+public class Test2Action {<br/>
+	//在方法上定义action的name<br/>
+	@Action(&quot;test2&quot;)<br/>
+	public String login(){<br/>
+		return &quot;test&quot;;<br/>
+	}<br/>
+}<br/>
+</pre><img src="http://img.blog.csdn.net/20160502182454257?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160502182504804?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160502182517752?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160502182532799?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160502182545502?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+<br><br/>
+<br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,14 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        随机时间（java代码）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1706613" snippet_file_name="blog_20160603_1_592334"  name="code" class="java">SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);<br/>
+		Date start = format.parse(&quot;2015-1-1 00:00:00&quot;);<br/>
+		// System.out.println(start);<br/>
+		Date end = format.parse(&quot;2016-5-30 00:00:00&quot;);<br/>
+		long time = start.getTime()<br/>
+				+ (long) (Math.random() * (end.getTime() - start.getTime()));<br/>
+<br/>
+		return new Date(time);</pre><br><br/>
+   <br/>
+</div>

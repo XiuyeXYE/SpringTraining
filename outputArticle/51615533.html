@@ -1,0 +1,22 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        启动primefaces和解决mime的问题 在web.xml文件中配置            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1712075" snippet_file_name="blog_20160608_1_2531321"  name="code" class="html">&lt;!--what&#39;s FontAwesome<br/>
+	 FontAwesome Font Awesome is a highly customizable scalable vector iconset <br/>
+		with 479 icons. In addition to the default ThemeRoller icons, Font Awesome <br/>
+		icons are provided out of the box within PrimeFaces. In order to enable Font <br/>
+		Awesome support, enable primefaces.FONT_AWESOME setting as true via a context <br/>
+		param. --&gt;<br/>
+	&lt;!-- 让primefaces 的FONT_AWESOME 起作用 --&gt;<br/>
+	&lt;context-param&gt;<br/>
+		&lt;param-name&gt;primefaces.FONT_AWESOME&lt;/param-name&gt;<br/>
+		&lt;param-value&gt;true&lt;/param-value&gt;<br/>
+	&lt;/context-param&gt;<br/>
+	&lt;!-- 必须要指定该mime的映射类型，否则tomcat启动时弹出警告 --&gt;<br/>
+	&lt;mime-mapping&gt;<br/>
+		&lt;extension&gt;woff2&lt;/extension&gt;<br/>
+		&lt;mime-type&gt;application/x-front-woff&lt;/mime-type&gt;<br/>
+	&lt;/mime-mapping&gt;</pre><br><br/>
+   <br/>
+</div>

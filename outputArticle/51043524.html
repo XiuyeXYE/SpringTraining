@@ -1,0 +1,67 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Object wait and notify            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632446" snippet_file_name="blog_20160402_1_1241561"  name="code" class="java">package com.test.thread;<br/>
+<br/>
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;<br/>
+<br/>
+public class ThreadTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		final Object obj = new Object();<br/>
+		<br/>
+		Thread t1 = new Thread(){<br/>
+			@Override<br/>
+			public void run() {<br/>
+				<br/>
+				synchronized (obj) {<br/>
+					<br/>
+					System.out.println(&quot;Thread 1 entered.&quot;);<br/>
+					try {<br/>
+						<br/>
+						obj.wait();<br/>
+						<br/>
+					} catch (InterruptedException e) {<br/>
+						e.printStackTrace();<br/>
+					}<br/>
+					System.out.println(&quot;Thread1 come back! And waiting for over!&quot;);<br/>
+					<br/>
+				}<br/>
+				<br/>
+			}<br/>
+		};<br/>
+		<br/>
+		Thread t2 = new Thread(){<br/>
+			public void run() {<br/>
+				<br/>
+				synchronized (obj) {<br/>
+					<br/>
+					System.out.println(&quot;Thread2 entered!&quot;);<br/>
+					obj.notify();<br/>
+					System.out.println(&quot;Thread2 let obj notify!&quot;);<br/>
+					System.out.println(&quot;Thread2 will first out than Thread1?&quot;);<br/>
+					System.out.println(&quot;Thread2 go out and life over!&quot;);<br/>
+					<br/>
+				}<br/>
+				<br/>
+			}<br/>
+		};<br/>
+		<br/>
+		t1.start();<br/>
+		t2.start();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1632446" snippet_file_name="blog_20160402_2_2735277"  name="code" class="java">Thread 1 entered.<br/>
+Thread2 entered!<br/>
+Thread2 let obj notify!<br/>
+Thread2 will first out than Thread1?<br/>
+Thread2 go out and life over!<br/>
+Thread1 come back! And waiting for over!<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

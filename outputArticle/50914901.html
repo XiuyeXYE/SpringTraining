@@ -1,0 +1,173 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        windows 内存分配尝试（AWE相关API编译器没找到库，所以全部注释）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1613866" snippet_file_name="blog_20160317_1_6496705"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;stdio.h&gt;<br/>
+#include&lt;tchar.h&gt;<br/>
+#include&lt;WinBase.h&gt;<br/>
+#define MEMORY_REQUESTED 1024*1024<br/>
+<br/>
+BOOL LoggedSetLockPagesPrivilege(HANDLE hProcess,BOOL bEnable);<br/>
+<br/>
+int _cdecl main(){<br/>
+	BOOL bResult;<br/>
+	ULONG_PTR NumberOfPages;<br/>
+	ULONG_PTR NumberOfPagesInitial;<br/>
+	ULONG_PTR *aPFNs; //page info;holds opaque data<br/>
+	PVOID lpMemReserved;//awe window<br/>
+	SYSTEM_INFO sSysInfo;<br/>
+	int PFNArraySize;//memory to rquest for PFN array<br/>
+	&lt;span style=&quot;color:#FF0000;&quot;&gt;GetSystemInfo&lt;/span&gt;(&amp;sSysInfo);<br/>
+	_tprintf(_T(&quot;This computer has page size:%dB\n&quot;),sSysInfo.dwPageSize);//1KB = 1024B<br/>
+	int kbPageSize = sSysInfo.&lt;span style=&quot;color:#FF0000;&quot;&gt;dwPageSize&lt;/span&gt;/1024;<br/>
+	_tprintf(_T(&quot;This computer has page size:%dKB\n&quot;),kbPageSize);<br/>
+	// Calculate the number of pages of memory to request.<br/>
+	NumberOfPages = MEMORY_REQUESTED/sSysInfo.dwPageSize;<br/>
+	_tprintf(_T(&quot;Requesting %d pages of memory.\n&quot;),NumberOfPages);<br/>
+<br/>
+	PFNArraySize = NumberOfPages * sizeof(ULONG_PTR);<br/>
+	_tprintf(_T(&quot;Requestig a PFN array of %d bytes.\n&quot;),PFNArraySize);<br/>
+	_tprintf(_T(&quot;Getting process&#39;s heap address : %p \n&quot;),&lt;span style=&quot;color:#FF0000;&quot;&gt;GetProcessHeap&lt;/span&gt;());<br/>
+	//Allocate heap for aPFNs<br/>
+	aPFNs = (ULONG_PTR*)&lt;span style=&quot;color:#FF0000;&quot;&gt;HeapAlloc&lt;/span&gt;(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetProcessHeap&lt;/span&gt;(),0,PFNArraySize);<br/>
+	_tprintf(_T(&quot;aPFNs address : %p \n&quot;),aPFNs);<br/>
+	if(aPFNs == NULL){<br/>
+		_tprintf(_T(&quot;Failed to allocate on heap.\n&quot;));<br/>
+		return -1;<br/>
+	}<br/>
+<br/>
+	//Enable the privilege<br/>
+	<br/>
+	_tprintf(_T(&quot;Getting process handle : %p\n&quot;),&lt;span style=&quot;color:#FF0000;&quot;&gt;GetCurrentProcess&lt;/span&gt;());//返回-1 即FFFFFFFF<br/>
+<br/>
+	/*if(!LoggedSetLockPagesPrivilege(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetCurrentProcess&lt;/span&gt;(),TRUE)){//编译不通过：Cannnot enable the SE_LOCK_MEMORY_NAME privilege;please check the local policy.<br/>
+		return -2;<br/>
+	}<br/>
+	*/<br/>
+<br/>
+	//Allocate the physical memory.<br/>
+	NumberOfPagesInitial = NumberOfPages;<br/>
+	/*bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;AllocateUserPhysicalPages&lt;/span&gt;(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetCurrentProcess&lt;/span&gt;(),&amp;NumberOfPages,aPFNs);<br/>
+	<br/>
+	if(bResult != TRUE){<br/>
+		_tprintf(_T(&quot;Cannot allocate physical pages (%u) \n&quot;),&lt;span style=&quot;color:#FF0000;&quot;&gt;GetLastError&lt;/span&gt;());<br/>
+		return -3;<br/>
+	}<br/>
+	if(NumberOfPagesInitial != NumberOfPages){<br/>
+		_tprintf(_T(&quot;Allocated only %p pages.\n&quot;),NumberOfPages);<br/>
+		return -9;<br/>
+	}<br/>
+	*/<br/>
+	//Reserve the virtual memory.<br/>
+<br/>
+	lpMemReserved = &lt;span style=&quot;color:#FF0000;&quot;&gt;VirtualAlloc&lt;/span&gt;(NULL,MEMORY_REQUESTED,MEM_RESERVE|MEM_PHYSICAL,PAGE_READWRITE);<br/>
+	if(lpMemReserved == NULL){<br/>
+		_tprintf(_T(&quot;Cannot reserve memory.\n&quot;));<br/>
+		return -4;<br/>
+	}<br/>
+	<br/>
+	//Map the physical memory into the window.<br/>
+	/*bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;MapUserPhysicalPages&lt;/span&gt;(lpMemReserved,<br/>
+								NumberOfPages,<br/>
+								aPFNs);<br/>
+	if(bResult != TRUE){<br/>
+		_tprintf(_T(&quot;MapUserPhysicalPages failed (%u)\n&quot;),GetLastError());<br/>
+		return -5;<br/>
+	}*/<br/>
+	//unmap<br/>
+	/*bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;MapUserPhysicalPages&lt;/span&gt;(lpMemReserved,NumberOfPages,NULL);<br/>
+	if(bResult != TRUE){<br/>
+		_tprintf(_T(&quot;MapUserPhysicalPages failed (%u)\n&quot;),GetLastError());<br/>
+		return -6;<br/>
+	}<br/>
+	//Free the physical pages.<br/>
+	bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;FreeUserPhysicalPages&lt;/span&gt;(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetCurrentProcess&lt;/span&gt;(),&amp;NumberOfPages,aPFNs);<br/>
+	if(bResult != TRUE){<br/>
+		_tprintf(_T(&quot;Cannot free physical pages,error %u.\n&quot;),GetLastError());<br/>
+		return -7;<br/>
+	}*/<br/>
+	//Free virtual memory<br/>
+	bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;VirtualFree&lt;/span&gt;(lpMemReserved,0,MEM_RELEASE);<br/>
+	//Release the aPFNs array<br/>
+	bResult = &lt;span style=&quot;color:#FF0000;&quot;&gt;HeapFree&lt;/span&gt;(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetProcessHeap&lt;/span&gt;(),0,aPFNs);<br/>
+	if(bResult != TRUE){<br/>
+		_tprintf(_T(&quot;Call to HeapFree has failed (%u)\n&quot;),&lt;span style=&quot;color:#FF0000;&quot;&gt;GetLastError&lt;/span&gt;());<br/>
+		return -8;<br/>
+	}<br/>
+	return 0;<br/>
+<br/>
+<br/>
+}<br/>
+/*****************************************************************<br/>
+   LoggedSetLockPagesPrivilege: a function to obtain or<br/>
+   release the privilege of locking physical pages.<br/>
+<br/>
+   Inputs:<br/>
+<br/>
+       HANDLE hProcess: Handle for the process for which the<br/>
+       privilege is needed<br/>
+<br/>
+       BOOL bEnable: Enable (TRUE) or disable?<br/>
+<br/>
+   Return value: TRUE indicates success, FALSE failure.<br/>
+<br/>
+*****************************************************************/<br/>
+BOOL LoggedSetLockPagesPrivilege(HANDLE hProcess,BOOL bEnable){<br/>
+	struct <br/>
+	{<br/>
+		DWORD Count;<br/>
+		LUID_AND_ATTRIBUTES Privilege [1];//1 个元素的数组<br/>
+	}Info;<br/>
+	HANDLE Token;<br/>
+	BOOL Result;<br/>
+	//open the token<br/>
+	Result = &lt;span style=&quot;color:#FF0000;&quot;&gt;OpenProcessToken&lt;/span&gt;(hProcess,TOKEN_ADJUST_PRIVILEGES,&amp;Token);<br/>
+	if(Result != TRUE){<br/>
+		_tprintf(_T(&quot;Cannot open process token.\n&quot;));<br/>
+		return FALSE;<br/>
+	}<br/>
+	//Enable of disable?<br/>
+	Info.Count = 1;<br/>
+	if(bEnable){<br/>
+		Info.Privilege[0].Attributes = SE_PRIVILEGE_ENABLED;<br/>
+	}<br/>
+	else{<br/>
+		Info.Privilege[0].Attributes = 0;<br/>
+	}<br/>
+	//Get the LUID<br/>
+	Result = &lt;span style=&quot;color:#FF0000;&quot;&gt;LookupPrivilegeValue&lt;/span&gt;(NULL,SE_LOCK_MEMORY_NAME,&amp;(Info.Privilege[0].Luid));<br/>
+	if(Result != TRUE){<br/>
+		_tprintf(_T(&quot;Cannot get privilege for %s.\n&quot;),SE_LOCK_MEMORY_NAME);<br/>
+		return FALSE;<br/>
+	}<br/>
+	//Adjust the privilege.<br/>
+	Result = &lt;span style=&quot;color:#FF0000;&quot;&gt;AdjustTokenPrivileges&lt;/span&gt;(Token,FALSE,(PTOKEN_PRIVILEGES)&amp;Info,0,NULL,NULL);<br/>
+	//Check the result<br/>
+	if(Result != TRUE){<br/>
+		_tprintf(_T(&quot;Cannot adjust token privileges (%u) \n&quot;),&lt;span style=&quot;color:#FF0000;&quot;&gt;GetLastError&lt;/span&gt;());<br/>
+		return FALSE;<br/>
+	}<br/>
+	else{<br/>
+		if(&lt;span style=&quot;color:#FF0000;&quot;&gt;GetLastError&lt;/span&gt;() != ERROR_SUCCESS){<br/>
+			_tprintf(_T(&quot;Cannnot enable the SE_LOCK_MEMORY_NAME privilege;&quot;));<br/>
+			_tprintf(_T(&quot;please check the local policy.\n&quot;));<br/>
+			return FALSE;<br/>
+		}<br/>
+	}<br/>
+	return TRUE;<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1613866" snippet_file_name="blog_20160317_2_8939703"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;gcc awe.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+This computer has page size:4096B<br/>
+This computer has page size:4KB<br/>
+Requesting 256 pages of memory.<br/>
+Requestig a PFN array of 1024 bytes.<br/>
+Getting process&#39;s heap address : 007E0000<br/>
+aPFNs address : 0080ACF0<br/>
+Getting process handle : FFFFFFFF</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,330 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javascript操作商品            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!DOCTYPE html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;UTF-8&quot;&gt;<br/>
+&lt;title&gt;shopping&lt;/title&gt;<br/>
+	&lt;style&gt;<br/>
+		div{<br/>
+			text-align:center;			<br/>
+		}<br/>
+		table{<br/>
+			margin:auto;<br/>
+			border-collapse:collapse;<br/>
+		}<br/>
+		#goods{<br/>
+			border:1px solid red;<br/>
+			width:600px;<br/>
+			height:390px;<br/>
+			<br/>
+		}<br/>
+		<br/>
+		#goods td{<br/>
+			border:1px solid red;<br/>
+			<br/>
+		}<br/>
+		<br/>
+		#box{<br/>
+			width:600px;<br/>
+			border:1px solid blue;<br/>
+		}<br/>
+		#box td{<br/>
+			border:1px solid blue;<br/>
+		}<br/>
+		caption{<br/>
+			font-size:30px;<br/>
+			color:green;<br/>
+		}<br/>
+	&lt;/style&gt;<br/>
+<br/>
+	&lt;script&gt;<br/>
+	<br/>
+		function checkSame(btn)<br/>
+		{<br/>
+			var goodsTr = btn.parentNode.parentNode;<br/>
+			//alert(goodsTr.innerHTML);<br/>
+			var goodsTds = goodsTr.getElementsByTagName(&quot;td&quot;);<br/>
+			//alert(goodsTds[0].innerHTML);<br/>
+			var goodsId = goodsTds[0].innerHTML;<br/>
+			//alert(goodsId);<br/>
+			<br/>
+			<br/>
+			var box = document.getElementById(&quot;box&quot;);<br/>
+			var boxTrs = box.getElementsByTagName(&quot;tr&quot;);<br/>
+			<br/>
+			<br/>
+			//alert(boxTrs[0].innerHTML);<br/>
+			//alert(boxTrs.length);<br/>
+			if(boxTrs.length &gt; 2)<br/>
+			{<br/>
+					for(var i=1;i&lt;boxTrs.length-1;i++)<br/>
+					{<br/>
+						var boxId = boxTrs[i].getElementsByTagName(&quot;td&quot;)[0].innerHTML;<br/>
+						//alert(boxId == goodsId);<br/>
+						if(boxId == goodsId){<br/>
+							goodsTds[3].innerHTML = parseInt(goodsTds[3].innerHTML) - 1;<br/>
+							boxTrs[i].getElementsByTagName(&quot;td&quot;)[3].getElementsByTagName(&quot;input&quot;)[1].value++;<br/>
+							boxTrs[i].getElementsByTagName(&quot;td&quot;)[4].innerHTML = <br/>
+								parseInt(boxTrs[i].getElementsByTagName(&quot;td&quot;)[3].getElementsByTagName(&quot;input&quot;)[1].value)*<br/>
+								parseInt(boxTrs[i].getElementsByTagName(&quot;td&quot;)[2].innerHTML);<br/>
+							return true;<br/>
+						}<br/>
+						<br/>
+						<br/>
+					}<br/>
+					return false;<br/>
+			}<br/>
+			<br/>
+			<br/>
+		}<br/>
+	<br/>
+		function add(btn)<br/>
+		{<br/>
+			if(checkSame(btn)){<br/>
+				total();<br/>
+				return;<br/>
+			}<br/>
+			//获得tr节点<br/>
+			var tr = btn.parentNode.parentNode;<br/>
+			//alert(tr);<br/>
+			//获取所有td字节点<br/>
+			//var tds = tr.childNodes;//错误获取方式，会获取空格作为节点<br/>
+			var tds = tr.getElementsByTagName(&quot;td&quot;);<br/>
+			//获取id<br/>
+			var id = tds[0].innerHTML;<br/>
+			//获取name值<br/>
+			var name = tds[1].innerHTML;<br/>
+			//获取单价price<br/>
+			var price = tds[2].innerHTML;<br/>
+			//获得数量number<br/>
+			var num = tds[3].innerHTML;<br/>
+			/* alert(name);<br/>
+			alert(price);<br/>
+			alert(num); */<br/>
+			//alert(typeof num);//string<br/>
+			<br/>
+			//将相应商品数目减1<br/>
+			tds[3].innerHTML = parseInt(num) - 1;<br/>
+			var sumPrice = price;<br/>
+			var box = document.getElementById(&quot;box&quot;);<br/>
+			var newTr = document.createElement(&quot;tr&quot;);<br/>
+			newTr.innerHTML = &quot;&lt;td&gt;&quot;+id+&quot;&lt;/td&gt;&quot;<br/>
+				+&quot;&lt;td&gt;&quot;+name+&quot;&lt;/td&gt;\n&quot;<br/>
+				+&quot;&lt;td&gt;&quot;+price+&quot;&lt;/td&gt;\n&quot;<br/>
+				+&quot;&lt;td&gt;&lt;input type=&#39;button&#39; value=&#39;-&#39; onclick=&#39;decrement(this);&#39;&gt;&quot;<br/>
+				+&quot;&lt;input type=&#39;text&#39; size=&#39;3&#39; value=&#39;1&#39; readonly&gt;&quot;<br/>
+				+&quot;&lt;input type=&#39;button&#39; value=&#39;+&#39; onclick=&#39;increment(this);&#39;&gt;&lt;/td&gt;\n&quot;<br/>
+				+&quot;&lt;td&gt;&quot;+sumPrice+&quot;&lt;/td&gt;\n&quot;<br/>
+				+&quot;&lt;td&gt;&lt;input type=&#39;button&#39; value=&#39;remove&#39; onclick=&#39;remove_ancestor(this);&#39;&gt;&lt;/td&gt;&quot;;<br/>
+				//alert(newTr.innerHTML);<br/>
+			var trs = box.getElementsByTagName(&quot;tr&quot;);//可以直接获取孙元素<br/>
+			//alert(trs[1].innerHTML);<br/>
+			try{<br/>
+				//table的实际子元素是tbody<br/>
+			box.getElementsByTagName(&quot;tbody&quot;)[0].insertBefore(newTr,trs[1]);<br/>
+			}<br/>
+			catch(e)<br/>
+			{<br/>
+				alert(e);<br/>
+			}<br/>
+			total();<br/>
+		}<br/>
+		<br/>
+		function remove_ancestor(btn)<br/>
+		{<br/>
+			try{<br/>
+				var trs = document.getElementById(&quot;goods&quot;).getElementsByTagName(&quot;tr&quot;);<br/>
+			var num = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[3].getElementsByTagName(&quot;input&quot;)[1];<br/>
+			//alert(num.value);<br/>
+			var td = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[0];<br/>
+			//alert(td.innerHTML);<br/>
+			var id = parseInt(td.innerHTML);<br/>
+			var goodsTd = trs[id].getElementsByTagName(&quot;td&quot;)[3];<br/>
+			var n = parseInt(goodsTd.innerHTML);<br/>
+			var max = n + parseInt(num.value);<br/>
+			goodsTd.innerHTML = max;<br/>
+			var tab = btn.parentNode.parentNode.parentNode;<br/>
+			var tr = btn.parentNode.parentNode;<br/>
+			tab.removeChild(tr);<br/>
+			}<br/>
+			catch(e)<br/>
+			{<br/>
+				alert(e);<br/>
+			}<br/>
+			total();<br/>
+		}<br/>
+		<br/>
+		function decrement(btn)<br/>
+		{<br/>
+			var trs = document.getElementById(&quot;goods&quot;).getElementsByTagName(&quot;tr&quot;);<br/>
+			//alert(trs[0].innerHTML);<br/>
+			var td = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[0];<br/>
+			//alert(td.innerHTML);<br/>
+			var id = parseInt(td.innerHTML);<br/>
+			<br/>
+			var sumPrice = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[4];<br/>
+			var price = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[2]<br/>
+			<br/>
+			var num = btn.parentNode.getElementsByTagName(&quot;input&quot;)[1];<br/>
+			//alert(num.value);<br/>
+			var goodsTd = trs[id].getElementsByTagName(&quot;td&quot;)[3];<br/>
+			//alert(goodsTd.innerHTML);<br/>
+			//对于value属性的值不清楚是何类型，但应该是string<br/>
+			if(num.value &gt;1)<br/>
+			{<br/>
+				num.value--;<br/>
+				goodsTd.innerHTML = parseInt(goodsTd.innerHTML)+1;<br/>
+				sumPrice.innerHTML = parseInt(num.value)*parseInt(price.innerHTML);<br/>
+			}<br/>
+			<br/>
+			total();<br/>
+			<br/>
+		}<br/>
+		<br/>
+		function increment(btn)<br/>
+		{<br/>
+			var trs = document.getElementById(&quot;goods&quot;).getElementsByTagName(&quot;tr&quot;);<br/>
+			//alert(trs[0].innerHTML);<br/>
+			var td = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[0];<br/>
+			//alert(td.innerHTML);<br/>
+			var id = parseInt(td.innerHTML);<br/>
+			<br/>
+			var sumPrice = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[4];<br/>
+			var price = btn.parentNode.parentNode.getElementsByTagName(&quot;td&quot;)[2]<br/>
+			<br/>
+			var num = btn.parentNode.getElementsByTagName(&quot;input&quot;)[1];<br/>
+			//alert(num.value);<br/>
+			var goodsTd = trs[id].getElementsByTagName(&quot;td&quot;)[3];<br/>
+			//alert(goodsTd.innerHTML);<br/>
+			var n = parseInt(goodsTd.innerHTML);<br/>
+			var max = n + parseInt(num.value);<br/>
+			//alert(max);<br/>
+			if(num.value &lt; max)<br/>
+			{<br/>
+				num.value ++;<br/>
+				goodsTd.innerHTML = n-1;<br/>
+				sumPrice.innerHTML = parseInt(num.value)*parseInt(price.innerHTML);<br/>
+			} <br/>
+			total();<br/>
+		}<br/>
+		<br/>
+		function total()<br/>
+		{<br/>
+			var total = 0;<br/>
+			var box = document.getElementById(&quot;box&quot;);<br/>
+			var boxTrs = box.getElementsByTagName(&quot;tr&quot;);<br/>
+			<br/>
+			if(boxTrs.length &gt; 2){<br/>
+				for(var i=1;i&lt;boxTrs.length-1;i++){<br/>
+					var sumPrice = boxTrs[i].getElementsByTagName(&quot;td&quot;)[4].innerHTML;<br/>
+					total += parseInt(sumPrice);<br/>
+				}<br/>
+					<br/>
+			}<br/>
+			<br/>
+			var sum = document.getElementById(&quot;total&quot;);<br/>
+			<br/>
+			sum.innerHTML = total;<br/>
+			<br/>
+			<br/>
+			<br/>
+		}<br/>
+		<br/>
+	&lt;/script&gt;<br/>
+<br/>
+&lt;/head&gt;<br/>
+&lt;body&gt;<br/>
+	&lt;!-- list of goods --&gt;<br/>
+	&lt;div&gt;<br/>
+	<br/>
+		&lt;table id=&quot;goods&quot;&gt;<br/>
+		&lt;caption&gt;商品&lt;/caption&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;id&lt;/td&gt;<br/>
+				&lt;td&gt;name&lt;/td&gt;<br/>
+				&lt;td&gt;price&lt;/td&gt;<br/>
+				&lt;td&gt;number&lt;/td&gt;<br/>
+				&lt;td&gt;add&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;001&lt;/td&gt;<br/>
+				&lt;td&gt;镭射鼠标&lt;/td&gt;<br/>
+				&lt;td&gt;200&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;002&lt;/td&gt;<br/>
+				&lt;td&gt;火星键盘&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;003&lt;/td&gt;<br/>
+				&lt;td&gt;2015电脑&lt;/td&gt;<br/>
+				&lt;td&gt;4000&lt;/td&gt;<br/>
+				&lt;td&gt;50&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;004&lt;/td&gt;<br/>
+				&lt;td&gt;lol鼠标垫&lt;/td&gt;<br/>
+				&lt;td&gt;20&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;005&lt;/td&gt;<br/>
+				&lt;td&gt;无线耳机&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;006&lt;/td&gt;<br/>
+				&lt;td&gt;8G内存卡&lt;/td&gt;<br/>
+				&lt;td&gt;200&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;007&lt;/td&gt;<br/>
+				&lt;td&gt;2G显卡&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+		&lt;/table&gt;<br/>
+	&lt;/div&gt;<br/>
+	&lt;p&gt;&lt;/p&gt;<br/>
+	&lt;hr&gt;<br/>
+	&lt;p&gt;&lt;/p&gt;<br/>
+	&lt;!-- shoppingbox --&gt;<br/>
+	&lt;div&gt;<br/>
+		&lt;table id=&quot;box&quot;&gt;<br/>
+		&lt;caption&gt;购物车&lt;/caption&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;id&lt;/td&gt;<br/>
+				&lt;td&gt;name&lt;/td&gt;<br/>
+				&lt;td&gt;price&lt;/td&gt;<br/>
+				&lt;td&gt;number&lt;/td&gt;<br/>
+				&lt;td&gt;sumPrice&lt;/td&gt;<br/>
+				&lt;td&gt;delete&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td colspan=&quot;3&quot;&gt;total:&lt;/td&gt;<br/>
+				&lt;td  colspan=&quot;3&quot;&gt;&lt;span&gt;￥&lt;/span&gt;&lt;span id=&quot;total&quot;&gt;0&lt;/span&gt;&lt;/td&gt; <br/>
+			&lt;/tr&gt;<br/>
+		&lt;/table&gt;<br/>
+	<br/>
+	&lt;/div&gt;<br/>
+	<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</pre><br><br/>
+<img src="http://img.blog.csdn.net/20151009173224064?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br/>
+   <br/>
+</div>

@@ -1,0 +1,85 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        快速排序            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;cmath&gt;<br/>
+using namespace std;<br/>
+<br/>
+template&lt;class T&gt;<br/>
+void Swap(T &amp;a,T &amp;b)<br/>
+{<br/>
+	T temp = a;<br/>
+	a = b;<br/>
+	b = temp;<br/>
+}<br/>
+<br/>
+template&lt;class T&gt;<br/>
+int Partition(T a[],int p,int r)<br/>
+{<br/>
+	int i = p,j = r+1;<br/>
+	T x = a[p];<br/>
+	//将&lt;x 的元素交换到左边区域<br/>
+	//将&gt;x 的元素交换的右边区域<br/>
+	while(true)<br/>
+	{<br/>
+		while(a[++i]&lt;x&amp;&amp;i&lt;r);<br/>
+		while(a[--j]&gt;x);<br/>
+		if(i&gt;=j)break;<br/>
+		Swap(a[i],a[j]);<br/>
+	}<br/>
+	a[p] = a[j];<br/>
+	a[j] = x;<br/>
+	return j;<br/>
+}<br/>
+<br/>
+template&lt;class T&gt;<br/>
+int RandomizedPartition(T a[],int p,int r)<br/>
+{<br/>
+	int i = 6;<br/>
+	Swap(a[i],a[p]);<br/>
+	return Partition(a,p,r);<br/>
+}<br/>
+<br/>
+template&lt;class T&gt;<br/>
+void RandomizedQuickSort(T a[],int p,int r)<br/>
+{<br/>
+	if(p&lt;r)<br/>
+	{<br/>
+		int q = Partition(a,p,r);<br/>
+		RandomizedQuickSort(a,p,q-1);<br/>
+		RandomizedQuickSort(a,q+1,r);<br/>
+	}<br/>
+<br/>
+}<br/>
+<br/>
+int main()<br/>
+{<br/>
+	int a[] = {23,21,43,56,64,21,32,22,55,11,22,23,25,26,27};<br/>
+	int length = sizeof(a) / sizeof(int);<br/>
+	for(int i=0;i &lt; length ;i++)<br/>
+	{<br/>
+		cout &lt;&lt; a[i] &lt;&lt;&quot; &quot;;<br/>
+	}<br/>
+<br/>
+	cout &lt;&lt; endl;<br/>
+	//cout &lt;&lt; rand()/100 &lt;&lt; endl;<br/>
+	RandomizedQuickSort(a,0,length);<br/>
+	for(int i = 0;i &lt; length;i++)<br/>
+	{<br/>
+		cout &lt;&lt; a[i] &lt;&lt; &quot; &quot;;<br/>
+	}<br/>
+	cout &lt;&lt; endl;<br/>
+<br/>
+	<br/>
+	return 0;<br/>
+}<br/>
+<br/>
+</pre>D:\programming\C&#43;&#43;&gt;quicksort<br><br/>
+23 21 43 56 64 21 32 22 55 11 22 23 25 26 27<br><br/>
+<p>11 21 21 22 22 23 23 25 26 27 32 43 55 56 64</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,53 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        指针引用（OK）和指向引用的指针（ERROR）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620619" snippet_file_name="blog_20160323_1_5621502"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(){<br/>
+	int a = 100;<br/>
+	cout &lt;&lt; &quot;1:&quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	int &amp;ar = a;<br/>
+	cout &lt;&lt; &quot;2:&quot; &lt;&lt; ar &lt;&lt; endl;<br/>
+	int *p = &amp;a;<br/>
+	cout &lt;&lt; &quot;a address(p) :&quot; &lt;&lt; p &lt;&lt; &quot; 3:&quot; &lt;&lt; *p &lt;&lt; endl;<br/>
+	<br/>
+	int *pr2 = &amp;ar;//引用变量的地址(其实没取到引用变量的地址),还是原来变量的地址<br/>
+<br/>
+	cout &lt;&lt; &quot;ar address(pr2):&quot; &lt;&lt; pr2 &lt;&lt; &quot; 4. *pr2:&quot; &lt;&lt; *pr2 &lt;&lt; endl;//结果取引用的地址和a的地址一样<br/>
+	/**<br/>
+<br/>
+	pointerAndReference.cpp:15:13: error: invalid conversion from &#39;void*&#39; to &#39;int*&#39;<br/>
+[-fpermissive]<br/>
+  int *pr3 = &amp;&amp;ar;<br/>
+	*/<br/>
+	//int *pr3 = &amp;&amp;ar;<br/>
+	//cout &lt;&lt; pr3 &lt;&lt; endl;<br/>
+	<br/>
+	/*<br/>
+	 cannot declare pointer to &#39;int&amp;&#39;<br/>
+	*/<br/>
+	//int &amp;* pr1 = ar;//error<br/>
+	// cannot declare pointer to &#39;int&amp;&#39;<br/>
+	//int &amp;* pr = p; //指向引用的指针 error 也许是因为不能对引用取地址！<br/>
+	int *&amp; pr = p;//OK ,指针引用相当于指针的别名<br/>
+	cout &lt;&lt; &quot;address(pr):&quot; &lt;&lt; pr &lt;&lt; &quot; 5:&quot; &lt;&lt; *pr &lt;&lt; endl;<br/>
+	int ** pr4 = &amp;p;<br/>
+	cout &lt;&lt; &quot;pointer address:&quot; &lt;&lt; pr4 &lt;&lt; &quot; &amp;p:&quot; &lt;&lt; &amp;p &lt;&lt; endl;<br/>
+<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1620619" snippet_file_name="blog_20160323_2_5348502"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ pointerAndReference.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+1:100<br/>
+2:100<br/>
+a address(p) :0x28feec 3:100<br/>
+ar address(pr2):0x28feec 4. *pr2:100<br/>
+address(pr):0x28feec 5:100<br/>
+pointer address:0x28fee8 &amp;p:0x28fee8</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

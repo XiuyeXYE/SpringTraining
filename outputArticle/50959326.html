@@ -1,0 +1,21 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        NULL Pointer Reference Test            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620224" snippet_file_name="blog_20160322_1_1898591"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+	int *ptr = 0;<br/>
+	int &amp;ref = *ptr;<br/>
+	ref = 100;<br/>
+	cout &lt;&lt; ref &lt;&lt; endl;<br/>
+	return 0;<br/>
+<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1620224" snippet_file_name="blog_20160322_2_8278303"  name="code" class="cpp">D:\programming\C++&gt;g++ NULLPointerTest.cpp<br/>
+<br/>
+D:\programming\C++&gt;a</pre><pre code_snippet_id="1620224" snippet_file_name="blog_20160322_3_4483293"  name="code" class="cpp">程序异常终止</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,15 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        冒泡排序优化            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1802643" snippet_file_name="blog_20160803_1_37302"  name="code" class="plain">do<br/>
+  swapped = false<br/>
+  for i = 1 to indexOfLastUnsortedElement<br/>
+    if leftElement &gt; rightElement<br/>
+      swap(leftElement, rightElement)<br/>
+      swapped = true<br/>
+while swapped</pre><br/>
+<p>重点在swapped上所起到的作用，当it为false是说明那些没排序的元素已经排好序了，整体就已经排好序了。</p><br/>
+<p>参考:<a target="_blank" href="http://visualgo.net/sorting">bubble sort</a></p><br/>
+   <br/>
+</div>

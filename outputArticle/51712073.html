@@ -1,0 +1,19 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        solve SetDefaultDllDirectories’ : is not a member of ‘`global namespace” from line 638 in atlcore.h            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1721303" snippet_file_name="blog_20160619_1_8939583"  name="code" class="cpp">The key error being Error C2039: ‘SetDefaultDllDirectories’ : is not a member of ‘`global namespace” from line 638 in atlcore.h<br/>
+<br/>
+Well if we jump into that code, we see this:<br/>
+<br/>
+#ifndef _USING_V110_SDK71_<br/>
+	// the LOAD_LIBRARY_SEARCH_SYSTEM32 flag for LoadLibraryExW is only supported if the DLL-preload fixes are installed, so<br/>
+	// use LoadLibraryExW only if SetDefaultDllDirectories is available (only on Win8, or with KB2533623 on Vista and Win7)...<br/>
+	IFDYNAMICGETCACHEDFUNCTION(L&quot;kernel32.dll&quot;, SetDefaultDllDirectories, pfSetDefaultDllDirectories)<br/>
+	{<br/>
+		return(::LoadLibraryExW(pszLibrary, NULL, LOAD_LIBRARY_SEARCH_SYSTEM32));<br/>
+	}<br/>
+#endif<br/>
+It looks like that define should exist, as we’re targeting “V110_SDK71” (aka v110_xp).</pre><br><br/>
+   <br/>
+</div>

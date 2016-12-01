@@ -1,0 +1,44 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        堆分配的内存全局可以用（只要不delete，且指针赋值NULL）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1613236" snippet_file_name="blog_20160317_1_156121"  code_snippet_id="1613236" snippet_file_name="blog_20160317_1_156121" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int *f(){<br/>
+	int *p = new int;//在堆分配的，只要不delete就相当于“全局的”,只要有地址就能使用<br/>
+	*p = 100;<br/>
+	cout &lt;&lt; &quot;p in \&#39;f\&#39; address:&quot; &lt;&lt; p &lt;&lt; endl;<br/>
+	return p;<br/>
+}<br/>
+int g(){<br/>
+	int a = 10;<br/>
+	cout &lt;&lt; &quot;a in \&#39;g\&#39; address:&quot; &lt;&lt; &amp;a &lt;&lt; endl;<br/>
+	return a;<br/>
+}<br/>
+int main(){<br/>
+	int a  = g();<br/>
+	int *p = f();<br/>
+	cout &lt;&lt; *p &lt;&lt; &quot; p in \&#39;main\&#39; address:&quot; &lt;&lt; p &lt;&lt; endl;<br/>
+	cout &lt;&lt; a &lt;&lt; &quot; a in \&#39;main\&#39; address:&quot; &lt;&lt; &amp;a &lt;&lt; endl;<br/>
+	delete p;<br/>
+	delete p;//重复delete，编译不报错<br/>
+	cout &lt;&lt; &quot;p deleted in \&#39;main\&#39; address:&quot; &lt;&lt; p &lt;&lt; endl;<br/>
+	cout &lt;&lt; *p &lt;&lt; endl;//delete 后的p，仍可以使用，但指向的内存中值不确定（反正运行通过）<br/>
+	p = NULL;<br/>
+	cout &lt;&lt; &quot;p NULL in \&#39;main\&#39;  address:&quot; &lt;&lt; p &lt;&lt; endl;<br/>
+	//cout &lt;&lt; *p &lt;&lt; endl;//编译通过但运行出错！地址为0的内存不能访问吧！<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1613236" snippet_file_name="blog_20160317_2_8139016"  code_snippet_id="1613236" snippet_file_name="blog_20160317_2_8139016" name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ returnHeap.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+a in &#39;g&#39; address:0x28fedc<br/>
+p in &#39;f&#39; address:0x36baa8<br/>
+100 p in &#39;main&#39; address:0x36baa8<br/>
+10 a in &#39;main&#39; address:0x28ff08<br/>
+p deleted in &#39;main&#39; address:0x36baa8<br/>
+22<br/>
+p NULL in &#39;main&#39;  address:0</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

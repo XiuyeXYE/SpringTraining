@@ -1,0 +1,61 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        汇编编译成功且运行            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="2004301" snippet_file_name="blog_20161124_1_604510"  code_snippet_id="2004301" snippet_file_name="blog_20161124_1_604510" name="code" class="cpp">.386<br/>
+.model flat,stdcall<br/>
+option casemap:none<br/>
+include windows.inc<br/>
+include user32.inc<br/>
+includelib user32.lib<br/>
+include kernel32.inc<br/>
+includelib kernel32.lib<br/>
+.data<br/>
+arrayA dword 1,2,3,4,5<br/>
+szCaption db '消息框!',0<br/>
+szText db 100 dup(0)<br/>
+szCharsFormat db 'ArrayA:%d,%d,%d,%d,%d',0<br/>
+.code<br/>
+start:<br/>
+invoke wsprintf,addr szText,addr szCharsFormat,arrayA,arrayA+4,\<br/>
+arrayA+8,arrayA+12,arrayA+16<br/>
+invoke MessageBox,NULL,offset szText,offset szCaption,MB_OK<br/>
+invoke ExitProcess,NULL<br/>
+end start<br/>
+</pre><pre code_snippet_id="2004301" snippet_file_name="blog_20161124_2_5174079"  code_snippet_id="2004301" snippet_file_name="blog_20161124_2_5174079" name="code" class="cpp">&gt;ml /IE:\masm32\include /c array.asm</pre><br><br/>
+<pre code_snippet_id="2004301" snippet_file_name="blog_20161124_3_2077180"  code_snippet_id="2004301" snippet_file_name="blog_20161124_3_2077180" name="code" class="cpp">&gt;link /subsystem:windows array.obj</pre><br><br/>
+<p>结果:</p><br/>
+<p><img src="http://img.blog.csdn.net/20161124095120547?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="2004301" snippet_file_name="blog_20161124_4_4664119"  name="code" class="cpp">.386<br/>
+.model flat,stdcall<br/>
+option casemap:none<br/>
+include windows.inc<br/>
+include user32.inc<br/>
+includelib user32.lib<br/>
+include kernel32.inc<br/>
+includelib kernel32.lib<br/>
+.data<br/>
+arrayA dword 1,2,3,4,5<br/>
+szCaption db '消息框!',0<br/>
+szText db 100 dup(0)<br/>
+szCharsFormat db 'ArrayA:%d,%d,%d,%d,%d',0<br/>
+.code<br/>
+main proc<br/>
+<br/>
+invoke wsprintf,addr szText,addr szCharsFormat,arrayA,arrayA+4,\<br/>
+arrayA+8,arrayA+12,arrayA+16<br/>
+invoke MessageBox,NULL,offset szText,offset szCaption,MB_OK<br/>
+invoke ExitProcess,NULL<br/>
+<br/>
+main endp<br/>
+end main<br/>
+</pre>able to run!<br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

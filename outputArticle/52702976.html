@@ -1,0 +1,385 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        My md5 achievement            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1907302" snippet_file_name="blog_20160929_1_4658106"  code_snippet_id="1907302" snippet_file_name="blog_20160929_1_4658106" name="code" class="java">package com.xiuye.information.security;<br/>
+<br/>
+import java.util.Arrays;<br/>
+<br/>
+public class MD5 {<br/>
+<br/>
+	public MD5() {<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 对MD5算法简要的叙述可以为：MD5以512位分组来处理输入的信息，且每一分组又被划分为16个32位子分组，经过了一系列的处理后，<br/>
+	 * 算法的输出由四个32位分组组成，将这四个32位分组级联后将生成一个128位散列值。<br/>
+	 * <br/>
+	 * 第一步、填充：如果输入信息的长度(bit)对512求余的结果不等于448，就需要填充使得对512求余的结果等于448。<br/>
+	 * 填充的方法是填充一个1和n个0。填充完后，信息的长度就为N*512+448(bit)；<br/>
+	 * <br/>
+	 * 第二步、记录信息长度：用64位来存储填充前信息长度。这64位加在第一步结果的后面，这样信息长度就变为N*512+448+64=(N+1)*512位<br/>
+	 * 。<br/>
+	 * <br/>
+	 * 第三步、装入标准的幻数（四个整数）：标准的幻数（物理顺序）是（A=(01234567)16，B=(89ABCDEF)16，C=(FEDCBA98)<br/>
+	 * 16<br/>
+	 * ，D=(76543210)16）。如果在程序中定义应该是（A=0X67452301L，B=0XEFCDAB89L，C=0X98BADCFEL，D<br/>
+	 * =0X10325476L）。有点晕哈，其实想一想就明白了。<br/>
+	 * <br/>
+	 * 第四步、四轮循环运算：循环的次数是分组的个数（N+1）<br/>
+	 * <br/>
+	 * @param args<br/>
+	 */<br/>
+<br/>
+	/**<br/>
+	 * 填充数据<br/>
+	 * <br/>
+	 * @param s<br/>
+	 * @return<br/>
+	 */<br/>
+	public byte[] fillInData(String s) {<br/>
+		byte[] data = s.getBytes();<br/>
+		int length = data.length;<br/>
+		int rest = length % 64;<br/>
+		int additionalLength = 0;<br/>
+		if (rest &gt; 56) {<br/>
+			additionalLength = 56 + 64 - rest;<br/>
+		} else if (rest &lt; 56) {<br/>
+			additionalLength = 56 - rest;<br/>
+		}<br/>
+		int newLength = additionalLength + length;<br/>
+		data = Arrays.copyOf(data, newLength + 8);<br/>
+		byte[] dataLength = new byte[8];<br/>
+		dataLength[0] = (byte) (length &amp; 0xFF);<br/>
+		dataLength[1] = (byte) (length &gt;&gt;&gt; 8 &amp; 0xFF);<br/>
+		dataLength[2] = (byte) (length &gt;&gt;&gt; 16 &amp; 0xFF);<br/>
+		dataLength[3] = (byte) (length &gt;&gt;&gt; 24 &amp; 0xFF);<br/>
+		System.arraycopy(dataLength, 0, data, data.length - 1 - 8, 8);<br/>
+<br/>
+		return data;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 以512分组<br/>
+	 * <br/>
+	 * @param data<br/>
+	 * @return<br/>
+	 */<br/>
+	public byte[][] fromTotalLengthTo512ByteGroups(byte[] data) {<br/>
+<br/>
+		int i = data.length / 64;<br/>
+		byte[][] groups = new byte[i][64];<br/>
+<br/>
+		for (i = 0; i &lt; groups.length; i++) {<br/>
+<br/>
+			for (int j = 0; j &lt; groups[i].length; j++) {<br/>
+				groups[i][j] = data[i * groups[i].length + j];<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+		return groups;<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 512 位数据分组 data 64 byte &lt;-&gt; 512 bit 512分组16组<br/>
+	 * <br/>
+	 * @param args<br/>
+	 */<br/>
+	public byte[][] from512BitTo16GroupsPer32Bit(byte[] data) {<br/>
+<br/>
+		if (data.length != 64) {<br/>
+			throw new ByteLengthNotEnoughException(<br/>
+					&quot;data&#39;s length is not 64 byte&quot;);<br/>
+		}<br/>
+		byte[][] a = new byte[16][4];<br/>
+		// System.out.println(a.length);//16<br/>
+		// System.out.println(a[0].length);//4<br/>
+		for (int i = 0; i &lt; a.length; i++) {<br/>
+			for (int j = 0; j &lt; a[i].length; j++) {<br/>
+				a[i][j] = data[i * a[i].length + j];<br/>
+			}<br/>
+		}<br/>
+<br/>
+		return a;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 16组32位数据转化为 16组整型数据<br/>
+	 * <br/>
+	 * @param a<br/>
+	 * @return<br/>
+	 */<br/>
+	public int[] from16GroupsPer32BitTo16Ints(byte[][] a) {<br/>
+		if (a.length != 16) {<br/>
+			throw new ByteLengthNotEnoughException(<br/>
+					&quot;data&#39;s length is not 16 groups&quot;);<br/>
+		}<br/>
+		int[] b = new int[a.length];<br/>
+<br/>
+		for (int i = 0; i &lt; a.length; i++) {<br/>
+			b[i] = 0;<br/>
+			for (int j = 0; j &lt; a[i].length; j++) {<br/>
+				b[i] = b[i] &lt;&lt; 8 | a[i][j];<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+		return b;<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * operand priority ~ -&gt; &amp; -&gt; ^ -&gt; |<br/>
+	 * <br/>
+	 * F(X,Y,Z)=(X&amp;Y)|((~X)&amp;Z) G(X,Y,Z)=(X&amp;Z)|(Y&amp;(~Z)) H(X,Y,Z)=X^Y^Z<br/>
+	 * I(X,Y,Z)=Y^(X|(~Z))<br/>
+	 * <br/>
+	 * @param x<br/>
+	 * @param y<br/>
+	 * @param z<br/>
+	 * @return<br/>
+	 */<br/>
+	public int F(int x, int y, int z) {<br/>
+		return x &amp; y | ~x &amp; z;<br/>
+	}<br/>
+<br/>
+	public int G(int x, int y, int z) {<br/>
+		return x &amp; y | y &amp; ~z;<br/>
+	}<br/>
+<br/>
+	public int H(int x, int y, int z) {<br/>
+		return x ^ y ^ z;<br/>
+	}<br/>
+<br/>
+	public int I(int x, int y, int z) {<br/>
+		return y ^ (x | ~z);<br/>
+	}<br/>
+<br/>
+	private int A = 0X67452301;<br/>
+	private int B = 0XEFCDAB89;<br/>
+	private int C = 0X98BADCFE;<br/>
+	private int D = 0X10325476;<br/>
+<br/>
+	/**<br/>
+	 * FF(a,b,c,d,Mj,s,ti)表示a=b+((a+F(b,c,d)+Mj+ti)&lt;&lt;&lt;s)<br/>
+	 * GG(a,b,c,d,Mj,s,ti)表示a=b+((a+G(b,c,d)+Mj+ti)&lt;&lt;&lt;s)<br/>
+	 * HH(a,b,c,d,Mj,s,ti)表示a=b+((a+H(b,c,d)+Mj+ti)&lt;&lt;&lt;s)<br/>
+	 * II(a,b,c,d,Mj,s,ti)表示a=b+((a+I(b,c,d)+Mj+ti)&lt;&lt;&lt;s) 循环移动实现如下: a&gt;&gt;&gt;m|a&lt;&lt;n-m<br/>
+	 * <br/>
+	 * @param a<br/>
+	 * @param b<br/>
+	 * @param c<br/>
+	 * @param d<br/>
+	 * @param mj<br/>
+	 * @param ti<br/>
+	 * @return<br/>
+	 */<br/>
+	public int FF(int a, int b, int c, int d, int mj, int s, int ti) {<br/>
+		a = a + F(b, c, d) + mj + ti;<br/>
+		return b + (a &lt;&lt; s | a &gt;&gt;&gt; (32 - s));<br/>
+	}<br/>
+<br/>
+	public int GG(int a, int b, int c, int d, int mj, int s, int ti) {<br/>
+		a = (a + G(b, c, d) + mj + ti);<br/>
+		return b + (a &lt;&lt; s | a &gt;&gt;&gt; (32 - s));<br/>
+	}<br/>
+<br/>
+	public int HH(int a, int b, int c, int d, int mj, int s, int ti) {<br/>
+		a = (a + H(b, c, d) + mj + ti);<br/>
+		return b + (a &lt;&lt; s | a &gt;&gt;&gt; (32 - s));<br/>
+	}<br/>
+<br/>
+	public int II(int a, int b, int c, int d, int mj, int s, int ti) {<br/>
+		a = (a + I(b, c, d) + mj + ti);<br/>
+		return b + (a &lt;&lt; s | a &gt;&gt;&gt; (32 - s));<br/>
+	}<br/>
+<br/>
+	public void perGroupsCalculate(int[] _16Groups) {<br/>
+<br/>
+		int a = A;<br/>
+		int b = B;<br/>
+		int c = C;<br/>
+		int d = D;<br/>
+<br/>
+		/**<br/>
+		 * 第一轮<br/>
+		 */<br/>
+		a = FF(a, b, c, d, _16Groups[0], 7, 0xd76aa478);<br/>
+		b = FF(d, a, b, c, _16Groups[1], 12, 0xe8c7b756);<br/>
+		c = FF(c, d, a, b, _16Groups[2], 17, 0x242070db);<br/>
+		d = FF(b, c, d, a, _16Groups[3], 22, 0xc1bdceee);<br/>
+		a = FF(a, b, c, d, _16Groups[4], 7, 0xf57c0faf);<br/>
+		b = FF(d, a, b, c, _16Groups[5], 12, 0x4787c62a);<br/>
+		c = FF(c, d, a, b, _16Groups[6], 17, 0xa8304613);<br/>
+		d = FF(b, c, d, a, _16Groups[7], 22, 0xfd469501);<br/>
+		a = FF(a, b, c, d, _16Groups[8], 7, 0x698098d8);<br/>
+		b = FF(d, a, b, c, _16Groups[9], 12, 0x8b44f7af);<br/>
+		c = FF(c, d, a, b, _16Groups[10], 17, 0xffff5bb1);<br/>
+		d = FF(b, c, d, a, _16Groups[11], 22, 0x895cd7be);<br/>
+		a = FF(a, b, c, d, _16Groups[12], 7, 0x6b901122);<br/>
+		b = FF(d, a, b, c, _16Groups[13], 12, 0xfd987193);<br/>
+		c = FF(c, d, a, b, _16Groups[14], 17, 0xa679438e);<br/>
+		d = FF(b, c, d, a, _16Groups[15], 22, 0x49b40821);<br/>
+<br/>
+		// 第二轮<br/>
+		a = GG(a, b, c, d, _16Groups[1], 5, 0xf61e2562);<br/>
+		b = GG(d, a, b, c, _16Groups[6], 9, 0xc040b340);<br/>
+		c = GG(c, d, a, b, _16Groups[11], 14, 0x265e5a51);<br/>
+		d = GG(b, c, d, a, _16Groups[0], 20, 0xe9b6c7aa);<br/>
+		a = GG(a, b, c, d, _16Groups[5], 5, 0xd62f105d);<br/>
+		b = GG(d, a, b, c, _16Groups[10], 9, 0x02441453);<br/>
+		c = GG(c, d, a, b, _16Groups[15], 14, 0xd8a1e681);<br/>
+		d = GG(b, c, d, a, _16Groups[4], 20, 0xe7d3fbc8);<br/>
+		a = GG(a, b, c, d, _16Groups[9], 5, 0x21e1cde6);<br/>
+		b = GG(d, a, b, c, _16Groups[14], 9, 0xc33707d6);<br/>
+		c = GG(c, d, a, b, _16Groups[3], 14, 0xf4d50d87);<br/>
+		d = GG(b, c, d, a, _16Groups[8], 20, 0x455a14ed);<br/>
+		a = GG(a, b, c, d, _16Groups[13], 5, 0xa9e3e905);<br/>
+		b = GG(d, a, b, c, _16Groups[2], 9, 0xfcefa3f8);<br/>
+		c = GG(c, d, a, b, _16Groups[7], 14, 0x676f02d9);<br/>
+		d = GG(b, c, d, a, _16Groups[12], 20, 0x8d2a4c8a);<br/>
+<br/>
+		// 第三轮<br/>
+		a = HH(a, b, c, d, _16Groups[5], 4, 0xfffa3942);<br/>
+		b = HH(d, a, b, c, _16Groups[8], 11, 0x8771f681);<br/>
+		c = HH(c, d, a, b, _16Groups[11], 16, 0x6d9d6122);<br/>
+		d = HH(b, c, d, a, _16Groups[14], 23, 0xfde5380c);<br/>
+		a = HH(a, b, c, d, _16Groups[1], 4, 0xa4beea44);<br/>
+		b = HH(d, a, b, c, _16Groups[4], 11, 0x4bdecfa9);<br/>
+		c = HH(c, d, a, b, _16Groups[7], 16, 0xf6bb4b60);<br/>
+		d = HH(b, c, d, a, _16Groups[10], 23, 0xbebfbc70);<br/>
+		a = HH(a, b, c, d, _16Groups[13], 4, 0x289b7ec6);<br/>
+		b = HH(d, a, b, c, _16Groups[0], 11, 0xeaa127fa);<br/>
+		c = HH(c, d, a, b, _16Groups[3], 16, 0xd4ef3085);<br/>
+		d = HH(b, c, d, a, _16Groups[6], 23, 0x04881d05);<br/>
+		a = HH(a, b, c, d, _16Groups[9], 4, 0xd9d4d039);<br/>
+		b = HH(d, a, b, c, _16Groups[12], 11, 0xe6db99e5);<br/>
+		c = HH(c, d, a, b, _16Groups[15], 16, 0x1fa27cf8);<br/>
+		d = HH(b, c, d, a, _16Groups[2], 23, 0xc4ac5665);<br/>
+<br/>
+		// 第四轮<br/>
+		a = II(a, b, c, d, _16Groups[0], 6, 0xf4292244);<br/>
+		b = II(d, a, b, c, _16Groups[7], 10, 0x432aff97);<br/>
+		c = II(c, d, a, b, _16Groups[14], 15, 0xab9423a7);<br/>
+		d = II(b, c, d, a, _16Groups[5], 21, 0xfc93a039);<br/>
+		a = II(a, b, c, d, _16Groups[12], 6, 0x655b59c3);<br/>
+		b = II(d, a, b, c, _16Groups[3], 10, 0x8f0ccc92);<br/>
+		c = II(c, d, a, b, _16Groups[10], 15, 0xffeff47d);<br/>
+		d = II(b, c, d, a, _16Groups[1], 21, 0x85845dd1);<br/>
+		a = II(a, b, c, d, _16Groups[8], 6, 0x6fa87e4f);<br/>
+		b = II(d, a, b, c, _16Groups[15], 10, 0xfe2ce6e0);<br/>
+		c = II(c, d, a, b, _16Groups[6], 15, 0xa3014314);<br/>
+		d = II(b, c, d, a, _16Groups[13], 21, 0x4e0811a1);<br/>
+		a = II(a, b, c, d, _16Groups[4], 6, 0xf7537e82);<br/>
+		b = II(d, a, b, c, _16Groups[11], 10, 0xbd3af235);<br/>
+		c = II(c, d, a, b, _16Groups[2], 15, 0x2ad7d2bb);<br/>
+		d = II(b, c, d, a, _16Groups[9], 21, 0xeb86d391);<br/>
+<br/>
+		A += a;<br/>
+		B += b;<br/>
+		C += c;<br/>
+		D += d;<br/>
+<br/>
+	}<br/>
+<br/>
+	public void resetMagicNumbers() {<br/>
+		A = 0X67452301;<br/>
+		B = 0XEFCDAB89;<br/>
+		C = 0X98BADCFE;<br/>
+		D = 0X10325476;<br/>
+	}<br/>
+<br/>
+	public String doFinal(String s) {<br/>
+<br/>
+		this.resetMagicNumbers();<br/>
+		byte[] data = this.fillInData(s);<br/>
+		byte[][] ds = this.fromTotalLengthTo512ByteGroups(data);<br/>
+<br/>
+		for (int i = 0; i &lt; ds.length; i++) {<br/>
+<br/>
+			<br/>
+<br/>
+			byte[][] temp512 = this.from512BitTo16GroupsPer32Bit(ds[i]);<br/>
+			int[] temp16 = this.from16GroupsPer32BitTo16Ints(temp512);<br/>
+			this.perGroupsCalculate(temp16);<br/>
+			<br/>
+<br/>
+		}<br/>
+		String ret = Integer.toHexString(A) + Integer.toHexString(B)<br/>
+				+ Integer.toHexString(C) + Integer.toHexString(D);<br/>
+<br/>
+		return ret;<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		MD5 md5 = new MD5();<br/>
+		// 123456 MD5:7064584dcb922b1f13b42d8e19a95704<br/>
+		// &quot;&quot; MD5:ef8946e990bc4bda9723a020cc77f25a<br/>
+		System.out.println(md5.doFinal(&quot;紫禁仙舆诘旦来，青旂遥倚望春台。不知庭霰今朝落，疑是林花昨夜开。&quot;));<br/>
+<br/>
+		// byte[] data = new byte[64];<br/>
+		// for (int i = 0; i &lt; 64; i++) {<br/>
+		// data[i] = (byte) (i + 1);<br/>
+		// }<br/>
+		// byte[][] a = md5.from512BitTo16GroupsPer32Bit(data);<br/>
+		// for (int i = 0; i &lt; a.length; i++) {<br/>
+		// System.out.println(&quot;group : &quot; + (i + 1));<br/>
+		// for (int j = 0; j &lt; a[i].length; j++) {<br/>
+		// System.out.println(a[i][j]);<br/>
+		// }<br/>
+		// }<br/>
+		//<br/>
+		// System.out.println(-1 &amp; 1);<br/>
+		// System.out.println(Integer.toBinaryString(-1));<br/>
+		// System.out.println((8 ^ 5) | ~6);<br/>
+		// System.out.println(8 ^ (5 | ~6));<br/>
+		// byte i = 64;<br/>
+		//<br/>
+		// System.out.println(Integer.toBinaryString(64));<br/>
+		// // System.out.println(Integer.toBinaryString(4));<br/>
+		// // System.out.println(Integer.toBinaryString(2|4&lt;&lt;1));<br/>
+		// System.out.println(Integer<br/>
+		// .toBinaryString((64 &lt;&lt; 2 | 64 &gt;&gt; (8 - 2)) &amp; 0xff));<br/>
+		// System.out.println(String.format(&quot;%1$ 08d&quot;,<br/>
+		// (64 &lt;&lt; 2 | 64 &gt;&gt; (8 - 2)) &amp; 0xff));<br/>
+		// System.out.println(64 &lt;&lt; 2 | 64 &gt;&gt; (8 - 2));<br/>
+		//<br/>
+		// int n = 0;<br/>
+		// for (int j = 0; j &lt; 4; j++) {<br/>
+		// n = (n &lt;&lt; 8) | 128;<br/>
+		// }<br/>
+		//<br/>
+		// System.out.println(Integer.toBinaryString(128));<br/>
+		// System.out.println(Integer.toBinaryString(n));<br/>
+		//<br/>
+		// byte[] bs = new byte[12];<br/>
+		// for (n = 0; n &lt; bs.length; n++) {<br/>
+		// bs[n] = (byte) n;<br/>
+		// }<br/>
+		// bs = Arrays.copyOf(bs, 15);<br/>
+		// for (n = 0; n &lt; bs.length; n++) {<br/>
+		// System.out.println(bs[n]);<br/>
+		// }<br/>
+		// byte[] dataLength = new byte[4];<br/>
+		// dataLength[0] = (byte) (32768 &amp; 0xFF);<br/>
+		// dataLength[1] = (byte) (32768 &gt;&gt;&gt; 8 &amp; 0xFF);<br/>
+		// dataLength[2] = (byte) (32768 &gt;&gt;&gt; 16 &amp; 0xFF);<br/>
+		// dataLength[3] = (byte) (32768 &gt;&gt;&gt; 24 &amp; 0xFF);<br/>
+		// System.out.println(&quot;==========================&quot;);<br/>
+		// System.out.println(Integer.toBinaryString(32768));<br/>
+		// for (int k = 0; k &lt; dataLength.length; k++) {<br/>
+		// System.out.println(Integer.toBinaryString(dataLength[k] &amp; 0xff));<br/>
+		// }<br/>
+		//<br/>
+		// data = md5.fillInData(&quot;12345&quot;);<br/>
+		// System.out.println(data.length);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1907302" snippet_file_name="blog_20160929_2_3753817"  code_snippet_id="1907302" snippet_file_name="blog_20160929_2_3753817" name="code" class="java">c8a64a9694b308c13a75de2693a3b294<br/>
+</pre><br/>
+   <br/>
+</div>

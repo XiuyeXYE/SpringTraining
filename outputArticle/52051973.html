@@ -1,0 +1,314 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring整合hibernate加sqlite数据库            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1789225" snippet_file_name="blog_20160728_1_6402746"  name="code" class="java">package com.xiuye.dialect;<br/>
+<br/>
+import java.sql.Types;<br/>
+<br/>
+import org.hibernate.MappingException;<br/>
+import org.hibernate.dialect.Dialect;<br/>
+import org.hibernate.dialect.function.SQLFunctionTemplate;<br/>
+import org.hibernate.dialect.function.StandardSQLFunction;<br/>
+import org.hibernate.dialect.function.VarArgsSQLFunction;<br/>
+import org.hibernate.type.StandardBasicTypes;<br/>
+<br/>
+public class SQLiteDialect extends Dialect {<br/>
+<br/>
+	public SQLiteDialect() {<br/>
+<br/>
+		super();<br/>
+		registerColumnType(Types.BIT, &quot;integer&quot;);<br/>
+		registerColumnType(Types.TINYINT, &quot;tinyint&quot;);<br/>
+		registerColumnType(Types.SMALLINT, &quot;smallint&quot;);<br/>
+		registerColumnType(Types.INTEGER, &quot;integer&quot;);<br/>
+		registerColumnType(Types.BIGINT, &quot;bigint&quot;);<br/>
+		registerColumnType(Types.FLOAT, &quot;float&quot;);<br/>
+		registerColumnType(Types.REAL, &quot;real&quot;);<br/>
+		registerColumnType(Types.DOUBLE, &quot;double&quot;);<br/>
+		registerColumnType(Types.NUMERIC, &quot;numeric&quot;);<br/>
+		registerColumnType(Types.DECIMAL, &quot;decimal&quot;);<br/>
+		registerColumnType(Types.CHAR, &quot;char&quot;);<br/>
+		registerColumnType(Types.VARCHAR, &quot;varchar&quot;);<br/>
+		registerColumnType(Types.LONGVARCHAR, &quot;longvarchar&quot;);<br/>
+		registerColumnType(Types.DATE, &quot;date&quot;);<br/>
+		registerColumnType(Types.TIME, &quot;time&quot;);<br/>
+		registerColumnType(Types.TIMESTAMP, &quot;timestamp&quot;);<br/>
+		registerColumnType(Types.BINARY, &quot;blob&quot;);<br/>
+		registerColumnType(Types.VARBINARY, &quot;blob&quot;);<br/>
+		registerColumnType(Types.LONGVARBINARY, &quot;blob&quot;);<br/>
+		// registerColumnType(Types.NULL, &quot;null&quot;);<br/>
+		registerColumnType(Types.BLOB, &quot;blob&quot;);<br/>
+		registerColumnType(Types.CLOB, &quot;clob&quot;);<br/>
+		registerColumnType(Types.BOOLEAN, &quot;integer&quot;);<br/>
+<br/>
+		registerFunction(&quot;concat&quot;, new VarArgsSQLFunction(<br/>
+				StandardBasicTypes.STRING, &quot;&quot;, &quot;||&quot;, &quot;&quot;));<br/>
+		registerFunction(&quot;mod&quot;, new SQLFunctionTemplate(<br/>
+				StandardBasicTypes.INTEGER, &quot;?1 % ?2&quot;));<br/>
+		registerFunction(&quot;substr&quot;, new StandardSQLFunction(&quot;substr&quot;,<br/>
+				StandardBasicTypes.STRING));<br/>
+		registerFunction(&quot;substring&quot;, new StandardSQLFunction(&quot;substr&quot;,<br/>
+				StandardBasicTypes.STRING));<br/>
+<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsIdentityColumns() {<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean hasDataTypeInIdentityColumn() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected String getIdentityColumnString() throws MappingException {<br/>
+		return &quot;integer&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected String getIdentitySelectString() throws MappingException {<br/>
+		return &quot;select last_insert_rowid()&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsLimit() {<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected String getLimitString(String query, boolean hasOffset) {<br/>
+		return new StringBuffer(query.length() + 20).append(query)<br/>
+				.append(hasOffset ? &quot; limit ? offset ?&quot; : &quot; limit ?&quot;)<br/>
+				.toString();<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsTemporaryTables() {<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getCreateTemporaryTableString() {<br/>
+		return &quot;create temporary table if not exits&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean dropTemporaryTableAfterUse() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsCurrentTimestampSelection() {<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean isCurrentTimestampSelectStringCallable() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getCurrentTimestampSelectString() {<br/>
+		return &quot;select current_timestamp&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsUnionAll() {<br/>
+		return true;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean hasAlterTable() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean dropConstraints() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getAddColumnString() {<br/>
+		return &quot;add column&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getForUpdateString() {<br/>
+		return &quot;&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsOuterJoinForUpdate() {<br/>
+		return false;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getDropForeignKeyString() {<br/>
+		throw new UnsupportedOperationException(<br/>
+				&quot;No drop foreign key syntax supported by SQLiteDialect&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getAddForeignKeyConstraintString(String constraintName,<br/>
+			String[] foreignKey, String referencedTable, String[] primaryKey,<br/>
+			boolean referencesPrimaryKey) {<br/>
+		throw new UnsupportedOperationException(<br/>
+				&quot;No add foreign key syntax supported by SQLiteDialect&quot;);<br/>
+<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String getAddPrimaryKeyConstraintString(String constraintName) {<br/>
+		throw new UnsupportedOperationException(<br/>
+				&quot;No add primary key syntax supported by SQLiteDialect&quot;);<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public boolean supportsIfExistsBeforeTableName() {<br/>
+		return true;<br/>
+	}<br/>
+	<br/>
+	@Override<br/>
+	public boolean supportsCascadeDelete() {<br/>
+		return false;<br/>
+	}<br/>
+	<br/>
+	@Override<br/>
+	public boolean bindLimitParametersInReverseOrder() {<br/>
+		return true;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1789225" snippet_file_name="blog_20160728_2_1516750"  name="code" class="java"><br/>
+</pre><pre code_snippet_id="1789225" snippet_file_name="blog_20160728_3_916915"  name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;html&quot;&gt;&lt;beans default-destroy-method=&quot;close&quot; default-lazy-init=&quot;true&quot;<br/>
+	xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+	xmlns:context=&quot;http://www.springframework.org/schema/context&quot;<br/>
+	xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot; xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot;<br/>
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;<br/>
+	xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot; xmlns:util=&quot;http://www.springframework.org/schema/util&quot;<br/>
+<br/>
+	xsi:schemaLocation=&quot;<br/>
+   <br/>
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd<br/>
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd<br/>
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd<br/>
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd<br/>
+    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd<br/>
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd<br/>
+    <br/>
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd<br/>
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd&quot;&gt;<br/>
+<br/>
+<br/>
+<br/>
+	&lt;context:component-scan base-package=&quot;com.xiuye&quot;&gt;&lt;/context:component-scan&gt;<br/>
+<br/>
+<br/>
+<br/>
+	&lt;bean id=&quot;ds&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;<br/>
+		destroy-method=&quot;close&quot;&gt;<br/>
+<br/>
+		&lt;property name=&quot;jdbcUrl&quot; value=&quot;jdbc:sqlite:csms.db&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;driverClass&quot; value=&quot;org.sqlite.JDBC&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;user&quot; value=&quot;&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;password&quot; value=&quot;&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;initialPoolSize&quot; value=&quot;3&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;maxPoolSize&quot; value=&quot;10&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;minPoolSize&quot; value=&quot;1&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;acquireIncrement&quot; value=&quot;3&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;maxIdleTime&quot; value=&quot;60&quot;&gt;&lt;/property&gt;<br/>
+<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;sessionFactory&quot;<br/>
+		class=&quot;org.springframework.orm.hibernate4.LocalSessionFactoryBean&quot;&gt;<br/>
+		&lt;property name=&quot;dataSource&quot; ref=&quot;ds&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;hibernateProperties&quot;&gt;<br/>
+<br/>
+			&lt;props&gt;<br/>
+<br/>
+				&lt;prop key=&quot;hibernate.dialect&quot;&gt;<br/>
+					com.xiuye.dialect.SQLiteDialect<br/>
+				&lt;/prop&gt;<br/>
+				&lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;update&lt;/prop&gt;<br/>
+				&lt;prop key=&quot;hibernate.show_sql&quot;&gt;true&lt;/prop&gt;<br/>
+				&lt;prop key=&quot;hibernate.format_sql&quot;&gt;true&lt;/prop&gt;<br/>
+<br/>
+			&lt;/props&gt;<br/>
+<br/>
+		&lt;/property&gt;<br/>
+		&lt;property name=&quot;mappingResources&quot;&gt;<br/>
+			&lt;list&gt;<br/>
+				&lt;value&gt;com/xiuye/entity/Test.hbm.xml&lt;/value&gt;<br/>
+			&lt;/list&gt;<br/>
+		&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean class=&quot;org.springframework.orm.hibernate4.HibernateTemplate&quot;<br/>
+		id=&quot;hibernateTemplate&quot;&gt;<br/>
+<br/>
+		&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;<br/>
+<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;txManager&quot;<br/>
+		class=&quot;org.springframework.orm.hibernate4.HibernateTransactionManager&quot;&gt;<br/>
+		&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+<br/>
+<br/>
+	&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;txManager&quot;&gt;<br/>
+		&lt;tx:attributes&gt;<br/>
+		&lt;!-- dao 中有什么方法，那么要使用hibernate的HibernateTemplate功能或其他，那么dao中方法必须在次声明啊，否则报错 --&gt;<br/>
+			&lt;tx:method name=&quot;test*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;save*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;update*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;delete*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;add*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;query*&quot; read-only=&quot;true&quot; /&gt;<br/>
+			&lt;tx:method name=&quot;execute*&quot; propagation=&quot;REQUIRED&quot; /&gt;<br/>
+		&lt;/tx:attributes&gt;<br/>
+	&lt;/tx:advice&gt;<br/>
+<br/>
+	&lt;aop:config proxy-target-class=&quot;true&quot;&gt;<br/>
+		&lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut=&quot;within(com.xiuye.dao.*)&quot; /&gt;<br/>
+	&lt;/aop:config&gt;<br/>
+<br/>
+<br/>
+	&lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;<br/>
+	&lt;!-- &lt;mvc:default-servlet-handler/&gt; --&gt;<br/>
+	&lt;!-- &lt;bean class=&quot;org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping&quot;/&gt; --&gt;<br/>
+	&lt;bean<br/>
+		class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;<br/>
+		&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/pages/&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+<br/>
+&lt;/beans&gt;</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="1789225" snippet_file_name="blog_20160728_4_5125846"  name="code" class="html">&lt;?xml version=&quot;1.0&quot;?&gt;<br/>
+&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;<br/>
+&quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;<br/>
+&lt;!-- Generated 2016-7-10 14:18:56 by Hibernate Tools 3.4.0.CR1 --&gt;<br/>
+&lt;hibernate-mapping&gt;<br/>
+    &lt;class name=&quot;com.xiuye.entity.Test&quot; table=&quot;TEST&quot;&gt;<br/>
+        &lt;id name=&quot;uuid&quot; type=&quot;java.lang.String&quot;&gt;<br/>
+            &lt;column name=&quot;UUID&quot; /&gt;<br/>
+            &lt;generator class=&quot;assigned&quot; /&gt;<br/>
+        &lt;/id&gt;<br/>
+        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot;&gt;<br/>
+            &lt;column name=&quot;NAME&quot; /&gt;<br/>
+        &lt;/property&gt;<br/>
+        <br/>
+    &lt;/class&gt;<br/>
+&lt;/hibernate-mapping&gt;<br/>
+</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160728093157569?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,313 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        My SHA1 Achievement            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1908558" snippet_file_name="blog_20160930_1_6831107"  name="code" class="java">package com.xiuye.information.security;<br/>
+<br/>
+import java.util.Arrays;<br/>
+<br/>
+/**<br/>
+ * <br/>
+ * SHA-1是一种能够根据上限为2^64位的消息计算出160比特的散列值的单向散列函数，它的分组及对数据的填充方式与MD5是一样的，512位为1组，<br/>
+ * 填充数据时先填1，后面填0，一直填满448位，最后64位表示原始数据长度。<br/>
+ * <br/>
+ * <br/>
+ * <br/>
+ * @author xiuye<br/>
+ *<br/>
+ */<br/>
+public class SHA1 {<br/>
+<br/>
+	public SHA1() {<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 字节填充 为保证数据字节数长度在对64取模以后的余数是56，要进行补位 先补一个1，然后再补0，直到长度满足对64取模后余数是56<br/>
+	 * 最后再补8byte存放原始数据的长度。 最后得到的数据长度恰是64的整数倍<br/>
+	 * <br/>
+	 * @param s<br/>
+	 * @return<br/>
+	 */<br/>
+<br/>
+	private byte[] fillInData(String s) {<br/>
+<br/>
+		byte[] data = s.getBytes();<br/>
+		int length = data.length;<br/>
+		int remainder = length % 64;<br/>
+		int addLength = 0;<br/>
+		if (remainder &gt; 56) {<br/>
+			addLength = 64 - remainder + 56;<br/>
+		} else if (remainder &lt; 56) {<br/>
+			addLength = 56 - remainder;<br/>
+		}<br/>
+		int newLength = length + addLength;<br/>
+		data = Arrays.copyOf(data, newLength + 8);<br/>
+		data[length] = (byte) 0x80;<br/>
+		for (int i = 0; i &lt; 4; i++) {<br/>
+			data[newLength + i] = (byte) (length &gt;&gt;&gt; (8 * i) &amp; 0xFF);<br/>
+		}<br/>
+<br/>
+		return data;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 对数据以64byte（512bit）进行分组<br/>
+	 * <br/>
+	 * @param data<br/>
+	 * @return<br/>
+	 */<br/>
+	private byte[][] divideDataTo512Groups(byte[] data) {<br/>
+<br/>
+		if (data.length % 64 != 0) {<br/>
+			throw new ByteLengthNotEnoughException(<br/>
+					&quot;data&#39;s length is not 512 times&quot;);<br/>
+		}<br/>
+		int rows = data.length / 64;<br/>
+		byte[][] ds = new byte[rows][64];<br/>
+		for (int i = 0; i &lt; rows; i++) {<br/>
+<br/>
+			for (int j = 0; j &lt; 64; j++) {<br/>
+<br/>
+				ds[i][j] = data[i * ds[i].length + j];<br/>
+<br/>
+			}<br/>
+		}<br/>
+<br/>
+		return ds;<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 对数据512bit（64byte）数据进行分组16组32bit， 并转化成16组int型数据。<br/>
+	 * <br/>
+	 * @param _512data<br/>
+	 * @return<br/>
+	 */<br/>
+	private int[] divide512To32Groups(byte[] _512data) {<br/>
+<br/>
+		if (_512data.length != 64) {<br/>
+			throw new ByteLengthNotEnoughException(<br/>
+					&quot;data is not 64 byte(512 bit)&quot;);<br/>
+		}<br/>
+<br/>
+		int length = _512data.length / 4;<br/>
+		int[] is = new int[length];<br/>
+		for (int j = 0; j &lt; length; j++) {<br/>
+			byte[] temp = new byte[4];<br/>
+			for (int i = 0; i &lt; temp.length; i++) {<br/>
+				temp[i] = _512data[i * temp.length + j];<br/>
+			}<br/>
+			is[j] = this.convert4ByteToInt(temp);<br/>
+		}<br/>
+<br/>
+		return is;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 4byte -&gt; int<br/>
+	 * <br/>
+	 * @param bs<br/>
+	 * @return<br/>
+	 */<br/>
+	private int convert4ByteToInt(byte[] bs) {<br/>
+<br/>
+		if (bs.length != 4) {<br/>
+			throw new ByteLengthNotEnoughException(&quot;data is not 4 byte!&quot;);<br/>
+		}<br/>
+		int i = 0;<br/>
+		for (int j = 0; j &lt; bs.length; j++) {<br/>
+			i += bs[j];<br/>
+			i &lt;&lt;= 8;<br/>
+		}<br/>
+<br/>
+		return i;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 由16组int型数据计算得到80组int型数据<br/>
+	 * <br/>
+	 * @param _16Groups<br/>
+	 * @return<br/>
+	 */<br/>
+	private int[] calculateW0_79(int[] _16Groups) {<br/>
+<br/>
+		if (_16Groups.length != 16) {<br/>
+			throw new ByteLengthNotEnoughException(&quot;there is not 16 groups&quot;);<br/>
+		}<br/>
+<br/>
+		int[] w = new int[80];<br/>
+<br/>
+		for (int i = 0; i &lt; _16Groups.length; i++) {<br/>
+			w[i] = _16Groups[i];<br/>
+		}<br/>
+<br/>
+		for (int i = _16Groups.length; i &lt; w.length; i++) {<br/>
+			w[i] = this.leftCircularShift(1, w[i - 3] ^ w[i - 8] ^ w[i - 14]<br/>
+					^ w[i - 16]);<br/>
+		}<br/>
+<br/>
+		return w;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 循环左移<br/>
+	 * <br/>
+	 * @param offset<br/>
+	 * @param input<br/>
+	 * @return<br/>
+	 */<br/>
+	private int leftCircularShift(int offset, int input) {<br/>
+		return input &lt;&lt; offset | input &gt;&gt;&gt; 32 - offset;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * <br/>
+	 * 计算sha1所需要的线性函数<br/>
+	 * <br/>
+	 * @param b<br/>
+	 * @param c<br/>
+	 * @param d<br/>
+	 * @return<br/>
+	 */<br/>
+	private int f0_19(int b, int c, int d) {<br/>
+		return b &amp; c | ~b &amp; d;<br/>
+	}<br/>
+<br/>
+	private int f20_39(int b, int c, int d) {<br/>
+		return b ^ c ^ d;<br/>
+	}<br/>
+<br/>
+	private int f40_59(int b, int c, int d) {<br/>
+		return b &amp; c | b &amp; d | c &amp; d;<br/>
+	}<br/>
+<br/>
+	private int f60_79(int b, int c, int d) {<br/>
+		return b ^ c ^ d;<br/>
+	}<br/>
+<br/>
+	private int A = 0x67452301;<br/>
+	private int B = 0xefcdab89;<br/>
+	private int C = 0x98badcef;<br/>
+	private int D = 0x10325476;<br/>
+	private int E = 0xc3d2e1f0;<br/>
+<br/>
+	private void resetNumbers() {<br/>
+		A = 0x67452301;<br/>
+		B = 0xefcdab89;<br/>
+		C = 0x98badcef;<br/>
+		D = 0x10325476;<br/>
+		E = 0xc3d2e1f0;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 用得到的80组int数据进行sha1结果计算<br/>
+	 * <br/>
+	 * @param _80W<br/>
+	 */<br/>
+	private void executeEach16Groups(int[] _80W) {<br/>
+<br/>
+		if (_80W.length != 80) {<br/>
+			throw new ByteLengthNotEnoughException(&quot;data must be 80 length!&quot;);<br/>
+		}<br/>
+<br/>
+		int a = A;<br/>
+		int b = B;<br/>
+		int c = C;<br/>
+		int d = D;<br/>
+		int e = E;<br/>
+		int tmp = 0;<br/>
+		for (int i = 0; i &lt; 20; i++) {<br/>
+			tmp = k0_19 + f0_19(b, c, d) + leftCircularShift(5, a) + e<br/>
+					+ _80W[i];<br/>
+			e = d;<br/>
+			d = c;<br/>
+			c = leftCircularShift(30, b);<br/>
+			b = a;<br/>
+			a = tmp;<br/>
+		}<br/>
+		for (int i = 20; i &lt; 40; i++) {<br/>
+			tmp = k20_39 + f20_39(b, c, d) + leftCircularShift(5, a) + e<br/>
+					+ _80W[i];<br/>
+			e = d;<br/>
+			d = c;<br/>
+			c = leftCircularShift(30, b);<br/>
+			b = a;<br/>
+			a = tmp;<br/>
+		}<br/>
+		for (int i = 40; i &lt; 60; i++) {<br/>
+			tmp = k40_59 + f40_59(b, c, d) + leftCircularShift(5, a) + e<br/>
+					+ _80W[i];<br/>
+			e = d;<br/>
+			d = c;<br/>
+			c = leftCircularShift(30, b);<br/>
+			b = a;<br/>
+			a = tmp;<br/>
+<br/>
+		}<br/>
+		for (int i = 60; i &lt; 80; i++) {<br/>
+			tmp = k60_79 + f60_79(b, c, d) + leftCircularShift(5, a) + e<br/>
+					+ _80W[i];<br/>
+			e = d;<br/>
+			d = c;<br/>
+			c = leftCircularShift(30, b);<br/>
+			b = a;<br/>
+			a = tmp;<br/>
+		}<br/>
+		A += a;<br/>
+		B += b;<br/>
+		C += c;<br/>
+		D += d;<br/>
+		E += e;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 执行字符串SHA1加密整个过程并得到结果。<br/>
+	 * <br/>
+	 * @param s<br/>
+	 * @return<br/>
+	 */<br/>
+	public String doFinal(String s) {<br/>
+<br/>
+		this.resetNumbers();<br/>
+		byte[] data = this.fillInData(s);<br/>
+		byte[][] ds = this.divideDataTo512Groups(data);<br/>
+		for (int i = 0; i &lt; ds.length; i++) {<br/>
+<br/>
+			int[] _16IntGroups = this.divide512To32Groups(ds[i]);<br/>
+			int[] _80W = this.calculateW0_79(_16IntGroups);<br/>
+			this.executeEach16Groups(_80W);<br/>
+<br/>
+		}<br/>
+		String ret = Integer.toHexString(A) + Integer.toHexString(B)<br/>
+				+ Integer.toHexString(C) + Integer.toHexString(D)<br/>
+				+ Integer.toHexString(E);<br/>
+		return ret;<br/>
+	}<br/>
+<br/>
+	private int k0_19 = 0x5A827999;<br/>
+	private int k20_39 = 0x6ED9EBA1;<br/>
+	private int k40_59 = 0x8F1BBCDC;<br/>
+	private int k60_79 = 0xCA62C1D6;<br/>
+<br/>
+	/*<br/>
+	 * private int h0 = 0x67452301; private int h1 = 0xefcdab89; private int h2<br/>
+	 * = 0x98badcef; private int h3 = 0x10325476; private int h4 = 0xc3d2e1f0;<br/>
+	 */<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		SHA1 sha1 = new SHA1();<br/>
+<br/>
+		System.out<br/>
+				.println(sha1<br/>
+						.doFinal(&quot;春花秋月何时了？往事知多少。小楼昨夜又东风，故国不堪回首月明中。雕栏玉砌应犹在，只是朱颜改。问君能有几多愁？恰似一江春水向东流。&quot;));<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p><pre code_snippet_id="1908558" snippet_file_name="blog_20160930_2_2207473"  name="code" class="java">275071328061b15f8f4d4ac0fd07b11328d89cf4</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

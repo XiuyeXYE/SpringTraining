@@ -1,0 +1,136 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        WebSphere MQ Jms 连接            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1693330" snippet_file_name="blog_20160523_1_1875337"  name="code" class="java">package com.xiuye.ibmmq;<br/>
+<br/>
+import java.util.UUID;<br/>
+<br/>
+import javax.jms.Connection;<br/>
+import javax.jms.DeliveryMode;<br/>
+import javax.jms.Destination;<br/>
+import javax.jms.JMSException;<br/>
+import javax.jms.MessageProducer;<br/>
+import javax.jms.Session;<br/>
+import javax.jms.TextMessage;<br/>
+<br/>
+import com.ibm.mq.jms.MQConnectionFactory;<br/>
+<br/>
+public class JmsDefaultConnect {<br/>
+<br/>
+	private static final int SEND_NUMBER = 7;<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		MQConnectionFactory connFct = new MQConnectionFactory();<br/>
+		<br/>
+		Connection connection = null;<br/>
+		Session session;<br/>
+		Destination destination;<br/>
+		MessageProducer producer;<br/>
+<br/>
+		try {<br/>
+			connFct.setQueueManager(&quot;QM&quot;);<br/>
+			connFct.setHostName(&quot;localhost&quot;);<br/>
+			connFct.setPort(1414);<br/>
+			connection = connFct.createConnection();<br/>
+			connection.start();<br/>
+			session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);<br/>
+			destination = session.createQueue(&quot;Q&quot;);<br/>
+			producer = session.createProducer(destination);<br/>
+			producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);<br/>
+			sendMessage(session,producer);<br/>
+			<br/>
+			session.commit();<br/>
+			<br/>
+		} catch (JMSException e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	private static void sendMessage(Session session, MessageProducer producer) throws JMSException {<br/>
+		<br/>
+		for(int i=1;i&lt;=SEND_NUMBER;i++){<br/>
+			TextMessage message = session.createTextMessage(&quot;send Message hello &quot;+UUID.randomUUID()+&quot;:&quot;+i);<br/>
+			System.out.println(&quot;send message:message &quot;+i);<br/>
+			producer.send(message);<br/>
+		}<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1693330" snippet_file_name="blog_20160523_2_2463982"  name="code" class="java">send message:message 1<br/>
+send message:message 2<br/>
+send message:message 3<br/>
+send message:message 4<br/>
+send message:message 5<br/>
+send message:message 6<br/>
+send message:message 7<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160523122616206?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre code_snippet_id="1693330" snippet_file_name="blog_20160523_3_3717718"  name="code" class="java">package com.xiuye.ibmmq;<br/>
+<br/>
+import javax.jms.Connection;<br/>
+import javax.jms.Destination;<br/>
+import javax.jms.JMSException;<br/>
+import javax.jms.MessageConsumer;<br/>
+import javax.jms.Session;<br/>
+import javax.jms.TextMessage;<br/>
+<br/>
+import com.ibm.mq.jms.MQConnectionFactory;<br/>
+<br/>
+public class JmsConnectMQReceive {<br/>
+<br/>
+	public static void main(String[] args) throws JMSException {<br/>
+		<br/>
+		MQConnectionFactory factory = new MQConnectionFactory();<br/>
+		factory.setHostName(&quot;www.xiuye.com&quot;);<br/>
+		factory.setPort(1414);<br/>
+		factory.setQueueManager(&quot;QM&quot;);<br/>
+		<br/>
+		Connection conn = factory.createConnection();<br/>
+		conn.start();<br/>
+		Session session = conn.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);<br/>
+		Destination dest = session.createQueue(&quot;Q&quot;);<br/>
+		MessageConsumer consumer = session.createConsumer(dest);<br/>
+		int i = 0;<br/>
+		while(true){<br/>
+			TextMessage msg = (TextMessage) consumer.receive();<br/>
+			if(msg == null)<br/>
+				break;<br/>
+			else<br/>
+				System.out.println(msg.getText()+&quot; &quot;+i++);<br/>
+		}<br/>
+		session.commit();<br/>
+		conn.close();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+</p><br/>
+<pre code_snippet_id="1693330" snippet_file_name="blog_20160523_4_2147554"  name="code" class="java">send Message 1 0<br/>
+send Message 3 1<br/>
+send Message 5 2<br/>
+send Message 7 3<br/>
+send Message 2 4<br/>
+send Message 4 5<br/>
+send Message 6 6<br/>
+send Message 1 7<br/>
+send Message 3 8<br/>
+send Message 6 9<br/>
+send Message hello 48aeeea8-43f2-4b3a-968e-a951a297f125:1 10<br/>
+send Message hello 6e09edb7-9c31-42dd-872d-2e80c3a6aa9d:3 11<br/>
+send Message hello 8780abb8-d5d5-4a40-b7e3-501bf89eeee1:5 12<br/>
+send Message hello 3321e989-f524-4435-92cd-0c014a681804:1 13<br/>
+send Message hello eacb73d6-edc1-4e84-969e-b0e1fa75b5e7:4 14<br/>
+send Message hello 37c63f94-c0f0-4c9e-922e-9cfc693ab7aa:6 15<br/>
+send Message hello ea44c23e-fce6-4817-8490-a41284252e90:7 16<br/>
+</pre><br><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

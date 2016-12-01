@@ -1,0 +1,168 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        ActiveMQ First Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1687705" snippet_file_name="blog_20160518_1_3912961"  name="code" class="java">package com.xiuye.activemq;<br/>
+<br/>
+import javax.jms.Connection;<br/>
+import javax.jms.ConnectionFactory;<br/>
+import javax.jms.DeliveryMode;<br/>
+import javax.jms.Destination;<br/>
+import javax.jms.JMSException;<br/>
+import javax.jms.MessageProducer;<br/>
+import javax.jms.Session;<br/>
+import javax.jms.TextMessage;<br/>
+<br/>
+import org.apache.activemq.ActiveMQConnection;<br/>
+import org.apache.activemq.ActiveMQConnectionFactory;<br/>
+<br/>
+public class Sender {<br/>
+<br/>
+	private static final int SEND_NUMBER = 5;<br/>
+	<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		ConnectionFactory connectionFactory;<br/>
+		Connection connection = null;<br/>
+		Session session;<br/>
+		Destination destination;<br/>
+		MessageProducer producer;<br/>
+		<br/>
+		connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_USER,ActiveMQConnection.DEFAULT_PASSWORD,&quot;tcp://localhost:61616&quot;); <br/>
+		<br/>
+		try {<br/>
+			connection = connectionFactory.createConnection();<br/>
+			connection.start();<br/>
+			session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);<br/>
+			destination = session.createQueue(&quot;firstMQ&quot;);<br/>
+			producer = session.createProducer(destination);<br/>
+			producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);<br/>
+			sendMessage(session,producer);<br/>
+			<br/>
+			session.commit();<br/>
+			<br/>
+		} catch (JMSException e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		finally{<br/>
+			<br/>
+			if(null != connection){<br/>
+				try {<br/>
+					connection.close();<br/>
+				} catch (JMSException e) {<br/>
+					<br/>
+				}<br/>
+			}<br/>
+			<br/>
+			<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	private static void sendMessage(Session session, MessageProducer producer) throws JMSException {<br/>
+		<br/>
+		for(int i=1;i&lt;=SEND_NUMBER;i++){<br/>
+			TextMessage message = session.createTextMessage(&quot;ActiveMQ send Message &quot;+i);<br/>
+			System.out.println(&quot;send message:activeMQ message &quot;+i);<br/>
+			producer.send(message);<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1687705" snippet_file_name="blog_20160518_2_6355959"  name="code" class="java">send message:activeMQ message 1<br/>
+send message:activeMQ message 2<br/>
+send message:activeMQ message 3<br/>
+send message:activeMQ message 4<br/>
+send message:activeMQ message 5<br/>
+</pre><pre code_snippet_id="1687705" snippet_file_name="blog_20160518_3_3150376"  name="code" class="java">package com.xiuye.activemq;<br/>
+<br/>
+import javax.jms.Connection;<br/>
+import javax.jms.ConnectionFactory;<br/>
+import javax.jms.Destination;<br/>
+import javax.jms.JMSException;<br/>
+import javax.jms.MessageConsumer;<br/>
+import javax.jms.Session;<br/>
+import javax.jms.TextMessage;<br/>
+<br/>
+import org.apache.activemq.ActiveMQConnectionFactory;<br/>
+<br/>
+public class Receiver {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		ConnectionFactory connectionFactory ;<br/>
+		Connection connection = null;<br/>
+		Session session;<br/>
+		Destination destination;<br/>
+		<br/>
+		MessageConsumer consumer ;<br/>
+		<br/>
+		connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_USER,ActiveMQConnectionFactory.DEFAULT_PASSWORD,&quot;tcp://localhost:61616&quot;);<br/>
+		try {<br/>
+			connection = connectionFactory.createConnection();<br/>
+			connection.start();<br/>
+			session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);<br/>
+			destination = session.createQueue(&quot;firstMQ&quot;);<br/>
+			consumer = session.createConsumer(destination);<br/>
+			while(true){<br/>
+				TextMessage message = (TextMessage) consumer.receive(1000);<br/>
+				if(null != message){<br/>
+					System.out.println(&quot;Received Message: &quot;+message.getText());<br/>
+				}<br/>
+				else{//最后消息没有了就为null<br/>
+					break;<br/>
+				}<br/>
+			}<br/>
+					<br/>
+			<br/>
+			<br/>
+			<br/>
+		} catch (JMSException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		finally{<br/>
+			if(null != connection){<br/>
+				try {<br/>
+					connection.close();<br/>
+				} catch (JMSException e) {<br/>
+					<br/>
+				}<br/>
+			}<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1687705" snippet_file_name="blog_20160518_4_2212285"  name="code" class="java">Received Message: ActiveMQ send Message 1<br/>
+Received Message: ActiveMQ send Message 2<br/>
+Received Message: ActiveMQ send Message 3<br/>
+Received Message: ActiveMQ send Message 4<br/>
+Received Message: ActiveMQ send Message 5<br/>
+Received Message: ActiveMQ send Message 1<br/>
+Received Message: ActiveMQ send Message 2<br/>
+Received Message: ActiveMQ send Message 3<br/>
+Received Message: ActiveMQ send Message 4<br/>
+Received Message: ActiveMQ send Message 5<br/>
+Received Message: ActiveMQ send Message 1<br/>
+Received Message: ActiveMQ send Message 2<br/>
+Received Message: ActiveMQ send Message 3<br/>
+Received Message: ActiveMQ send Message 4<br/>
+Received Message: ActiveMQ send Message 5<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160518124247297?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="http://img.blog.csdn.net/20160518124247297?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160518124349695?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160518124450804?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160518124523414?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,23 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        获取环境变量            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691946" snippet_file_name="blog_20160521_1_6065610"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(int argc,char *argv[],char *env[]){<br/>
+    <br/>
+    while(env != NULL){<br/>
+        <br/>
+        cout &lt;&lt; *env++ &lt;&lt; endl;<br/>
+         <br/>
+    }<br/>
+    <br/>
+}</pre><br><br/>
+<pre code_snippet_id="1691946" snippet_file_name="blog_20160521_2_9413680"  name="code" class="cpp">d:\programming\C++&gt;mainThreeParameter<br/>
+ALLUSERSPROFILE=C:\ProgramData<br/>
+APPDATA=C:\Users\Administrator\AppData\Roaming<br/>
+classpath=.;F:\360Apps\IBM\WebSphere MQ\java\lib\com.ibm.mqjms.jar;F:\360Apps\IB<br/>
+M\WebSphere MQ\java\lib\com.ibm.mq.jar<br/>
+。。。。。。。。。</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,112 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring 全注解配置 bean 和 调用 (5) @Qualifier 自动装配歧义性消除            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1980825" snippet_file_name="blog_20161112_1_1398587"  name="code" class="java">package com.xiuye.bean;<br/>
+<br/>
+import org.springframework.beans.factory.annotation.Autowired;<br/>
+import org.springframework.beans.factory.annotation.Qualifier;<br/>
+<br/>
+import com.xiuye.component.CarComponent;<br/>
+<br/>
+public class Car {<br/>
+<br/>
+	private CarComponent wheels;<br/>
+	private CarComponent steer;<br/>
+	private CarComponent engine;<br/>
+<br/>
+	@Autowired<br/>
+	@Qualifier(&quot;carWheelComponent&quot;)<br/>
+	public void setWheels(CarComponent wheels) {<br/>
+		this.wheels = wheels;<br/>
+	}<br/>
+	@Autowired<br/>
+	@Qualifier(&quot;carSteerComponent&quot;)<br/>
+	public void setSteer(CarComponent steer) {<br/>
+		this.steer = steer;<br/>
+	}<br/>
+	@Autowired<br/>
+	public void setEngine(CarComponent engine) {<br/>
+		this.engine = engine;<br/>
+	}<br/>
+<br/>
+	public void configInfo(){<br/>
+		this.steer.description();<br/>
+		this.wheels.description();<br/>
+		this.engine.description();<br/>
+	}<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1980825" snippet_file_name="blog_20161112_2_2969533"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.junit.BeforeClass;<br/>
+import org.junit.Test;<br/>
+import org.junit.runner.RunWith;<br/>
+import org.springframework.test.context.ActiveProfiles;<br/>
+import org.springframework.test.context.ContextConfiguration;<br/>
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;<br/>
+<br/>
+import com.xiuye.bean.Car;<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+@RunWith(SpringJUnit4ClassRunner.class)<br/>
+@ContextConfiguration(classes=BeanConfiguration1.class)<br/>
+@ActiveProfiles(&quot;dev&quot;)<br/>
+<br/>
+public class TestMain {<br/>
+<br/>
+<br/>
+	@Resource<br/>
+	private ComponentForStudent cfs;<br/>
+	@Resource<br/>
+	private ComponentForStudent2 cfs2;<br/>
+<br/>
+	@Resource<br/>
+	private Car car;<br/>
+<br/>
+	@BeforeClass<br/>
+	public static void envConfig(){<br/>
+		System.setProperty(&quot;test&quot;,&quot;true&quot;);<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void testCfs(){<br/>
+		cfs.studentInfo();<br/>
+	}<br/>
+	@Test<br/>
+	public void testCfs2(){<br/>
+		cfs2.studentInfo();<br/>
+	}<br/>
+<br/>
+<br/>
+	@Test<br/>
+	public void testCar(){<br/>
+		this.car.configInfo();<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1980825" snippet_file_name="blog_20161112_3_9141502"  name="code" class="java">十一月 12, 2016 1:06:39 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getDefaultTestExecutionListenerClassNames<br/>
+信息: Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]<br/>
+十一月 12, 2016 1:06:39 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper instantiateListeners<br/>
+信息: Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]<br/>
+十一月 12, 2016 1:06:39 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getTestExecutionListeners<br/>
+信息: Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@133c8f8, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@1a25848, org.springframework.test.context.support.DirtiesContextTestExecutionListener@c3fd8b, org.springframework.test.context.transaction.TransactionalTestExecutionListener@194a1b5, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@5fc7f7]<br/>
+十一月 12, 2016 1:06:39 下午 org.springframework.context.support.GenericApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.support.GenericApplicationContext@25790e: startup date [Sat Nov 12 13:06:39 CST 2016]; root of context hierarchy<br/>
+Active profile := dev<br/>
+test := true<br/>
+I'm car's steer!<br/>
+I'm car's wheels!<br/>
+I'm car's engine!<br/>
+</pre><br><br/>
+   <br/>
+</div>

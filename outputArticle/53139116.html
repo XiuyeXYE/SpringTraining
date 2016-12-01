@@ -1,0 +1,142 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring 全注解配置 bean 和 调用 (2) @Profile 自适应不同的模式或环境中            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1980783" snippet_file_name="blog_20161112_1_658569"  name="code" class="java">package com.xiuye.config;<br/>
+<br/>
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;<br/>
+import org.springframework.context.annotation.Bean;<br/>
+import org.springframework.context.annotation.ComponentScan;<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.context.annotation.Profile;<br/>
+import org.springframework.context.annotation.Scope;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+<br/>
+@Configuration<br/>
+@ComponentScan(&quot;com.xiuye.component&quot;)<br/>
+@Profile(&quot;dev&quot;)<br/>
+public class BeanConfiguration1 {<br/>
+<br/>
+	@Bean<br/>
+	public Student student() {<br/>
+		return new Student(&quot;xiuye&quot;, &quot;man&quot;, 18, 99);<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * @param name<br/>
+	 * @param sex<br/>
+	 * @param age<br/>
+	 * @param level<br/>
+	 * @return<br/>
+	 */<br/>
+	@Bean<br/>
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // 必须原生,否则no longer has<br/>
+													// any effect<br/>
+	public Student student(String name, String sex, int age, int level) {<br/>
+		return new Student(name, sex, age, level);<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public ComponentForStudent2 cfs2(Student s) {<br/>
+		ComponentForStudent2 cfs2 = new ComponentForStudent2();<br/>
+		cfs2.setStudent(s);<br/>
+		return cfs2;<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1980783" snippet_file_name="blog_20161112_2_9295365"  name="code" class="java">package com.xiuye.main;<br/>
+<br/>
+import org.springframework.context.ApplicationContext;<br/>
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+import com.xiuye.component.Component;<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+public class Main {<br/>
+<br/>
+	public static void main(String []args) {<br/>
+<br/>
+		System.setProperty(&quot;spring.profiles.active&quot;,&quot;dev&quot;);//设置(开启)激活的开发环境   可以   不设置报错<br/>
+		//System.setProperty(&quot;spring.profiles.default&quot;,&quot;dev&quot;);//设置默认的开发环境  可以<br/>
+<br/>
+		ApplicationContext ac = new AnnotationConfigApplicationContext(BeanConfiguration1.class);<br/>
+		Student s = ac.getBean(Student.class);<br/>
+		System.out.println(s);<br/>
+		s = ac.getBean(Student.class, &quot;Linda&quot;,&quot;Woman&quot;,22,70);<br/>
+		System.out.println(s);<br/>
+		ComponentForStudent cf = ac.getBean(ComponentForStudent.class);<br/>
+		cf.studentInfo();<br/>
+		Component c = ac.getBean(Component.class, &quot;100&quot;,&quot;200&quot;);<br/>
+		System.out.println(c);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1980783" snippet_file_name="blog_20161112_3_9502325"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.junit.Test;<br/>
+import org.junit.runner.RunWith;<br/>
+import org.springframework.test.context.ActiveProfiles;<br/>
+import org.springframework.test.context.ContextConfiguration;<br/>
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;<br/>
+<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+@RunWith(SpringJUnit4ClassRunner.class)<br/>
+@ContextConfiguration(classes=BeanConfiguration1.class)<br/>
+@ActiveProfiles(&quot;dev&quot;)<br/>
+public class TestMain {<br/>
+<br/>
+<br/>
+	@Resource<br/>
+	private ComponentForStudent cfs;<br/>
+	@Resource<br/>
+	private ComponentForStudent2 cfs2;<br/>
+<br/>
+<br/>
+	@Test<br/>
+	public void testCfs(){<br/>
+		cfs.studentInfo();<br/>
+	}<br/>
+	@Test<br/>
+	public void testCfs2(){<br/>
+		cfs2.studentInfo();<br/>
+	}<br/>
+<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p>结果:</p><br/>
+<p><pre code_snippet_id="1980783" snippet_file_name="blog_20161112_4_581339"  name="code" class="java">十一月 12, 2016 12:04:38 下午 org.springframework.context.annotation.AnnotationConfigApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@1af6ecc: startup date [Sat Nov 12 12:04:38 CST 2016]; root of context hierarchy<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Student [name=Linda, sex=Woman, age=22, level=70]<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Component [_1=100, _2=200]<br/>
+</pre><br><br/>
+<pre code_snippet_id="1980783" snippet_file_name="blog_20161112_5_1868094"  name="code" class="java">十一月 12, 2016 12:10:19 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getDefaultTestExecutionListenerClassNames<br/>
+信息: Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]<br/>
+十一月 12, 2016 12:10:19 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper instantiateListeners<br/>
+信息: Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]<br/>
+十一月 12, 2016 12:10:19 下午 org.springframework.test.context.support.DefaultTestContextBootstrapper getTestExecutionListeners<br/>
+信息: Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@75222b, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@203ea1, org.springframework.test.context.support.DirtiesContextTestExecutionListener@7f674d, org.springframework.test.context.transaction.TransactionalTestExecutionListener@1251891, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@140564]<br/>
+十一月 12, 2016 12:10:19 下午 org.springframework.context.support.GenericApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.support.GenericApplicationContext@109b8da: startup date [Sat Nov 12 12:10:19 CST 2016]; root of context hierarchy<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+十一月 12, 2016 12:10:20 下午 org.springframework.context.support.GenericApplicationContext doClose<br/>
+信息: Closing org.springframework.context.support.GenericApplicationContext@109b8da: startup date [Sat Nov 12 12:10:19 CST 2016]; root of context hierarchy<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

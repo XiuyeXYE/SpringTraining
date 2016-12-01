@@ -1,0 +1,113 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        JFinal First Demo &quot;Hello World&quot;            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;3.0&quot;&gt;<br/>
+  &lt;display-name&gt;jfinal1&lt;/display-name&gt;<br/>
+  &lt;welcome-file-list&gt;<br/>
+    &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.html&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;<br/>
+    &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;<br/>
+  &lt;/welcome-file-list&gt;<br/>
+  &lt;filter&gt;<br/>
+  	&lt;filter-name&gt;jfinal&lt;/filter-name&gt;<br/>
+  	&lt;filter-class&gt;com.jfinal.core.JFinalFilter&lt;/filter-class&gt;<br/>
+  	&lt;init-param&gt;<br/>
+  		&lt;param-name&gt;configClass&lt;/param-name&gt;<br/>
+  		&lt;param-value&gt;com.SelfConfig&lt;/param-value&gt;<br/>
+  	&lt;/init-param&gt;<br/>
+  	<br/>
+  &lt;/filter&gt;<br/>
+  &lt;filter-mapping&gt;<br/>
+  	&lt;filter-name&gt;jfinal&lt;/filter-name&gt;<br/>
+  	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;<br/>
+  &lt;/filter-mapping&gt;<br/>
+&lt;/web-app&gt;</pre><br><br/>
+<pre name="code" class="java">package com;<br/>
+<br/>
+import com.jfinal.config.Constants;<br/>
+import com.jfinal.config.Handlers;<br/>
+import com.jfinal.config.Interceptors;<br/>
+import com.jfinal.config.JFinalConfig;<br/>
+import com.jfinal.config.Plugins;<br/>
+import com.jfinal.config.Routes;<br/>
+<br/>
+import controller.HelloController;<br/>
+<br/>
+public class SelfConfig extends JFinalConfig {<br/>
+<br/>
+	<br/>
+	<br/>
+	@Override<br/>
+	public void configConstant(Constants me) {<br/>
+		<br/>
+		me.setDevMode(true);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void configRoute(Routes me) {<br/>
+		<br/>
+		me.add(&quot;/Hello&quot;,HelloController.class);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void configPlugin(Plugins me) {<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void configInterceptor(Interceptors me) {<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void configHandler(Handlers me) {<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package controller;<br/>
+<br/>
+import com.jfinal.core.Controller;<br/>
+<br/>
+public class HelloController extends Controller{<br/>
+<br/>
+	public void index(){<br/>
+		<br/>
+		renderText(&quot;Hello JFinal World.&quot;);<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160315123349105?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160315123354136?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre name="code" class="java">Starting JFinal 2.2<br/>
+Starting scanner at interval of 5 seconds.<br/>
+Starting web server on port: 80<br/>
+Starting Complete. Welcome To The JFinal World :)<br/>
+2016-3-15 12:14:23 com.jfinal.core.ActionHandler warn<br/>
+警告: 404 Action Not Found: /<br/>
+<br/>
+JFinal action report -------- 2016-03-15 12:14:45 ------------------------------<br/>
+Controller  : controller.HelloController.(HelloController.java:1)<br/>
+Method      : index<br/>
+--------------------------------------------------------------------------------<br/>
+</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160315123624498?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

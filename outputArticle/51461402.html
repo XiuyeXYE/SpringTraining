@@ -1,0 +1,28 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java8 class::method lambda            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1690486" snippet_file_name="blog_20160520_1_4513339"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+public class ClassMethodParameter {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		double d = get(Math::random);<br/>
+		System.out.println(d);<br/>
+<br/>
+	}<br/>
+	public static&lt;T&gt; T get(ParameterVoidGetReturn&lt;T&gt; pvgr){<br/>
+		return pvgr.get();<br/>
+	}<br/>
+}<br/>
+@FunctionalInterface<br/>
+interface ParameterVoidGetReturn&lt;T&gt;{//必须加T泛型，以为类型推断<br/>
+	<br/>
+	T get();<br/>
+	<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1690486" snippet_file_name="blog_20160520_2_3924694"  name="code" class="java">0.5404146660392524<br/>
+</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,817 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        解析json到对象（java实现，有缺陷：通用性不够好）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_1_3763798"  code_snippet_id="1872531" snippet_file_name="blog_20160908_1_3763798" name="code" class="java">package com.xiuye.json;<br/>
+<br/>
+import java.lang.reflect.Array;<br/>
+import java.lang.reflect.Field;<br/>
+import java.util.ArrayList;<br/>
+import java.util.HashMap;<br/>
+import java.util.List;<br/>
+import java.util.Map;<br/>
+import java.util.regex.Matcher;<br/>
+import java.util.regex.Pattern;<br/>
+<br/>
+/**<br/>
+ * <br/>
+ * 把json字符串解析到对象 分四类解析: 字符串， 原生的类型， 数组， 对象。 实现: 使用了递归。 使用了java反射。 限制:<br/>
+ * 类和类中的成员类必须有默认的构造方法。 对接口，枚举不支持。 没有字段会报错。 还有。。。 缺陷: 代码冗余。 成员类型判断方式不统一。 。。。<br/>
+ * <br/>
+ * <br/>
+ * @author xiuye<br/>
+ *<br/>
+ */<br/>
+public class ObjectParser {<br/>
+<br/>
+	public ObjectParser() {<br/>
+<br/>
+	}<br/>
+<br/>
+	<br/>
+<br/>
+	/**<br/>
+	 * 将json字符串解析成对象<br/>
+	 * <br/>
+	 * @param jsonStr<br/>
+	 * @param clazz<br/>
+	 * @return<br/>
+	 */<br/>
+	public &lt;T&gt; T fromJsonToObject(String jsonStr, Class&lt;T&gt; clazz) {<br/>
+		T curObj = null;<br/>
+		try {<br/>
+			List&lt;String&gt; kvStrs = this.parseKVStrList(jsonStr);<br/>
+			curObj = clazz.newInstance();<br/>
+<br/>
+			for (String kvStr : kvStrs) {<br/>
+<br/>
+				Map&lt;Integer, String&gt; kvMap = this.getKV(kvStr);<br/>
+				String key = kvMap.get(1);<br/>
+<br/>
+				Field f = clazz.getDeclaredField(key);<br/>
+				f.setAccessible(true);<br/>
+				/**<br/>
+				 * 处理基本类型<br/>
+				 */<br/>
+				if (isPrimitive(f)) {<br/>
+					this.primitiveSetted(f, curObj, kvStr);<br/>
+					continue;<br/>
+				}<br/>
+				/**<br/>
+				 * 处理字符串<br/>
+				 */<br/>
+				if (isString(f)) {<br/>
+					this.stringSetted(f, curObj, kvStr);<br/>
+					continue;<br/>
+				}<br/>
+				/**<br/>
+				 * 处理数组<br/>
+				 */<br/>
+				if (isArray(f)) {<br/>
+					this.arraySetted(f, curObj, kvStr);<br/>
+					continue;<br/>
+				}<br/>
+				/**<br/>
+				 * 处理对象<br/>
+				 */<br/>
+				if (isObject(f)) {<br/>
+					this.objectSetted(f, curObj, kvStr);<br/>
+					continue;<br/>
+				}<br/>
+			}<br/>
+<br/>
+		} catch (NoSuchFieldException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (SecurityException e) {<br/>
+<br/>
+			e.printStackTrace();<br/>
+		} catch (InstantiationException e) {<br/>
+<br/>
+			e.printStackTrace();<br/>
+		} catch (IllegalAccessException e) {<br/>
+<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+<br/>
+		return curObj;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 将json字符串中的所有的 一级 key:value 解析出来<br/>
+	 * <br/>
+	 * @param all<br/>
+	 * @return<br/>
+	 */<br/>
+	private List&lt;String&gt; parseKVStrList(String all) {<br/>
+		List&lt;String&gt; kvStrs = new ArrayList&lt;String&gt;();<br/>
+		/**<br/>
+		 * 去掉字符串的空白字符<br/>
+		 */<br/>
+		all = all.replaceAll(&quot;\\s&quot;, &quot;&quot;);<br/>
+		// System.out.println(&quot;all_1 := &quot; + all);<br/>
+		/**<br/>
+		 * 去掉首尾的{}<br/>
+		 */<br/>
+		all = all.replaceAll(&quot;^\\{|\\}$&quot;, &quot;&quot;);<br/>
+		// System.out.println(&quot;all_2 := &quot; + all);<br/>
+<br/>
+		/**<br/>
+		 * 从字符串中提取数据 关键是正则表达式提取正确! 此代码关键啊 找到合适的最小匹配 正则 regex .*?<br/>
+		 * 找到最小合适的匹配，不知道正确否或者通用性怎样！<br/>
+		 */<br/>
+<br/>
+		Pattern p = Pattern<br/>
+				.compile(&quot;\\w+:(\&quot;.*?\&quot;|\\{{1,}?.*?\\}{1,}?|\\[{1,}?.*?\\]{1,}?)&quot;);<br/>
+		Matcher m = p.matcher(all);<br/>
+		while (m.find()) {<br/>
+			kvStrs.add(m.group());<br/>
+<br/>
+			// System.out.println(m.group());<br/>
+<br/>
+		}<br/>
+<br/>
+		return kvStrs;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 拆分 key:value 中key和value 字符串<br/>
+	 * <br/>
+	 * @param kvStr<br/>
+	 * @return<br/>
+	 */<br/>
+	private Map&lt;Integer, String&gt; getKV(String kvStr) {<br/>
+<br/>
+		Map&lt;Integer, String&gt; kvMap = new HashMap&lt;Integer, String&gt;();<br/>
+		try {<br/>
+			int colonIndex = kvStr.indexOf(&quot;:&quot;);<br/>
+			String key = kvStr.substring(0, colonIndex);<br/>
+<br/>
+			String value = kvStr.substring(colonIndex + 1);<br/>
+			kvMap.put(1, key);<br/>
+			kvMap.put(2, value);<br/>
+		} catch (StringIndexOutOfBoundsException e) {<br/>
+			throw new StringIndexOutOfBoundsException(kvStr<br/>
+					+ &quot; : json str&#39;s format has errors！&quot;);<br/>
+		}<br/>
+<br/>
+		return kvMap;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 为类中的成员对象赋值<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @param curObj<br/>
+	 * @param kvStr<br/>
+	 */<br/>
+	private void objectSetted(Field f, Object curObj, String kvStr) {<br/>
+		if (f != null) {<br/>
+			if (isObject(f) &amp;&amp; isJsonStrObject(kvStr)) {<br/>
+				try {<br/>
+<br/>
+					Class&lt;?&gt; clazz = f.getType();<br/>
+					Map&lt;Integer, String&gt; kvMap = this.getKV(kvStr);<br/>
+					String key = kvMap.get(1);<br/>
+					String value = kvMap.get(2);<br/>
+					if (!f.getName().equalsIgnoreCase(key)) {<br/>
+						return;<br/>
+					}<br/>
+					Object obj = this.fromJsonToObject(value, clazz);<br/>
+<br/>
+					f.set(curObj, obj);<br/>
+<br/>
+				} catch (IllegalArgumentException e) {<br/>
+<br/>
+					e.printStackTrace();<br/>
+				} catch (IllegalAccessException e) {<br/>
+<br/>
+					e.printStackTrace();<br/>
+				}<br/>
+			}<br/>
+<br/>
+		}<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 为类中的成员原始类型的变量赋值<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @param curObj<br/>
+	 * @param kvStr<br/>
+	 */<br/>
+	private void primitiveSetted(Field f, Object curObj, String kvStr) {<br/>
+		if (f != null) {<br/>
+			if (this.isPrimitive(f)) {<br/>
+				Map&lt;Integer, String&gt; kvMap = this.getKV(kvStr);<br/>
+				String key = kvMap.get(1);<br/>
+				String value = kvMap.get(2);<br/>
+				if (!f.getName().equalsIgnoreCase(key)) {<br/>
+					return;<br/>
+				}<br/>
+				try {<br/>
+					switch (f.getType().getName()) {<br/>
+					case ConstantType.TYPE_BOOLEAN:<br/>
+						boolean b = Boolean.parseBoolean(value);<br/>
+						f.setBoolean(curObj, b);<br/>
+						break;<br/>
+					case ConstantType.TYPE_BYTE:<br/>
+						byte by = Byte.parseByte(value);<br/>
+						f.setByte(curObj, by);<br/>
+						break;<br/>
+					case ConstantType.TYPE_DOUBLE:<br/>
+						double d = Double.parseDouble(key);<br/>
+						f.setDouble(curObj, d);<br/>
+						break;<br/>
+					case ConstantType.TYPE_FLOAT:<br/>
+						float fl = Float.parseFloat(value);<br/>
+						f.setFloat(curObj, fl);<br/>
+						break;<br/>
+					case ConstantType.TYPE_INT:<br/>
+						int i = Integer.parseInt(value);<br/>
+						f.setInt(curObj, i);<br/>
+						break;<br/>
+					case ConstantType.TYPE_LONG:<br/>
+						long l = Long.parseLong(value);<br/>
+						f.setLong(curObj, l);<br/>
+						break;<br/>
+					case ConstantType.TYPE_SHORT:<br/>
+						short s = Short.parseShort(value);<br/>
+						f.setShort(curObj, s);<br/>
+						break;<br/>
+					case ConstantType.TYPE_CHAR:<br/>
+						if (value.length() == 1) {<br/>
+							char c = value.charAt(0);<br/>
+							f.setChar(curObj, c);<br/>
+						}<br/>
+						break;<br/>
+					}<br/>
+				} catch (IllegalArgumentException e) {<br/>
+					e.printStackTrace();<br/>
+				} catch (IllegalAccessException e) {<br/>
+					e.printStackTrace();<br/>
+				}<br/>
+<br/>
+			}<br/>
+		}<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 为类中的成员 字符串变量赋值<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @param curObj<br/>
+	 * @param kvStr<br/>
+	 */<br/>
+	private void stringSetted(Field f, Object curObj, String kvStr) {<br/>
+		if (f != null) {<br/>
+			if (this.isString(f)) {<br/>
+<br/>
+				Map&lt;Integer, String&gt; kvMap = this.getKV(kvStr);<br/>
+				String key = kvMap.get(1);<br/>
+				String value = kvMap.get(2);<br/>
+				if (!f.getName().equalsIgnoreCase(key)) {<br/>
+					return;<br/>
+				}<br/>
+				/*<br/>
+				 * if (value.indexOf(&quot;\&quot;&quot;) == 0 &amp;&amp; value.lastIndexOf(&quot;\&quot;&quot;) ==<br/>
+				 * value.length() - 1 || value.indexOf(&quot;\&#39;&quot;) == 0 &amp;&amp;<br/>
+				 * value.lastIndexOf(&quot;\&#39;&quot;) == value.length() - 1) {<br/>
+				 */<br/>
+				value = value.replaceAll(&quot;^(\&quot;|\&#39;)|(\&quot;|\&#39;)$&quot;, &quot;&quot;);<br/>
+				/* } */<br/>
+				try {<br/>
+					f.set(curObj, value);<br/>
+				} catch (IllegalArgumentException e) {<br/>
+					e.printStackTrace();<br/>
+				} catch (IllegalAccessException e) {<br/>
+					e.printStackTrace();<br/>
+				}<br/>
+			}<br/>
+		}<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 为类中的成员 数组赋值<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @param obj<br/>
+	 * @param kvArrayStr<br/>
+	 */<br/>
+	private void arraySetted(Field f, Object obj, String kvArrayStr) {<br/>
+<br/>
+		if (f != null) {<br/>
+			if (this.isArray(f)) {<br/>
+				try {<br/>
+					/**<br/>
+					 * 得到数组类的类型名 如： java.lang.String[] int[]<br/>
+					 */<br/>
+					String typeName = f.getType().getTypeName()<br/>
+							.replaceAll(&quot;\\[\\]&quot;, &quot;&quot;);<br/>
+					/**<br/>
+					 * 得到class类型名 如:[Ljava.lang.String [I<br/>
+					 */<br/>
+					String name = f.getType().getName();<br/>
+					Map&lt;Integer, String&gt; kvMap = this.getKV(kvArrayStr);<br/>
+					String key = kvMap.get(1);<br/>
+					String value = kvMap.get(2);<br/>
+					if (!f.getName().equalsIgnoreCase(key)) {<br/>
+						return;<br/>
+					}<br/>
+					value = value.replaceAll(&quot;^\\[|\\]$&quot;, &quot;&quot;);<br/>
+					// System.out.println(value);<br/>
+					String[] vals = value.split(&quot;,&quot;);<br/>
+					int i = 0;<br/>
+					switch (name) {<br/>
+					case ConstantType.ARRAYTYPE_BOOLEAN:<br/>
+						boolean[] bVals = new boolean[vals.length];<br/>
+						for (String val : vals) {<br/>
+							bVals[i++] = Boolean.parseBoolean(val);<br/>
+						}<br/>
+						f.set(obj, bVals);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_BYTE:<br/>
+						i = 0;<br/>
+						byte[] bs = new byte[vals.length];<br/>
+						for (String val : vals) {<br/>
+							bs[i++] = Byte.parseByte(val);<br/>
+						}<br/>
+						f.set(obj, bs);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_CHAR:<br/>
+						i = 0;<br/>
+						char[] cs = new char[vals.length];<br/>
+						for (String val : vals) {<br/>
+							cs[i++] = val.charAt(0);<br/>
+						}<br/>
+						f.set(obj, cs);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_DOUBLE:<br/>
+						i = 0;<br/>
+						double[] ds = new double[vals.length];<br/>
+						for (String val : vals) {<br/>
+							ds[i++] = Double.parseDouble(val);<br/>
+						}<br/>
+						f.set(obj, ds);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_FLOAT:<br/>
+						i = 0;<br/>
+						float[] fs = new float[vals.length];<br/>
+						for (String val : vals) {<br/>
+							fs[i++] = Float.parseFloat(val);<br/>
+						}<br/>
+						f.set(obj, fs);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_INT:<br/>
+						i = 0;<br/>
+						int[] is = new int[vals.length];<br/>
+						for (String val : vals) {<br/>
+							is[i++] = Integer.parseInt(val);<br/>
+						}<br/>
+						f.set(obj, is);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_LONG:<br/>
+						i = 0;<br/>
+						long[] ls = new long[vals.length];<br/>
+						for (String val : vals) {<br/>
+							ls[i++] = Long.parseLong(val);<br/>
+						}<br/>
+						f.set(obj, ls);<br/>
+						return;<br/>
+					case ConstantType.ARRAYTYPE_SHORT:<br/>
+						i = 0;<br/>
+						short[] ss = new short[vals.length];<br/>
+						for (String val : vals) {<br/>
+							ss[i++] = Short.parseShort(val);<br/>
+						}<br/>
+						f.set(obj, ss);<br/>
+						return;<br/>
+					}<br/>
+					if (ConstantType.TYPE_STRING.equalsIgnoreCase(typeName)) {<br/>
+						i = 0;<br/>
+						String[] valsCopy = new String[vals.length];<br/>
+						for (String val : vals) {<br/>
+							valsCopy[i++] = val.replaceAll(&quot;^(\&quot;|\&#39;)|(\&quot;|\&#39;)$&quot;,<br/>
+									&quot;&quot;);<br/>
+						}<br/>
+<br/>
+						f.set(obj, valsCopy);<br/>
+						return;<br/>
+					}<br/>
+					if (isObject(f)) {<br/>
+<br/>
+						Class&lt;?&gt; clazz = Class.forName(typeName);<br/>
+						List&lt;String&gt; objsList = this.parseArrJsonStrList(value);<br/>
+						/**<br/>
+						 * java.lang.reflect.Array 很关键 Array ,可以成功的 让<br/>
+						 * Field.set可以成功设置数组对象， 直接new Object[length]不能 Field.set<br/>
+						 * 生效<br/>
+						 */<br/>
+						// Object[] objs = new Object[objsList.size()] //logic<br/>
+						// error<br/>
+						Object[] objs = (Object[]) Array.newInstance(clazz,<br/>
+								objsList.size());<br/>
+						i = 0;<br/>
+						for (String s : objsList) {<br/>
+							objs[i++] = this.fromJsonToObject(s, clazz);// 递归调处理对象类型<br/>
+						}<br/>
+<br/>
+						f.set(obj, objs);<br/>
+						return;<br/>
+<br/>
+					}<br/>
+<br/>
+				} catch (IllegalArgumentException e) {<br/>
+<br/>
+					e.printStackTrace();<br/>
+				} catch (IllegalAccessException e) {<br/>
+<br/>
+					e.printStackTrace();<br/>
+				} catch (ClassNotFoundException e) {<br/>
+<br/>
+					e.printStackTrace();<br/>
+				}<br/>
+			}<br/>
+<br/>
+		}<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 提取json数组中的json对象 ，解析json对象数组到 字符串数组对象list<br/>
+	 * <br/>
+	 * @param value<br/>
+	 * @return<br/>
+	 */<br/>
+	private List&lt;String&gt; parseArrJsonStrList(String value) {<br/>
+		List&lt;String&gt; arrObjs = new ArrayList&lt;String&gt;();<br/>
+		Pattern pattern = Pattern.compile(&quot;\\{{1,}.*?\\}{1,}&quot;);<br/>
+		Matcher matcher = pattern.matcher(value);<br/>
+		while (matcher.find()) {<br/>
+			arrObjs.add(matcher.group());<br/>
+		}<br/>
+		return arrObjs;<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断成员属性是否是对象类型 注: 与 isArray 方法和用最好 使用了这正则方式<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isObject(Field f) {<br/>
+		return Pattern.matches(&quot;^class \\S*&quot;, f.getGenericType().toString());<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断是否是内部类<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isMemberClass(Field f) {<br/>
+		return f.getType().isMemberClass();<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断json字符串是否是对象类型<br/>
+	 * <br/>
+	 * @param kvStr<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isJsonStrObject(String kvStr) {<br/>
+		return Pattern.matches(&quot;\\w+:\\{\\S*\\}&quot;, kvStr);<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断成员属性是否是数组<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isArray(Field f) {<br/>
+		return f.getType().isArray();<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断成员属性是否是原始类型（基本类型）<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isPrimitive(Field f) {<br/>
+		return f.getType().isPrimitive();<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 判断成员属性是否是字符串<br/>
+	 * <br/>
+	 * @param f<br/>
+	 * @return<br/>
+	 */<br/>
+	private boolean isString(Field f) {<br/>
+		return f.getType().getName().equalsIgnoreCase(ConstantType.TYPE_STRING);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_2_7384085"  code_snippet_id="1872531" snippet_file_name="blog_20160908_2_7384085" name="code" class="java">package com.xiuye.json;<br/>
+<br/>
+public class ConstantType {<br/>
+<br/>
+	public final static String ARRAYTYPE_INT = &quot;[I&quot;;<br/>
+	public final static String ARRAYTYPE_LONG = &quot;[J&quot;;<br/>
+	public final static String ARRAYTYPE_CHAR = &quot;[C&quot;;<br/>
+	public final static String ARRAYTYPE_BYTE = &quot;[B&quot;;<br/>
+	public final static String ARRAYTYPE_FLOAT = &quot;[F&quot;;<br/>
+	public final static String ARRAYTYPE_DOUBLE = &quot;[D&quot;;<br/>
+	public final static String ARRAYTYPE_BOOLEAN = &quot;[Z&quot;;<br/>
+	public final static String ARRAYTYPE_SHORT = &quot;[S&quot;;<br/>
+	public final static String TYPE_STRING = &quot;java.lang.String&quot;;<br/>
+<br/>
+	public final static String TYPE_INT = &quot;int&quot;;<br/>
+	public final static String TYPE_LONG = &quot;long&quot;;<br/>
+	public final static String TYPE_BYTE = &quot;byte&quot;;<br/>
+	public final static String TYPE_BOOLEAN = &quot;boolean&quot;;<br/>
+	public final static String TYPE_SHORT = &quot;short&quot;;<br/>
+	public final static String TYPE_CHAR = &quot;char&quot;;<br/>
+	public final static String TYPE_FLOAT = &quot;float&quot;;<br/>
+	public final static String TYPE_DOUBLE = &quot;double&quot;;<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p>Test:</p><br/>
+<p>实体类:</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_3_4177719"  code_snippet_id="1872531" snippet_file_name="blog_20160908_3_4177719" name="code" class="java">package com.xiuye.json;<br/>
+<br/>
+import java.util.Arrays;<br/>
+<br/>
+public class JsonObjectForTest {<br/>
+<br/>
+	public JsonObjectForTest() {<br/>
+<br/>
+	}<br/>
+<br/>
+	private String name;<br/>
+	private int[] arr;<br/>
+<br/>
+	public static class Two {<br/>
+		@Override<br/>
+		public String toString() {<br/>
+			return &quot;Two [obj=&quot; + obj + &quot;, first=&quot; + first + &quot;, second=&quot;<br/>
+					+ second + &quot;]&quot;;<br/>
+		}<br/>
+<br/>
+		public String getFirst() {<br/>
+			return first;<br/>
+		}<br/>
+<br/>
+		public void setFirst(String first) {<br/>
+			this.first = first;<br/>
+		}<br/>
+<br/>
+		public String getSecond() {<br/>
+			return second;<br/>
+		}<br/>
+<br/>
+		public void setSecond(String second) {<br/>
+			this.second = second;<br/>
+		}<br/>
+<br/>
+		private Two obj;<br/>
+		<br/>
+		<br/>
+		public Two getObj() {<br/>
+			return obj;<br/>
+		}<br/>
+<br/>
+		public void setObj(Two obj) {<br/>
+			this.obj = obj;<br/>
+		}<br/>
+<br/>
+		private String first;<br/>
+		private String second;<br/>
+	}<br/>
+<br/>
+	private String []ss;<br/>
+	<br/>
+	private Two obj;<br/>
+<br/>
+	public String getName() {<br/>
+		return name;<br/>
+	}<br/>
+<br/>
+	public void setName(String name) {<br/>
+		this.name = name;<br/>
+	}<br/>
+<br/>
+	public int[] getArr() {<br/>
+		return arr;<br/>
+	}<br/>
+<br/>
+	public void setArr(int[] arr) {<br/>
+		this.arr = arr;<br/>
+	}<br/>
+<br/>
+	public Two getObj() {<br/>
+		return obj;<br/>
+	}<br/>
+<br/>
+	public void setObj(Two obj) {<br/>
+		this.obj = obj;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String toString() {<br/>
+		return &quot;JsonObjectForTest [name=&quot; + name + &quot;, arr=&quot;<br/>
+				+ Arrays.toString(arr) + &quot;, ss=&quot; + Arrays.toString(ss)<br/>
+				+ &quot;, obj=&quot; + obj + &quot;]&quot;;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+json文件：<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_4_5115810"  code_snippet_id="1872531" snippet_file_name="blog_20160908_4_5115810" name="code" class="html">{<br/>
+name:&quot;xiuye&quot;,<br/>
+<br/>
+obj:<br/>
+	{<br/>
+		first:&quot;123456&quot;,<br/>
+		second:&quot;jjjjjj&quot;,<br/>
+		obj:<br/>
+		{<br/>
+			first:&quot;123456&quot;,<br/>
+			second:&quot;jjjjjj&quot;<br/>
+		}<br/>
+	},<br/>
+arr:<br/>
+	[<br/>
+	1,2,3,4,5,6,7,7,8,9<br/>
+	],<br/>
+ss:<br/>
+	[<br/>
+	&quot;kufun&quot;,<br/>
+	&quot;中国&quot;,<br/>
+	&#39;无尽&#39;<br/>
+	]<br/>
+	<br/>
+}</pre><br><br/>
+测试代码:<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_5_8321393"  code_snippet_id="1872531" snippet_file_name="blog_20160908_5_8321393" name="code" class="java">package com.xiuye.json;<br/>
+<br/>
+import java.io.BufferedReader;<br/>
+import java.io.FileReader;<br/>
+<br/>
+public class MyJsonTest {<br/>
+<br/>
+	public MyJsonTest() {<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		try (BufferedReader br = new BufferedReader(new FileReader(&quot;demo.json&quot;));) {<br/>
+			String all = &quot;&quot;;<br/>
+			String s = &quot;&quot;;<br/>
+			while ((s = br.readLine()) != null) {<br/>
+<br/>
+				all += s;<br/>
+<br/>
+			}<br/>
+			<br/>
+			ObjectParser op = new ObjectParser();<br/>
+			JsonObjectForTest test = op.fromJsonToObject(all, JsonObjectForTest.class);<br/>
+			System.out.println(test);<br/>
+			<br/>
+		}<br/>
+		catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+输出:<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_6_4275995"  code_snippet_id="1872531" snippet_file_name="blog_20160908_6_4275995" name="code" class="java">JsonObjectForTest [name=xiuye, arr=[1, 2, 3, 4, 5, 6, 7, 7, 8, 9], ss=[kufun, 中国, 无尽], obj=Two [obj=Two [obj=null, first=123456, second=jjjjjj], first=123456, second=jjjjjj]]<br/>
+</pre><br><br/>
+<p>json文件：</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_7_1155107"  code_snippet_id="1872531" snippet_file_name="blog_20160908_7_1155107" name="code" class="java">{<br/>
+name:&quot;xiu ye&quot;,<br/>
+<br/>
+obj:<br/>
+	{<br/>
+		first:&quot;123456&quot;,<br/>
+		second:&quot;jjjjjj&quot;,<br/>
+		obj:<br/>
+		{<br/>
+			first:&quot;123456&quot;,<br/>
+			second:&quot;jjjjjj&quot;<br/>
+		}<br/>
+	},<br/>
+arr:<br/>
+	[<br/>
+	1,2,3,4,5,6,7,7,8,9<br/>
+	],<br/>
+ss:<br/>
+	[<br/>
+	&quot;kufun&quot;,<br/>
+	&quot;中国&quot;,<br/>
+	&#39;无尽&#39;<br/>
+	],<br/>
+objs:<br/>
+	[<br/>
+		<br/>
+		{<br/>
+			first:&quot;66&quot;,<br/>
+			second:&quot;yy&quot;,<br/>
+			obj:<br/>
+			{<br/>
+				first:&quot;88&quot;,<br/>
+				second:&quot;99&quot;<br/>
+			}<br/>
+		},<br/>
+		<br/>
+		{<br/>
+			first:&quot;99&quot;,<br/>
+			second:&quot;pp&quot;,<br/>
+			obj:<br/>
+			{<br/>
+				first:&quot;11&quot;,<br/>
+				second:&quot;xxx&quot;<br/>
+			}<br/>
+		}<br/>
+	]<br/>
+}</pre><br><br/>
+测试代码:<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_8_4601453"  code_snippet_id="1872531" snippet_file_name="blog_20160908_8_4601453" name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+<br/>
+import java.io.BufferedReader;<br/>
+import java.io.FileReader;<br/>
+import java.lang.reflect.Array;<br/>
+import java.lang.reflect.Field;<br/>
+<br/>
+import com.xiuye.json.ObjectParser;<br/>
+import com.xiuye.test.JsonObjectForTest.Two;<br/>
+<br/>
+public class MyJsonTest {<br/>
+<br/>
+	public MyJsonTest() {<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {<br/>
+<br/>
+		<br/>
+		<br/>
+		try (BufferedReader br = new BufferedReader(new FileReader(&quot;demo.json&quot;));) {<br/>
+			String all = &quot;&quot;;<br/>
+			String s = &quot;&quot;;<br/>
+			while ((s = br.readLine()) != null) {<br/>
+<br/>
+				all += s;<br/>
+<br/>
+			}<br/>
+			long start = System.currentTimeMillis();<br/>
+			ObjectParser op = new ObjectParser();<br/>
+			JsonObjectForTest test = op.fromJsonToObject(all, JsonObjectForTest.class);<br/>
+			long end = System.currentTimeMillis();<br/>
+			System.out.println(&quot;cost time := &quot; + (end-start));<br/>
+			System.out.println(test);<br/>
+			<br/>
+		//	System.out.println(Class.forName(&quot;com.xiuye.test.JsonObjectForTest$Two&quot;).newInstance());<br/>
+			/*int []arr = new int[10]; <br/>
+			System.out.println(arr.getClass().getDeclaredFields()[0]);*/<br/>
+			<br/>
+		}<br/>
+		catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+输出:<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1872531" snippet_file_name="blog_20160908_9_1743752"  code_snippet_id="1872531" snippet_file_name="blog_20160908_9_1743752" name="code" class="java">cost time := 13<br/>
+JsonObjectForTest [name=xiuye, arr=[1, 2, 3, 4, 5, 6, 7, 7, 8, 9], objs=[Two [obj=Two [obj=null, first=88, second=99], first=66, second=yy], Two [obj=Two [obj=null, first=11, second=xxx], first=99, second=pp]], ss=[kufun, 中国, 无尽], obj=Two [obj=null, first=123456, second=jjjjjj]]<br/>
+</pre><br><br/>
+<br><br/>
+<p></p><br/>
+<p></p><br/>
+   <br/>
+</div>

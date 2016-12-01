@@ -1,0 +1,22 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        try __attribute__((weak))            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1608997" snippet_file_name="blog_20160313_1_349639"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+<br/>
+using namespace std;<br/>
+void __attribute__((weak)) f();<br/>
+int main(){<br/>
+	if(f)<br/>
+		cout &lt;&lt; &quot;OK1&quot; &lt;&lt; endl;<br/>
+       f();<br/>
+	return 0;       <br/>
+}<br/>
+<br/>
+</pre><pre code_snippet_id="1608997" snippet_file_name="blog_20160313_2_9204586"  name="code" class="cpp">D:\programming\C++&gt;g++ __attribute__.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

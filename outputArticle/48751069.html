@@ -1,0 +1,151 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        全排序 java实现            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.algorithm;<br/>
+<br/>
+public class Perm {<br/>
+<br/>
+	//全排序，k指定开始的下标，m指定数组长度，list要全排序的数组<br/>
+	public static void perm(int list[],int k,int m)<br/>
+	{<br/>
+		if(k == m)<br/>
+		{<br/>
+			for(int i=0;i&lt;m;i++)<br/>
+			{<br/>
+				System.out.print(list[i]);<br/>
+			}<br/>
+			System.out.println();<br/>
+		}<br/>
+		else<br/>
+			for(int i = k;i&lt;m ;i++)<br/>
+			{<br/>
+				int tmp = list[k];<br/>
+				list[k] = list[i];<br/>
+				list[i] = tmp;<br/>
+				perm(list,k+1,m);<br/>
+				tmp = list[k];<br/>
+				list[k] = list[i];<br/>
+				list[i] = tmp;<br/>
+				<br/>
+			}<br/>
+	}<br/>
+	<br/>
+	public static void perm(int list[],int k)<br/>
+	{<br/>
+		if(k == list.length)<br/>
+		{<br/>
+			for(int i=0;i&lt;list.length;i++)<br/>
+			{<br/>
+				System.out.print(list[i]);<br/>
+			}<br/>
+			System.out.println();<br/>
+		}<br/>
+		else<br/>
+			for(int i = k;i&lt;list.length ;i++)<br/>
+			{<br/>
+				int tmp = list[k];<br/>
+				list[k] = list[i];<br/>
+				list[i] = tmp;<br/>
+				perm(list,k+1);<br/>
+				tmp = list[k];<br/>
+				list[k] = list[i];<br/>
+				list[i] = tmp;<br/>
+				<br/>
+			}<br/>
+	}<br/>
+	<br/>
+	<br/>
+	public static&lt;T&gt;void swap(T m,T n)//失败交换函数<br/>
+	{<br/>
+		T tmp = m;<br/>
+		m = n;<br/>
+		n = tmp;<br/>
+		//System.out.println(m+&quot;:&quot;+n);<br/>
+	}<br/>
+	//引用本质是值传递，传递实参，要拷贝副本，即形参，交换的栈空间地址<br/>
+	//没有对堆内数据进行更改所以一定要注意。仅仅传的是拷贝的副本引用。<br/>
+	public static void swap(MyInteger a,MyInteger b)<br/>
+	{<br/>
+		int tmp = a.getValue();<br/>
+		a.setValue(b.getValue());<br/>
+		b.setValue(tmp);<br/>
+	}<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+//		int a = 10;<br/>
+//		int b = 99;<br/>
+//		System.out.println(a+&quot;:&quot;+b);<br/>
+//		<br/>
+//		swap(a,b);<br/>
+//		<br/>
+//		System.out.println(a+&quot;:&quot;+b);<br/>
+//		Integer c = new Integer(10);<br/>
+//		Integer d = new Integer(99);<br/>
+//		System.out.println(c+&quot;:&quot;+d);<br/>
+//		<br/>
+//		swap(c,d);<br/>
+//		<br/>
+//		System.out.println(c+&quot;:&quot;+d);<br/>
+//<br/>
+//		A1 e = new A1();<br/>
+//		A2 f = new A2();<br/>
+//		swap(e,f);<br/>
+//		System.out.println(e+&quot;:&quot;+f);<br/>
+		MyInteger a1 = new MyInteger(11);<br/>
+		MyInteger a2 = new MyInteger(99);<br/>
+		System.out.println(a1+&quot;:&quot;+a2);<br/>
+		<br/>
+		swap(a1,a2);<br/>
+		System.out.println(a1+&quot;:&quot;+a2);<br/>
+		int []list = new int[10];<br/>
+		for(int i=0;i&lt;10;i++)<br/>
+		{<br/>
+			list[i] = i;<br/>
+		}<br/>
+		perm(list,8,10);<br/>
+		perm(list,8);<br/>
+	}<br/>
+<br/>
+}<br/>
+<br/>
+class A1<br/>
+{<br/>
+	public String toString()<br/>
+	{<br/>
+		return &quot;A1&quot;;<br/>
+	}<br/>
+}<br/>
+class A2 <br/>
+{<br/>
+	public String toString()<br/>
+	{<br/>
+		return &quot;A2&quot;;<br/>
+	}<br/>
+<br/>
+}<br/>
+class MyInteger<br/>
+{<br/>
+	private int x;<br/>
+	public MyInteger(int n)<br/>
+	{<br/>
+		x = n;<br/>
+	}<br/>
+	public int getValue()<br/>
+	{<br/>
+		return x;<br/>
+	}<br/>
+	public String toString()<br/>
+	{<br/>
+		return &quot;&quot;+x;<br/>
+	}<br/>
+	public void setValue(int x)<br/>
+	{<br/>
+		this.x = x;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

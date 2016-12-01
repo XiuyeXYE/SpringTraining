@@ -1,0 +1,455 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        objective-c 类            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1633593" snippet_file_name="blog_20160403_1_1951644"  code_snippet_id="1633593" snippet_file_name="blog_20160403_1_1951644" name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+<br/>
+@interface Boy:NSObject{<br/>
+    NSString *name;<br/>
+    int age;<br/>
+}<br/>
+-(void)say;<br/>
+@end<br/>
+@implementation Boy<br/>
+-(void)say{<br/>
+    NSLog(@&quot;I&#39;m %@,I am %d years old!&quot;,name,age);<br/>
+}<br/>
+<br/>
+@end<br/>
+<br/>
+int main (int argc, const char * argv[])<br/>
+{<br/>
+   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];<br/>
+        BOOL b = YES;<br/>
+        NSString *str = @&quot;wuming&quot;;<br/>
+        NSLog(@&quot;%@&quot;,str);<br/>
+        Boy *boy = [[Boy alloc] init];<br/>
+        [boy say];<br/>
+   [pool drain];<br/>
+   return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1633593" snippet_file_name="blog_20160403_2_2573308"  code_snippet_id="1633593" snippet_file_name="blog_20160403_2_2573308" name="code" class="objc">sh-4.3$ gcc `gnustep-config --objc-flags` -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lobjc *.m -o main                                                                           <br/>
+main.m: In function &#39;main&#39;:                                                                                                                                                                   <br/>
+main.m:19:14: warning: unused variable &#39;b&#39; [-Wunused-variable]                                                                                                                                <br/>
+         BOOL b = YES;                                                                                                                                                                        <br/>
+              ^                                                                                                                                                                               <br/>
+sh-4.3$ main                                                                                                                                                                                  <br/>
+2016-04-03 13:48:34.475 main[191] wuming                                                                                                                                                      <br/>
+2016-04-03 13:48:34.475 main[191] I&#39;m (null),I am 0 years old!</pre><pre code_snippet_id="1633593" snippet_file_name="blog_20160403_3_8320192"  name="code" class="objc">main: main.m /usr/GNUstep/System/Library/Headers/Foundation/Foundation.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/GSVersionMacros.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/GSConfig.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/FoundationErrors.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSObject.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSObjCRuntime.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/GSBlocks.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/GSObjCRuntime.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSZone.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/GNUstep.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDate.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSObject+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDebug.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSDebug+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSProcessInfo.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSProcessInfo+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSAffineTransform.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSGeometry.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSString.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSRange.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSString+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSMutableString+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSArchiver.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCoder.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSArray.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSEnumerator.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSArray+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSAttributedString.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDictionary.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSAttributedString+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSAutoreleasePool.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSBundle.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSBundle+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSByteOrder.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCache.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCalendar.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCalendarDate.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSCalendarDate+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCharacterSet.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSClassDescription.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSException.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSComparisonPredicate.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSExpression.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPredicate.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSSet.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSCompoundPredicate.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSConnection.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSTimer.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSRunLoop.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSMapTable.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPointerFunctions.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSData.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSSerialization.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSData+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDateFormatter.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSFormatter.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDecimalNumber.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDecimal.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSValue.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSNumber+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDistantObject.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSProxy.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDistributedLock.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSDistributedNotificationCenter.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSLock.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSLock+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSNotification.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSError.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSFileHandle.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSFileHandle+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSFileManager.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSGarbageCollector.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSHashTable.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSHost.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSHTTPCookie.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSHTTPCookieStorage.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSIndexPath.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSIndexSet.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSInvocation.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSMethodSignature.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSInvocationOperation.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSOperation.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSJSONSerialization.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSKeyedArchiver.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPropertyList.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSKeyValueCoding.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSKeyValueObserving.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSLocale.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSMetadata.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSNotificationQueue.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSNetServices.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSNetServices+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSNull.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSNumberFormatter.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPathUtilities.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPointerArray.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPortCoder.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPortMessage.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPort.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSPortNameServer.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSProtocolChecker.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSRegularExpression.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSScanner.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSScriptWhoseTests.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSSortDescriptor.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSSpellServer.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSStream.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSStream+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSTask.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSTask+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSThread.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSThread+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSTimeZone.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSUndoManager.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLAuthenticationChallenge.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLCache.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLConnection.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLCredential.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLCredentialStorage.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLDownload.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLError.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURL.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLHandle.h \<br/>
+ /usr/GNUstep/System/Library/Headers/GNUstepBase/NSURL+GNUstepBase.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLProtectionSpace.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLProtocol.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLRequest.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSURLResponse.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSUserDefaults.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSValueTransformer.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLDocument.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLNode.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLNodeOptions.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLDTD.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLDTDNode.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLElement.h \<br/>
+ /usr/GNUstep/System/Library/Headers/Foundation/NSXMLParser.h Employee.h<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/Foundation.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/GSVersionMacros.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/GSConfig.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/FoundationErrors.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSObject.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSObjCRuntime.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/GSBlocks.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/GSObjCRuntime.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSZone.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/GNUstep.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDate.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSObject+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDebug.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSDebug+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSProcessInfo.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSProcessInfo+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSAffineTransform.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSGeometry.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSString.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSRange.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSString+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSMutableString+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSArchiver.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCoder.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSArray.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSEnumerator.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSArray+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSAttributedString.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDictionary.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSAttributedString+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSAutoreleasePool.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSBundle.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSBundle+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSByteOrder.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCache.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCalendar.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCalendarDate.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSCalendarDate+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCharacterSet.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSClassDescription.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSException.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSComparisonPredicate.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSExpression.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPredicate.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSSet.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSCompoundPredicate.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSConnection.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSTimer.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSRunLoop.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSMapTable.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPointerFunctions.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSData.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSSerialization.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSData+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDateFormatter.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSFormatter.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDecimalNumber.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDecimal.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSValue.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSNumber+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDistantObject.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSProxy.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDistributedLock.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSDistributedNotificationCenter.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSLock.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSLock+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSNotification.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSError.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSFileHandle.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSFileHandle+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSFileManager.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSGarbageCollector.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSHashTable.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSHost.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSHTTPCookie.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSHTTPCookieStorage.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSIndexPath.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSIndexSet.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSInvocation.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSMethodSignature.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSInvocationOperation.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSOperation.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSJSONSerialization.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSKeyedArchiver.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPropertyList.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSKeyValueCoding.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSKeyValueObserving.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSLocale.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSMetadata.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSNotificationQueue.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSNetServices.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSNetServices+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSNull.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSNumberFormatter.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPathUtilities.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPointerArray.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPortCoder.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPortMessage.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPort.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSPortNameServer.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSProtocolChecker.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSRegularExpression.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSScanner.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSScriptWhoseTests.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSSortDescriptor.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSSpellServer.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSStream.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSStream+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSTask.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSTask+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSThread.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSThread+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSTimeZone.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSUndoManager.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLAuthenticationChallenge.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLCache.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLConnection.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLCredential.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLCredentialStorage.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLDownload.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLError.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURL.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLHandle.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/GNUstepBase/NSURL+GNUstepBase.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLProtectionSpace.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLProtocol.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLRequest.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSURLResponse.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSUserDefaults.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSValueTransformer.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLDocument.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLNode.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLNodeOptions.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLDTD.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLDTDNode.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLElement.h:<br/>
+<br/>
+/usr/GNUstep/System/Library/Headers/Foundation/NSXMLParser.h:<br/>
+<br/>
+Employee.h:<br/>
+</pre><br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

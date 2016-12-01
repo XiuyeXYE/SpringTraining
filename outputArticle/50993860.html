@@ -1,0 +1,52 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        递归 example ruler            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1625826" snippet_file_name="blog_20160327_1_1593076"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+const int len = 66;<br/>
+const int divs = 6;<br/>
+void subdivide(char ar[],int low,int high,int level);<br/>
+int main(){<br/>
+	char ruler[len];<br/>
+	int i;<br/>
+	for(i=0;i&lt;len-2;i++){<br/>
+		ruler[i] = &#39; &#39;;<br/>
+	}<br/>
+	ruler[len - 1] = &#39;\0&#39;;<br/>
+	int max = len-2;<br/>
+	int min = 0;<br/>
+	ruler[min] = ruler[max] = &#39; &#39;;<br/>
+	cout &lt;&lt; ruler &lt;&lt; endl;<br/>
+	for(i=1;i&lt;=divs;i++){<br/>
+		subdivide(ruler,min,max,i);<br/>
+		cout &lt;&lt; ruler &lt;&lt; endl;<br/>
+		for(int j = 1;j &lt; len-2;j++){<br/>
+			ruler[j] = &#39; &#39;;<br/>
+<br/>
+		}<br/>
+	}<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+void subdivide(char ar[],int low,int high,int level){<br/>
+	if(level == 0)<br/>
+		return;<br/>
+	int mid = (high + low) / 2;<br/>
+	ar[mid] = &#39;|&#39;;<br/>
+	subdivide(ar,low,mid,level-1);<br/>
+	subdivide(ar,mid,high,level-1);<br/>
+}<br/>
+</pre><pre code_snippet_id="1625826" snippet_file_name="blog_20160327_2_3720429"  name="code" class="cpp">D:\programming\C++&gt;g++ ruler.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+<br/>
+                                |<br/>
+                |               |               |<br/>
+        |       |       |       |       |       |       |<br/>
+    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |<br/>
+  | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |<br/>
+ |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

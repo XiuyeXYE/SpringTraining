@@ -1,0 +1,300 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        URLEncoder原码            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">/*<br/>
+ * Copyright (c) 1995, 2013, Oracle and/or its affiliates. All rights reserved.<br/>
+ * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ *<br/>
+ */<br/>
+<br/>
+package java.net;<br/>
+<br/>
+import java.io.ByteArrayOutputStream;<br/>
+import java.io.BufferedWriter;<br/>
+import java.io.OutputStreamWriter;<br/>
+import java.io.IOException;<br/>
+import java.io.UnsupportedEncodingException;<br/>
+import java.io.CharArrayWriter;<br/>
+import java.nio.charset.Charset;<br/>
+import java.nio.charset.IllegalCharsetNameException;<br/>
+import java.nio.charset.UnsupportedCharsetException ;<br/>
+import java.util.BitSet;<br/>
+import java.security.AccessController;<br/>
+import java.security.PrivilegedAction;<br/>
+import sun.security.action.GetBooleanAction;<br/>
+import sun.security.action.GetPropertyAction;<br/>
+<br/>
+/**<br/>
+ * Utility class for HTML form encoding. This class contains static methods<br/>
+ * for converting a String to the &lt;CODE&gt;application/x-www-form-urlencoded&lt;/CODE&gt; MIME<br/>
+ * format. For more information about HTML form encoding, consult the HTML<br/>
+ * &lt;A HREF=&quot;http://www.w3.org/TR/html4/&quot;&gt;specification&lt;/A&gt;.<br/>
+ *<br/>
+ * &lt;p&gt;<br/>
+ * When encoding a String, the following rules apply:<br/>
+ *<br/>
+ * &lt;ul&gt;<br/>
+ * &lt;li&gt;The alphanumeric characters &quot;{@code a}&quot; through<br/>
+ *     &quot;{@code z}&quot;, &quot;{@code A}&quot; through<br/>
+ *     &quot;{@code Z}&quot; and &quot;{@code 0}&quot;<br/>
+ *     through &quot;{@code 9}&quot; remain the same.<br/>
+ * &lt;li&gt;The special characters &quot;{@code .}&quot;,<br/>
+ *     &quot;{@code -}&quot;, &quot;{@code *}&quot;, and<br/>
+ *     &quot;{@code _}&quot; remain the same.<br/>
+ * &lt;li&gt;The space character &quot; &#160; &quot; is<br/>
+ *     converted into a plus sign &quot;{@code +}&quot;.<br/>
+ * &lt;li&gt;All other characters are unsafe and are first converted into<br/>
+ *     one or more bytes using some encoding scheme. Then each byte is<br/>
+ *     represented by the 3-character string<br/>
+ *     &quot;&lt;i&gt;{@code %xy}&lt;/i&gt;&quot;, where &lt;i&gt;xy&lt;/i&gt; is the<br/>
+ *     two-digit hexadecimal representation of the byte.<br/>
+ *     The recommended encoding scheme to use is UTF-8. However,<br/>
+ *     for compatibility reasons, if an encoding is not specified,<br/>
+ *     then the default encoding of the platform is used.<br/>
+ * &lt;/ul&gt;<br/>
+ *<br/>
+ * &lt;p&gt;<br/>
+ * For example using UTF-8 as the encoding scheme the string &quot;The<br/>
+ * string &#252;@foo-bar&quot; would get converted to<br/>
+ * &quot;The+string+%C3%BC%40foo-bar&quot; because in UTF-8 the character<br/>
+ * &#252; is encoded as two bytes C3 (hex) and BC (hex), and the<br/>
+ * character @ is encoded as one byte 40 (hex).<br/>
+ *<br/>
+ * @author  Herb Jellinek<br/>
+ * @since   JDK1.0<br/>
+ */<br/>
+public class URLEncoder {<br/>
+    static BitSet dontNeedEncoding;<br/>
+    static final int caseDiff = (&#39;a&#39; - &#39;A&#39;);<br/>
+    static String dfltEncName = null;<br/>
+<br/>
+    static {<br/>
+<br/>
+        /* The list of characters that are not encoded has been<br/>
+         * determined as follows:<br/>
+         *<br/>
+         * RFC 2396 states:<br/>
+         * -----<br/>
+         * Data characters that are allowed in a URI but do not have a<br/>
+         * reserved purpose are called unreserved.  These include upper<br/>
+         * and lower case letters, decimal digits, and a limited set of<br/>
+         * punctuation marks and symbols.<br/>
+         *<br/>
+         * unreserved  = alphanum | mark<br/>
+         *<br/>
+         * mark        = &quot;-&quot; | &quot;_&quot; | &quot;.&quot; | &quot;!&quot; | &quot;~&quot; | &quot;*&quot; | &quot;&#39;&quot; | &quot;(&quot; | &quot;)&quot;<br/>
+         *<br/>
+         * Unreserved characters can be escaped without changing the<br/>
+         * semantics of the URI, but this should not be done unless the<br/>
+         * URI is being used in a context that does not allow the<br/>
+         * unescaped character to appear.<br/>
+         * -----<br/>
+         *<br/>
+         * It appears that both Netscape and Internet Explorer escape<br/>
+         * all special characters from this list with the exception<br/>
+         * of &quot;-&quot;, &quot;_&quot;, &quot;.&quot;, &quot;*&quot;. While it is not clear why they are<br/>
+         * escaping the other characters, perhaps it is safest to<br/>
+         * assume that there might be contexts in which the others<br/>
+         * are unsafe if not escaped. Therefore, we will use the same<br/>
+         * list. It is also noteworthy that this is consistent with<br/>
+         * O&#39;Reilly&#39;s &quot;HTML: The Definitive Guide&quot; (page 164).<br/>
+         *<br/>
+         * As a last note, Intenet Explorer does not encode the &quot;@&quot;<br/>
+         * character which is clearly not unreserved according to the<br/>
+         * RFC. We are being consistent with the RFC in this matter,<br/>
+         * as is Netscape.<br/>
+         *<br/>
+         */<br/>
+<br/>
+        dontNeedEncoding = new BitSet(256);<br/>
+        int i;<br/>
+        for (i = &#39;a&#39;; i &lt;= &#39;z&#39;; i++) {<br/>
+            dontNeedEncoding.set(i);<br/>
+        }<br/>
+        for (i = &#39;A&#39;; i &lt;= &#39;Z&#39;; i++) {<br/>
+            dontNeedEncoding.set(i);<br/>
+        }<br/>
+        for (i = &#39;0&#39;; i &lt;= &#39;9&#39;; i++) {<br/>
+            dontNeedEncoding.set(i);<br/>
+        }<br/>
+        dontNeedEncoding.set(&#39; &#39;); /* encoding a space to a + is done<br/>
+                                    * in the encode() method */<br/>
+        dontNeedEncoding.set(&#39;-&#39;);<br/>
+        dontNeedEncoding.set(&#39;_&#39;);<br/>
+        dontNeedEncoding.set(&#39;.&#39;);<br/>
+        dontNeedEncoding.set(&#39;*&#39;);<br/>
+<br/>
+        dfltEncName = AccessController.doPrivileged(<br/>
+            new GetPropertyAction(&quot;file.encoding&quot;)<br/>
+        );<br/>
+    }<br/>
+<br/>
+    /**<br/>
+     * You can&#39;t call the constructor.<br/>
+     */<br/>
+    private URLEncoder() { }<br/>
+<br/>
+    /**<br/>
+     * Translates a string into {@code x-www-form-urlencoded}<br/>
+     * format. This method uses the platform&#39;s default encoding<br/>
+     * as the encoding scheme to obtain the bytes for unsafe characters.<br/>
+     *<br/>
+     * @param   s   {@code String} to be translated.<br/>
+     * @deprecated The resulting string may vary depending on the platform&#39;s<br/>
+     *             default encoding. Instead, use the encode(String,String)<br/>
+     *             method to specify the encoding.<br/>
+     * @return  the translated {@code String}.<br/>
+     */<br/>
+    @Deprecated<br/>
+    public static String encode(String s) {<br/>
+<br/>
+        String str = null;<br/>
+<br/>
+        try {<br/>
+            str = encode(s, dfltEncName);<br/>
+        } catch (UnsupportedEncodingException e) {<br/>
+            // The system should always have the platform default<br/>
+        }<br/>
+<br/>
+        return str;<br/>
+    }<br/>
+<br/>
+    /**<br/>
+     * Translates a string into {@code application/x-www-form-urlencoded}<br/>
+     * format using a specific encoding scheme. This method uses the<br/>
+     * supplied encoding scheme to obtain the bytes for unsafe<br/>
+     * characters.<br/>
+     * &lt;p&gt;<br/>
+     * &lt;em&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;a href=<br/>
+     * &quot;http://www.w3.org/TR/html40/appendix/notes.html#non-ascii-chars&quot;&gt;<br/>
+     * World Wide Web Consortium Recommendation&lt;/a&gt; states that<br/>
+     * UTF-8 should be used. Not doing so may introduce<br/>
+     * incompatibilities.&lt;/em&gt;<br/>
+     *<br/>
+     * @param   s   {@code String} to be translated.<br/>
+     * @param   enc   The name of a supported<br/>
+     *    &lt;a href=&quot;../lang/package-summary.html#charenc&quot;&gt;character<br/>
+     *    encoding&lt;/a&gt;.<br/>
+     * @return  the translated {@code String}.<br/>
+     * @exception  UnsupportedEncodingException<br/>
+     *             If the named encoding is not supported<br/>
+     * @see URLDecoder#decode(java.lang.String, java.lang.String)<br/>
+     * @since 1.4<br/>
+     */<br/>
+    public static String encode(String s, String enc)<br/>
+        throws UnsupportedEncodingException {<br/>
+<br/>
+        boolean needToChange = false;<br/>
+        StringBuffer out = new StringBuffer(s.length());<br/>
+        Charset charset;<br/>
+        CharArrayWriter charArrayWriter = new CharArrayWriter();<br/>
+<br/>
+        if (enc == null)<br/>
+            throw new NullPointerException(&quot;charsetName&quot;);<br/>
+<br/>
+        try {<br/>
+            charset = Charset.forName(enc);<br/>
+        } catch (IllegalCharsetNameException e) {<br/>
+            throw new UnsupportedEncodingException(enc);<br/>
+        } catch (UnsupportedCharsetException e) {<br/>
+            throw new UnsupportedEncodingException(enc);<br/>
+        }<br/>
+<br/>
+        for (int i = 0; i &lt; s.length();) {<br/>
+            int c = (int) s.charAt(i);<br/>
+            //System.out.println(&quot;Examining character: &quot; + c);<br/>
+            if (dontNeedEncoding.get(c)) {<br/>
+                if (c == &#39; &#39;) {<br/>
+                    c = &#39;+&#39;;<br/>
+                    needToChange = true;<br/>
+                }<br/>
+                //System.out.println(&quot;Storing: &quot; + c);<br/>
+                out.append((char)c);<br/>
+                i++;<br/>
+            } else {<br/>
+                // convert to external encoding before hex conversion<br/>
+                do {<br/>
+                    charArrayWriter.write(c);<br/>
+                    /*<br/>
+                     * If this character represents the start of a Unicode<br/>
+                     * surrogate pair, then pass in two characters. It&#39;s not<br/>
+                     * clear what should be done if a bytes reserved in the<br/>
+                     * surrogate pairs range occurs outside of a legal<br/>
+                     * surrogate pair. For now, just treat it as if it were<br/>
+                     * any other character.<br/>
+                     */<br/>
+                    if (c &gt;= 0xD800 &amp;&amp; c &lt;= 0xDBFF) {<br/>
+                        /*<br/>
+                          System.out.println(Integer.toHexString(c)<br/>
+                          + &quot; is high surrogate&quot;);<br/>
+                        */<br/>
+                        if ( (i+1) &lt; s.length()) {<br/>
+                            int d = (int) s.charAt(i+1);<br/>
+                            /*<br/>
+                              System.out.println(&quot;\tExamining &quot;<br/>
+                              + Integer.toHexString(d));<br/>
+                            */<br/>
+                            if (d &gt;= 0xDC00 &amp;&amp; d &lt;= 0xDFFF) {<br/>
+                                /*<br/>
+                                  System.out.println(&quot;\t&quot;<br/>
+                                  + Integer.toHexString(d)<br/>
+                                  + &quot; is low surrogate&quot;);<br/>
+                                */<br/>
+                                charArrayWriter.write(d);<br/>
+                                i++;<br/>
+                            }<br/>
+                        }<br/>
+                    }<br/>
+                    i++;<br/>
+                } while (i &lt; s.length() &amp;&amp; !dontNeedEncoding.get((c = (int) s.charAt(i))));<br/>
+<br/>
+                charArrayWriter.flush();<br/>
+                String str = new String(charArrayWriter.toCharArray());<br/>
+                byte[] ba = str.getBytes(charset);<br/>
+                for (int j = 0; j &lt; ba.length; j++) {<br/>
+                    out.append(&#39;%&#39;);<br/>
+                    char ch = Character.forDigit((ba[j] &gt;&gt; 4) &amp; 0xF, 16);<br/>
+                    // converting to use uppercase letter as part of<br/>
+                    // the hex value if ch is a letter.<br/>
+                    if (Character.isLetter(ch)) {<br/>
+                        ch -= caseDiff;<br/>
+                    }<br/>
+                    out.append(ch);<br/>
+                    ch = Character.forDigit(ba[j] &amp; 0xF, 16);<br/>
+                    if (Character.isLetter(ch)) {<br/>
+                        ch -= caseDiff;<br/>
+                    }<br/>
+                    out.append(ch);<br/>
+                }<br/>
+                charArrayWriter.reset();<br/>
+                needToChange = true;<br/>
+            }<br/>
+        }<br/>
+<br/>
+        return (needToChange? out.toString() : s);<br/>
+    }<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

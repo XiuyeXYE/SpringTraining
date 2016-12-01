@@ -1,0 +1,29 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        自适应字符环境wind32程序            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1603462" snippet_file_name="blog_20160309_1_1805042"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;tchar.h&gt;<br/>
+int WINAPI _tWinMain(<br/>
+	HINSTANCE hInstance,<br/>
+	HINSTANCE hPrevInstance,<br/>
+	LPTSTR lpCmdLine,<br/>
+	int nCmdShow<br/>
+	)<br/>
+{<br/>
+	UNREFERENCED_PARAMETER(hPrevInstance);<br/>
+	UNREFERENCED_PARAMETER(nCmdShow);<br/>
+	UNREFERENCED_PARAMETER(hInstance);<br/>
+	UNREFERENCED_PARAMETER(lpCmdLine);<br/>
+	HWND hwnd = GetDesktopWindow();<br/>
+	MessageBox(hwnd,_T(&quot;第一个应用程序&quot;),_T(&quot;例子&quot;),MB_OK);<br/>
+	return 0;<br/>
+}<br/>
+<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160309183859185?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>主要是_tWinMain , LPTSTR , _T , &lt;tchar.h&gt;<br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

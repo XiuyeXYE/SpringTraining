@@ -1,0 +1,150 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java 简单的TCP接收数据与发送数据            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.ooooo;<br/>
+<br/>
+import java.io.OutputStreamWriter;<br/>
+import java.io.PrintWriter;<br/>
+import java.net.Socket;<br/>
+import java.util.Scanner;<br/>
+<br/>
+public class Client {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		Socket socket = null;<br/>
+		try {<br/>
+			System.out.println(&quot;connecting...&quot;);<br/>
+			socket = new Socket(&quot;localhost&quot;, 8888);<br/>
+			System.out.println(&quot;connection success&quot;);<br/>
+			Scanner in = new Scanner(System.in);<br/>
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),&quot;utf-8&quot;),true);<br/>
+			String str = &quot;&quot;;<br/>
+			while(!(str = in.nextLine()).equals(&quot;q&quot;))<br/>
+			{<br/>
+				<br/>
+				pw.println(str);<br/>
+				<br/>
+				<br/>
+				<br/>
+			}<br/>
+			pw.println(&quot;bye-bye&quot;);<br/>
+			pw.close();<br/>
+			in.close();<br/>
+			<br/>
+			<br/>
+			<br/>
+		} catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		finally{<br/>
+			if(socket!=null)<br/>
+			{<br/>
+				try{<br/>
+					socket.close();<br/>
+				}<br/>
+				catch(Exception e){<br/>
+					<br/>
+				}<br/>
+			}<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre name="code" class="java"><br/>
+</pre><pre name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;package com.xiuye.ooooo;<br/>
+<br/>
+import java.io.BufferedReader;<br/>
+import java.io.IOException;<br/>
+import java.io.InputStreamReader;<br/>
+import java.net.ServerSocket;<br/>
+import java.net.Socket;<br/>
+<br/>
+public class Server {<br/>
+<br/>
+	private static class ClientHandler implements Runnable {<br/>
+<br/>
+		private Socket socket;<br/>
+<br/>
+		public ClientHandler(Socket socket) {<br/>
+			this.socket = socket;<br/>
+		}<br/>
+<br/>
+		@Override<br/>
+		public void run() {<br/>
+<br/>
+			try {<br/>
+				<br/>
+				BufferedReader  br = new BufferedReader(new InputStreamReader(socket.getInputStream(),&quot;utf-8&quot;));<br/>
+				String str = &quot;&quot;;<br/>
+				//socket.getOutputStream().close();<br/>
+				while((str = br.readLine()) != null)<br/>
+				{<br/>
+					<br/>
+					System.out.println(socket.getRemoteSocketAddress()+&quot;:&quot;+ str);<br/>
+					<br/>
+				}<br/>
+				br.close();<br/>
+			} catch (Exception e) {<br/>
+				e.printStackTrace();<br/>
+			}<br/>
+			finally{<br/>
+				System.out.println(&quot;client is over&quot;);<br/>
+				if(socket!=null)<br/>
+				{<br/>
+					try {<br/>
+						socket.close();<br/>
+					} catch (IOException e) {<br/>
+						<br/>
+						e.printStackTrace();<br/>
+					}<br/>
+				}<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		ServerSocket server = null;<br/>
+		try {<br/>
+			server = new ServerSocket(8888);<br/>
+			while (true) {<br/>
+				System.out.println(&quot;listening...&quot;);<br/>
+				<br/>
+				Socket socket = server.accept();<br/>
+				System.out.println(&quot;connected...&quot;);<br/>
+				ClientHandler handler = new ClientHandler(socket);<br/>
+				Thread t = new Thread(handler);<br/>
+				t.start();<br/>
+				<br/>
+			}<br/>
+<br/>
+		} catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		finally{<br/>
+			<br/>
+			if(server!=null)<br/>
+			{<br/>
+				try {<br/>
+					server.close();<br/>
+				} catch (IOException e) {<br/>
+					<br/>
+					e.printStackTrace();<br/>
+				}<br/>
+			}<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<img src="" alt=""><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,22 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring事务类型            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1655423" snippet_file_name="blog_20160421_1_6618602"  name="code" class="java">Spring事务类型详解：<br/>
+<br/>
+<br/>
+PROPAGATION_REQUIRED--支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择。<br/>
+<br/>
+PROPAGATION_SUPPORTS--支持当前事务，如果当前没有事务，就以非事务方式执行。<br/>
+<br/>
+PROPAGATION_MANDATORY--支持当前事务，如果当前没有事务，就抛出异常。<br/>
+<br/>
+PROPAGATION_REQUIRES_NEW--新建事务，如果当前存在事务，把当前事务挂起。<br/>
+<br/>
+PROPAGATION_NOT_SUPPORTED--以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。<br/>
+<br/>
+PROPAGATION_NEVER--以非事务方式执行，如果当前存在事务，则抛出异常。<br/>
+<br/>
+PROPAGATION_NESTED--如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则进行与PROPAGATION_REQUIRED类似的操作。</pre><br><br/>
+   <br/>
+</div>

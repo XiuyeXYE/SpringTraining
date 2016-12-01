@@ -1,0 +1,25 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        MyBatis注意事项一            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">SqlSessionFactoryBuilder builder = <br/>
+				new SqlSessionFactoryBuilder();<br/>
+		String conf = &quot;SqlMapConfig.xml&quot;;<br/>
+		<br/>
+		<br/>
+		<br/>
+		Reader reader = Resources.getResourceAsReader(conf);//在xml文件中最好不要写注释有这个方法的时候<br/>
+		<br/>
+		<br/>
+		SqlSessionFactory factory = builder.build(reader);<br/>
+		<br/>
+		<br/>
+		/*InputStream confStream = Emp.class.getClassLoader().getResourceAsStream(conf);<br/>
+		<br/>
+		SqlSessionFactory factory = builder.build(confStream);<br/>
+		System.out.println(factory);*/<br/>
+		SqlSession session = factory.openSession();<br/>
+		<br/>
+	</pre><pre name="code" class="java">Reader reader = Resources.getResourceAsReader(conf);</pre><pre name="code" class="java">在xml文件中最好不要写注释用这个方法的时候，因为在xml注释的时候有可能报异常，我看它也就是个异常</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,70 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        尝试提取c++类函数地址（1）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1605190" snippet_file_name="blog_20160310_1_3793405"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+class A{<br/>
+	public:<br/>
+	void f(){<br/>
+		cout &lt;&lt; &quot;ordinary&quot; &lt;&lt; endl;<br/>
+	}	<br/>
+	static void e(){<br/>
+		<br/>
+		cout &lt;&lt; &quot;static&quot; &lt;&lt; endl;<br/>
+		<br/>
+	}<br/>
+	int a;<br/>
+	int b;<br/>
+	static int c;<br/>
+	static const int d = 100;//could assgined<br/>
+};<br/>
+int main(){<br/>
+	A p;<br/>
+	int *a = &amp;p.a;<br/>
+	int p1 = (int)a;<br/>
+	cout &lt;&lt; &quot;memember:&quot;  &lt;&lt; p1 &lt;&lt; endl;<br/>
+	<br/>
+	int A::*p2 = &amp;A::b;<br/>
+	cout &lt;&lt; &quot;memember:&quot;  &lt;&lt; p2 &lt;&lt; endl;//1<br/>
+	<br/>
+	typedef void (A::*pf)();<br/>
+	pf f = &amp;A::f; <br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f &lt;&lt; endl; //1<br/>
+	(p.*f)();<br/>
+	typedef void (*pf1)();// <br/>
+	pf1 f1 = &amp;A::e;<br/>
+	cout &lt;&lt; &quot;static function:&quot; &lt;&lt; (int)f1 &lt;&lt; endl; <br/>
+	<br/>
+	void (*f3)();//<br/>
+	f3 = A::e;<br/>
+	f3(); <br/>
+	cout &lt;&lt; &quot;static function:&quot; &lt;&lt; (int)f3 &lt;&lt; endl;<br/>
+	void (A::*f4)();<br/>
+	f4 = &amp;A::f;<br/>
+	(p.*f4)();<br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f4 &lt;&lt; endl;<br/>
+/*<br/>
+	pf f2 = p.f;<br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f2 &lt;&lt; endl;*/<br/>
+	f4 = &amp;p.f;<br/>
+	(p.*f4)();<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1605190" snippet_file_name="blog_20160310_2_2953590"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ &quot;&amp;ClassPointer.cpp&quot;<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+memember:2686692<br/>
+memember:1<br/>
+function:1<br/>
+ordinary<br/>
+static function:4425512<br/>
+static<br/>
+static function:4425512<br/>
+ordinary<br/>
+function:1<br/>
+ordinary</pre><br><br/>
+   <br/>
+</div>

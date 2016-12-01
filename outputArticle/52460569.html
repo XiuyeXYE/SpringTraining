@@ -1,0 +1,118 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java多thread 一个runnable            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1870452" snippet_file_name="blog_20160907_1_3618771"  name="code" class="java">package com.xiuye.thread;<br/>
+<br/>
+public class CounterRunnable implements Runnable {<br/>
+<br/>
+	private int i = 0;<br/>
+<br/>
+	public CounterRunnable() {<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void run() {<br/>
+<br/>
+		i++;<br/>
+		System.out.println(Thread.currentThread().getName()<br/>
+				+ &quot; In runnable output: &quot; + i);<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1870452" snippet_file_name="blog_20160907_2_9223924"  name="code" class="java">package com.xiuye.thread;<br/>
+<br/>
+public class MultiThreads extends Thread {<br/>
+<br/>
+	public MultiThreads(Runnable target, String name) {<br/>
+		super(target, name);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(Runnable target) {<br/>
+		super(target);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(String name) {<br/>
+		super(name);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(ThreadGroup group, Runnable target, String name,<br/>
+			long stackSize) {<br/>
+		super(group, target, name, stackSize);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(ThreadGroup group, Runnable target, String name) {<br/>
+		super(group, target, name);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(ThreadGroup group, Runnable target) {<br/>
+		super(group, target);<br/>
+	}<br/>
+<br/>
+	public MultiThreads(ThreadGroup group, String name) {<br/>
+		super(group, name);<br/>
+	}<br/>
+<br/>
+	public MultiThreads() {<br/>
+	}<br/>
+<br/>
+	private int i = 0;<br/>
+<br/>
+	@Override<br/>
+	public void run() {<br/>
+		super.run();<br/>
+		i++;<br/>
+		System.out.println(&quot;In thread output: &quot; + i);<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		CounterRunnable ra = new CounterRunnable();<br/>
+		/**<br/>
+		 * 在thread中的“run”和runnable中的“run”<br/>
+		 * 是都会执行<br/>
+		 * <br/>
+		 * <br/>
+		 */<br/>
+		MultiThreads mt = new MultiThreads(ra);<br/>
+		mt.start();<br/>
+		<br/>
+		/**<br/>
+		 * 一个runnable 多个thread<br/>
+		 * 会不会出现共享数据问题？<br/>
+		 */<br/>
+		for(int j = 0;j&lt;10;j++){<br/>
+			new MultiThreads(ra).start();<br/>
+		}<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1870452" snippet_file_name="blog_20160907_3_1382733"  name="code" class="java">Thread-0 In runnable output: 2<br/>
+Thread-2 In runnable output: 3<br/>
+In thread output: 1<br/>
+Thread-1 In runnable output: 2<br/>
+In thread output: 1<br/>
+Thread-4 In runnable output: 5<br/>
+In thread output: 1<br/>
+Thread-3 In runnable output: 4<br/>
+Thread-5 In runnable output: 6<br/>
+In thread output: 1<br/>
+In thread output: 1<br/>
+Thread-6 In runnable output: 7<br/>
+In thread output: 1<br/>
+In thread output: 1<br/>
+Thread-7 In runnable output: 8<br/>
+In thread output: 1<br/>
+Thread-8 In runnable output: 9<br/>
+In thread output: 1<br/>
+Thread-9 In runnable output: 10<br/>
+In thread output: 1<br/>
+Thread-10 In runnable output: 11<br/>
+In thread output: 1<br/>
+</pre><br><br/>
+   <br/>
+</div>

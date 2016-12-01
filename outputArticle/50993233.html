@@ -1,0 +1,26 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        没有括号的sizeof，sizeof为关键字            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1625696" snippet_file_name="blog_20160327_1_6412115"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(){<br/>
+	<br/>
+	int a = 100;<br/>
+	int l = sizeof a;<br/>
+	cout &lt;&lt; l &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof(int) &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof a &lt;&lt; endl;<br/>
+	<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1625696" snippet_file_name="blog_20160327_2_4918399"  name="code" class="cpp">D:\programming\C++&gt;g++ sizeof.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+4<br/>
+4<br/>
+4</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

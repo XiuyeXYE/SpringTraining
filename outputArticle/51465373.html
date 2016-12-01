@@ -1,0 +1,183 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        QT Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691129" snippet_file_name="blog_20160521_1_3318427"  name="code" class="cpp">#ifndef MAINWINDOW_H<br/>
+#define MAINWINDOW_H<br/>
+<br/>
+#include &lt;QMainWindow&gt;<br/>
+#include&lt;QObject&gt;<br/>
+#include&lt;QString&gt;<br/>
+#include&lt;QButtonGroup&gt;<br/>
+#include&lt;QCheckBox&gt;<br/>
+namespace Ui {<br/>
+class MainWindow;<br/>
+}<br/>
+<br/>
+class MainWindow : public QMainWindow<br/>
+{<br/>
+    Q_OBJECT<br/>
+<br/>
+public:<br/>
+    explicit MainWindow(QWidget *parent = 0);<br/>
+    void paintEvent(QPaintEvent *);<br/>
+<br/>
+    ~MainWindow();<br/>
+public slots:<br/>
+    void chkChanged();<br/>
+    void nonChkChanged();<br/>
+<br/>
+private:<br/>
+    Ui::MainWindow *ui;<br/>
+    QCheckBox *exclusive[3];<br/>
+    QCheckBox *non_exclusive[3];<br/>
+    QButtonGroup *chk_group[2];<br/>
+};<br/>
+<br/>
+#endif // MAINWINDOW_H<br/>
+</pre><br><br/>
+<pre code_snippet_id="1691129" snippet_file_name="blog_20160521_2_3907072"  name="code" class="cpp">#include &quot;mainwindow.h&quot;<br/>
+#include &quot;ui_mainwindow.h&quot;<br/>
+<br/>
+MainWindow::MainWindow(QWidget *parent) :<br/>
+    QMainWindow(parent),<br/>
+    ui(new Ui::MainWindow)<br/>
+{<br/>
+    ui-&gt;setupUi(this);<br/>
+<br/>
+    QString str1[3] = {&quot;Game&quot;,&quot;Office&quot;,&quot;Develop&quot;};<br/>
+    QString str2[3] = {&quot;P&amp;Programing&quot;,&quot;Q&amp;t&quot;,&quot;O&amp;S&quot;};<br/>
+    int xpos = 30;<br/>
+    int ypos = 30;<br/>
+    chk_group[0] = new QButtonGroup(this);<br/>
+    chk_group[1] = new QButtonGroup(this);<br/>
+    for(int i=0;i&lt;3;i++){<br/>
+        exclusive[i] = new QCheckBox(str1[i],this);<br/>
+        exclusive[i]-&gt;setGeometry(xpos,ypos,100,30);<br/>
+        chk_group[0]-&gt;addButton(exclusive[i]);<br/>
+        non_exclusive[i] =  new QCheckBox(str2[i],this);<br/>
+        non_exclusive[i] -&gt;setGeometry(xpos+120,ypos,100,30);<br/>
+        chk_group[1]-&gt;addButton(non_exclusive[i]);<br/>
+        connect(exclusive[i],SIGNAL(clicked()),this,SLOT(chkChanged()));<br/>
+        connect(non_exclusive[i],SIGNAL(clicked()),this,SLOT(nonChkChanged()));<br/>
+        ypos+=40;<br/>
+    }<br/>
+    chk_group[0]-&gt;setExclusive(false);<br/>
+    chk_group[1]-&gt;setExclusive(true);<br/>
+<br/>
+<br/>
+}<br/>
+void MainWindow::paintEvent(QPaintEvent *){<br/>
+<br/>
+}<br/>
+void MainWindow::nonChkChanged(){<br/>
+    for(int i=0;i&lt;3;i++){<br/>
+        if(non_exclusive[i]-&gt;isChecked()){<br/>
+            qDebug(&quot;non_checkbox %d selected &quot;,i+1);<br/>
+        }<br/>
+<br/>
+    }<br/>
+}<br/>
+<br/>
+void MainWindow::chkChanged(){<br/>
+<br/>
+    for(int i=0;i&lt;3;i++){<br/>
+        if(exclusive[i]-&gt;isChecked()){<br/>
+            qDebug(&quot;checkbox %d selected&quot;,i+1);<br/>
+        }<br/>
+        if(exclusive[i]-&gt;checkState()){<br/>
+            qDebug(&quot;checkbox %d selected&quot;,i+1);<br/>
+        }<br/>
+    }<br/>
+<br/>
+}<br/>
+<br/>
+MainWindow::~MainWindow()<br/>
+{<br/>
+    delete ui;<br/>
+//    delete []exclusive;//不要delete否则程序出错<br/>
+//    delete []non_exclusive;<br/>
+//    delete []chk_group;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1691129" snippet_file_name="blog_20160521_3_2652553"  name="code" class="cpp">#include &quot;mainwindow.h&quot;<br/>
+#include &lt;QApplication&gt;<br/>
+<br/>
+int main(int argc, char *argv[])<br/>
+{<br/>
+    QApplication a(argc, argv);<br/>
+    MainWindow w;<br/>
+    w.show();<br/>
+<br/>
+    return a.exec();<br/>
+}<br/>
+</pre><pre code_snippet_id="1691129" snippet_file_name="blog_20160521_4_1082390"  name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;ui version=&quot;4.0&quot;&gt;<br/>
+ &lt;class&gt;MainWindow&lt;/class&gt;<br/>
+ &lt;widget class=&quot;QMainWindow&quot; name=&quot;MainWindow&quot;&gt;<br/>
+  &lt;property name=&quot;geometry&quot;&gt;<br/>
+   &lt;rect&gt;<br/>
+    &lt;x&gt;0&lt;/x&gt;<br/>
+    &lt;y&gt;0&lt;/y&gt;<br/>
+    &lt;width&gt;400&lt;/width&gt;<br/>
+    &lt;height&gt;300&lt;/height&gt;<br/>
+   &lt;/rect&gt;<br/>
+  &lt;/property&gt;<br/>
+  &lt;property name=&quot;windowTitle&quot;&gt;<br/>
+   &lt;string&gt;MainWindow&lt;/string&gt;<br/>
+  &lt;/property&gt;<br/>
+  &lt;widget class=&quot;QWidget&quot; name=&quot;centralWidget&quot;/&gt;<br/>
+  &lt;widget class=&quot;QMenuBar&quot; name=&quot;menuBar&quot;&gt;<br/>
+   &lt;property name=&quot;geometry&quot;&gt;<br/>
+    &lt;rect&gt;<br/>
+     &lt;x&gt;0&lt;/x&gt;<br/>
+     &lt;y&gt;0&lt;/y&gt;<br/>
+     &lt;width&gt;400&lt;/width&gt;<br/>
+     &lt;height&gt;23&lt;/height&gt;<br/>
+    &lt;/rect&gt;<br/>
+   &lt;/property&gt;<br/>
+  &lt;/widget&gt;<br/>
+  &lt;widget class=&quot;QToolBar&quot; name=&quot;mainToolBar&quot;&gt;<br/>
+   &lt;attribute name=&quot;toolBarArea&quot;&gt;<br/>
+    &lt;enum&gt;TopToolBarArea&lt;/enum&gt;<br/>
+   &lt;/attribute&gt;<br/>
+   &lt;attribute name=&quot;toolBarBreak&quot;&gt;<br/>
+    &lt;bool&gt;false&lt;/bool&gt;<br/>
+   &lt;/attribute&gt;<br/>
+  &lt;/widget&gt;<br/>
+  &lt;widget class=&quot;QStatusBar&quot; name=&quot;statusBar&quot;/&gt;<br/>
+ &lt;/widget&gt;<br/>
+ &lt;layoutdefault spacing=&quot;6&quot; margin=&quot;11&quot;/&gt;<br/>
+ &lt;resources/&gt;<br/>
+ &lt;connections/&gt;<br/>
+&lt;/ui&gt;<br/>
+</pre><br><br/>
+<br><br/>
+<pre code_snippet_id="1691129" snippet_file_name="blog_20160521_5_4844380"  name="code" class="cpp">#-------------------------------------------------<br/>
+#<br/>
+# Project created by QtCreator 2016-05-20T23:29:05<br/>
+#<br/>
+#-------------------------------------------------<br/>
+<br/>
+QT       += core gui<br/>
+<br/>
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets<br/>
+<br/>
+TARGET = TestControllerUI<br/>
+TEMPLATE = app<br/>
+<br/>
+<br/>
+SOURCES += main.cpp\<br/>
+        mainwindow.cpp<br/>
+<br/>
+HEADERS  += mainwindow.h<br/>
+<br/>
+FORMS    += mainwindow.ui<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160521002714877?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160521002732752?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

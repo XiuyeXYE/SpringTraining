@@ -1,0 +1,113 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        objective-c inherit            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1633961" snippet_file_name="blog_20160404_1_9988953"  name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+<br/>
+@interface Shape:NSObject<br/>
+{<br/>
+    double width;<br/>
+    double height;<br/>
+}<br/>
+<br/>
+-(id)init:(double)_w:(double)_h;<br/>
+-(double)area;<br/>
+<br/>
+@end<br/>
+</pre><pre code_snippet_id="1633961" snippet_file_name="blog_20160404_2_8941395"  name="code" class="objc">#import &quot;Shape.h&quot;<br/>
+<br/>
+@implementation Shape<br/>
+<br/>
+-(id)init:(double)_w:(double)_h{<br/>
+    self = [super init];<br/>
+    if(self){<br/>
+        self-&gt;width = _w;<br/>
+        self-&gt;height = _h;<br/>
+    }<br/>
+    return self;<br/>
+}<br/>
+-(double)area{<br/>
+<br/>
+    return width*height;<br/>
+<br/>
+}<br/>
+<br/>
+@end</pre><br><br/>
+<pre code_snippet_id="1633961" snippet_file_name="blog_20160404_3_8243283"  name="code" class="objc">#import &quot;Shape.h&quot;<br/>
+<br/>
+@interface Circle:Shape<br/>
+{<br/>
+    double r;<br/>
+}<br/>
+<br/>
+-(id)init:(double)_r;<br/>
+-(void)setR:(double)_r;<br/>
+<br/>
+@end<br/>
+</pre><br><br/>
+<pre code_snippet_id="1633961" snippet_file_name="blog_20160404_4_9181375"  name="code" class="objc">#import &quot;Circle.h&quot;<br/>
+<br/>
+@implementation Circle<br/>
+<br/>
+-(id)init:(double)_r{<br/>
+<br/>
+    self = [super init:1:1];<br/>
+    if(self){<br/>
+        self-&gt;r = _r;<br/>
+    }<br/>
+    return self;<br/>
+    <br/>
+}<br/>
+-(double)area{<br/>
+    <br/>
+    return 3.14*r*r;<br/>
+    <br/>
+}<br/>
+-(void)setR:(double)_r{<br/>
+    <br/>
+    r = _r;<br/>
+    <br/>
+}<br/>
+<br/>
+@end<br/>
+</pre><pre code_snippet_id="1633961" snippet_file_name="blog_20160404_5_7403468"  name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+#import &quot;Circle.h&quot;<br/>
+<br/>
+int main (int argc, const char * argv[])<br/>
+{<br/>
+   NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];<br/>
+   NSLog (@&quot;hello world&quot;);<br/>
+   Shape *s = [Shape alloc];<br/>
+   [s init:1.3:4.6];<br/>
+   NSLog(@&quot;%lf&quot;,[s area]);<br/>
+   <br/>
+   Circle *c = [Circle alloc];<br/>
+   [c init:5.5];<br/>
+   NSLog(@&quot;%lf&quot;,[c area]);<br/>
+   <br/>
+   Shape *sc = c;<br/>
+   NSLog(@&quot;%lf&quot;,[sc area]);<br/>
+   <br/>
+   c.r = 100;<br/>
+   NSLog(@&quot;%lf&quot;,[c area]);<br/>
+   <br/>
+   //sc.r = 99;<br/>
+   NSLog(@&quot;%lf&quot;,[sc area]);<br/>
+   <br/>
+   <br/>
+   [pool drain];<br/>
+   return 0;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1633961" snippet_file_name="blog_20160404_6_5833305"  name="code" class="objc">sh-4.3$ gcc `gnustep-config --objc-flags` -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lobjc *.m -o main                                                <br/>
+sh-4.3$ main                                                                                                                                                       <br/>
+2016-04-04 04:36:47.974 main[373] hello world                                                                                                                      <br/>
+2016-04-04 04:36:47.974 main[373] 5.980000                                                                                                                         <br/>
+2016-04-04 04:36:47.975 main[373] 94.985000                                                                                                                        <br/>
+2016-04-04 04:36:47.975 main[373] 94.985000                                                                                                                        <br/>
+2016-04-04 04:36:47.975 main[373] 31400.000000                                                                                                                     <br/>
+2016-04-04 04:36:47.975 main[373] 31400.000000  </pre><br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

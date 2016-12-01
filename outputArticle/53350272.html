@@ -1,0 +1,30 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Mybaits 数据库的 CLOB 类型 与 java 类型 String            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>java类中</p><br/>
+<p>字段:</p><br/>
+<p><pre code_snippet_id="2009472" snippet_file_name="blog_20161126_1_8744390"  name="code" class="cpp">private String content;<br/>
+public String getContent() {<br/>
+		return content;<br/>
+	}<br/>
+	public void setContent(String content) {<br/>
+		this.content = content;<br/>
+	}</pre><br><br/>
+mybatis中的</p><br/>
+<p>字段:</p><br/>
+<p><pre code_snippet_id="2009472" snippet_file_name="blog_20161126_2_6159688"  name="code" class="cpp">&lt;result column=&quot;CONTENT&quot; jdbcType=&quot;CLOB&quot; property=&quot;content&quot; /&gt;</pre>取&#20540;操作(successfully):<br><br/>
+<pre code_snippet_id="2009472" snippet_file_name="blog_20161126_3_4796485"  name="code" class="cpp">String s = at.getContent();<br/>
+			log.debug(&quot;s := &quot; + s);</pre></p><br/>
+<p>&nbsp;能顺利运行.</p><br/>
+日志中引用变量&quot;s&quot;对应应该是:<br/>
+<p><pre code_snippet_id="2009472" snippet_file_name="blog_20161126_4_925028"  name="code" class="cpp">&lt;&lt;BLOB&gt;&gt;</pre>即CLOB对象.能顺利打印出来.<br><br/>
+<br><br/>
+虽然mybatis中对应的对象实例是CLOB对象,但引用变量却是String类型的(居然不报错),如果你写成下面的形式就会NullPointerException,报错:</p><br/>
+<p><pre code_snippet_id="2009472" snippet_file_name="blog_20161126_5_3432500"  name="code" class="cpp">String s = new String(at.getContent());</pre></p><br/>
+<p>报错是at.getContent().</p><br/>
+<p>上面的log能顺利输出,但是这里at.getContent()却报错了,</p><br/>
+为什么会这样?难道不同没有继承关系的两种类型可以隐式转换?这不是C语言吧.也许是其他的什么原因,why , tell me directly.<br><br/>
+<br><br/>
+   <br/>
+</div>

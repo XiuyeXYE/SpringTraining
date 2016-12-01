@@ -1,0 +1,35 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        c language chaos coding            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1656443" snippet_file_name="blog_20160421_1_3729670"  name="code" class="cpp">#define v putchar<br/>
+#	define print(x)<br/>
+main(){v(4+v(v(52)-4));return 0;}/*<br/>
+#&gt;+++++++4+[&gt;++++++&lt;-]&gt;<br/>
+++++.----.++++.*/<br/>
+print(202*2);exit();<br/>
+#define /*&gt;.@*/exit()</pre><pre code_snippet_id="1656443" snippet_file_name="blog_20160421_2_2366467"  name="code" class="cpp">D:\programming\C++&gt;gcc chaosCoding.c<br/>
+chaosCoding.c:4:1: warning: return type defaults to &#39;int&#39; [-Wimplicit-int]<br/>
+ main(){v(4+v(v(52)-4));return 0;}/*<br/>
+ ^<br/>
+chaosCoding.c: In function &#39;main&#39;:<br/>
+chaosCoding.c:2:11: warning: implicit declaration of function &#39;putchar&#39; [-Wimpli<br/>
+cit-function-declaration]<br/>
+ #define v putchar<br/>
+           ^<br/>
+chaosCoding.c:4:8: note: in expansion of macro &#39;v&#39;<br/>
+ main(){v(4+v(v(52)-4));return 0;}/*<br/>
+        ^<br/>
+chaosCoding.c: At top level:<br/>
+chaosCoding.c:7:14: warning: data definition has no type or storage class<br/>
+ print(202*2);exit();<br/>
+              ^<br/>
+chaosCoding.c:7:14: warning: type defaults to &#39;int&#39; in declaration of &#39;exit&#39; [-W<br/>
+implicit-int]<br/>
+chaosCoding.c:7:14: warning: conflicting types for built-in function &#39;exit&#39;<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+404</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

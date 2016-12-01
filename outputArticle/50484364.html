@@ -1,0 +1,36 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java生成图片            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java"> StringBuffer sb = new StringBuffer();<br/>
+        BufferedImage image = new BufferedImage(WIDTH, HEIGHT,<br/>
+                BufferedImage.TYPE_INT_RGB);<br/>
+        Graphics graphic = image.getGraphics();<br/>
+        graphic.setColor(Color.LIGHT_GRAY);<br/>
+        graphic.fillRect(0, 0, WIDTH, HEIGHT);<br/>
+        Random ran = new Random();<br/>
+        // 画随机字符<br/>
+        for (int i = 1; i &lt;= SIZE; i++) {<br/>
+            int r = ran.nextInt(chars.length);<br/>
+            graphic.setColor(getRandomColor());<br/>
+            graphic.setFont(new Font(null, Font.BOLD + Font.ITALIC, FONT_SIZE));<br/>
+            graphic.drawString(chars[r] + &quot;&quot;, (i - 1) * WIDTH / SIZE,<br/>
+                    HEIGHT / 2);<br/>
+            sb.append(chars[r]);// 将字符保存，存入Session<br/>
+        }<br/>
+        // 画干扰线<br/>
+        for (int i = 1; i &lt;= LINES; i++) {<br/>
+            graphic.setColor(getRandomColor());<br/>
+            graphic.drawLine(ran.nextInt(WIDTH), ran.nextInt(HEIGHT),<br/>
+                    ran.nextInt(WIDTH), ran.nextInt(HEIGHT));<br/>
+        }<br/>
+        Map&lt;String, BufferedImage&gt; map = new HashMap&lt;String, BufferedImage&gt;();<br/>
+        map.put(sb.toString(), image);<br/>
+        return map;</pre><br><br/>
+<pre name="code" class="java"> ByteArrayOutputStream bos = new ByteArrayOutputStream();<br/>
+        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(bos);<br/>
+        encoder.encode(image);<br/>
+        byte[] imageBts = bos.toByteArray();<br/>
+        InputStream in = new ByteArrayInputStream(imageBts);</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,55 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        HashMap Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632355" snippet_file_name="blog_20160402_1_6645166"  name="code" class="java">package com.test.collection;<br/>
+<br/>
+import java.util.HashMap;<br/>
+import java.util.Map;<br/>
+import java.util.Set;<br/>
+<br/>
+public class MapTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Map&lt;Character, String&gt; m = new HashMap&lt;Character, String&gt;();<br/>
+		<br/>
+		//存放元素<br/>
+		m.put(&#39;A&#39;, &quot;American&quot;);<br/>
+		m.put(&#39;B&#39;, &quot;Blundon&quot;);<br/>
+		m.put(&#39;C&#39;,&quot;Canada&quot;);<br/>
+		<br/>
+		//得到value<br/>
+		System.out.println(m.get(&#39;A&#39;));<br/>
+		<br/>
+		//删除key<br/>
+		m.remove(&#39;A&#39;);<br/>
+		System.out.println(m);<br/>
+		<br/>
+		//key set<br/>
+		Set&lt;Character&gt; keySet = m.keySet();		<br/>
+		System.out.println(keySet);<br/>
+		<br/>
+		//putAll<br/>
+		m.putAll(m);//添加self不起作用<br/>
+		System.out.println(m);<br/>
+		<br/>
+		Map&lt;Character, String&gt; m1 = new HashMap&lt;Character, String&gt;();<br/>
+		m1.put(&#39;D&#39;, &quot;Diga&quot;);<br/>
+		m1.put(&#39;H&#39;, &quot;Huhanon&quot;);<br/>
+		m.putAll(m1);<br/>
+		System.out.println(m);<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1632355" snippet_file_name="blog_20160402_2_7997179"  name="code" class="java">American<br/>
+{B=Blundon, C=Canada}<br/>
+[B, C]<br/>
+{B=Blundon, C=Canada}<br/>
+{D=Diga, B=Blundon, C=Canada, H=Huhanon}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

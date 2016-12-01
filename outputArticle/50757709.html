@@ -1,0 +1,21 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        img reload            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1590751" snippet_file_name="blog_20160228_1_2558300"  name="code" class="javascript">$.ajax({<br/>
+<br/>
+		url : &quot;studentProfile.do&quot;,<br/>
+		dataType : &quot;html&quot;,<br/>
+		<br/>
+		type : &quot;post&quot;,<br/>
+		contentType : &quot;application/x-www-form-urlencoded;charset=UTF-8&quot;,<br/>
+		success : function() {<br/>
+<br/>
+			console.log(&quot;stuImgOut:&quot;+37);<br/>
+			$(&quot;#photo&quot;).attr(&quot;src&quot;, &quot;photo.do?&quot;+Math.random());<br/>
+<br/>
+		}<br/>
+<br/>
+	});</pre>如果要重新加载图片最好在img的src地址后在加随机字符串，因为img默认在src不变的情况下，会读取缓存，如果想及时更新图片，让src的地址不同才行。不要用src的&#20540;去连接new Date()，效果不太好，几次地址更新瞬间的new Date()&#20540;相同。<br/>
+   <br/>
+</div>

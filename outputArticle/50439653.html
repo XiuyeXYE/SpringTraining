@@ -1,0 +1,92 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        数据库数据横排显示2            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="sql">if object_id(&#39;#case&#39;) is not null<br/>
+	drop table #case<br/>
+go<br/>
+create table #case( id int identity ,<br/>
+issue_type varchar(20) null,<br/>
+asset_id int null)<br/>
+go    <br/>
+ insert into #case select &#39;for  issue&#39;,1701335119                           <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,1701335120       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,1701335121       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,1701335127       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,	1701335130       <br/>
+insert into #case(issue_type,asset_id) select &#39;for21 issue&#39;,1701335131    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,1701335132)    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,1701335135)    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,1701335140)    <br/>
+go<br/>
+select * from #case<br/>
+<br/>
+if object_id(&#39;#t11&#39;) is not null<br/>
+	drop table #t11<br/>
+go<br/>
+create table #t11(issue_type varchar(20),asset_id_comb varchar(250) null)<br/>
+go<br/>
+declare @id int,@ei int,@asset_ID varchar(255),@asset_ID_tmp varchar(15),@issue_type varchar(255),@tmp varchar(255)<br/>
+select @id=min(id),@ei=max(id)+1 from #case<br/>
+select @issue_type=issue_type from #case where id=@id<br/>
+set @asset_ID=&#39;&#39;  <br/>
+set @asset_ID_tmp=&#39;&#39;  <br/>
+while @id&lt;@ei<br/>
+begin<br/>
+    select @tmp=issue_type,@asset_ID_tmp=convert(varchar(15),asset_id) from #case where id=@id<br/>
+   <br/>
+     if( @issue_type=@tmp)<br/>
+    begin<br/>
+        set @asset_ID=@asset_ID+&#39;|&#39;+@asset_ID_tmp<br/>
+       print &#39;issue_type=%1!,asset_id=%2!&#39;,@issue_type,@asset_ID<br/>
+    end<br/>
+    else<br/>
+    begin<br/>
+        insert into #t11 select @issue_type,@asset_ID<br/>
+        print &#39;%1!,%2!&#39;,@issue_type,@asset_ID<br/>
+        set @asset_ID=&#39;&#39;<br/>
+    end<br/>
+    <br/>
+    if @id=@ei-1<br/>
+      insert into #t11 select @issue_type,@asset_ID<br/>
+      <br/>
+        set @issue_type=@tmp<br/>
+<br/>
+    set @id=@id+1<br/>
+end<br/>
+go<br/>
+select * from #t11<br/>
+<br/>
+--用update迭代<br/>
+if object_id(&#39;#t1&#39;) is not null<br/>
+	drop table #t1<br/>
+go<br/>
+<br/>
+select issue_type,asset_id,ASSET_ID=convert(varchar(200), null),ProcessStep=convert( INT, NULL)   <br/>
+into #t1<br/>
+from #case<br/>
+order by issue_type<br/>
+go<br/>
+declare @issue_type varchar(20) ,@ASSET_ID VARCHAR(200),@Step INT -- record process step<br/>
+SET @Step=0<br/>
+SET @ASSET_ID=&#39;&#39;<br/>
+	<br/>
+UPDATE #t1<br/>
+SET ASSET_ID = CASE <br/>
+	WHEN issue_type=@issue_type  THEN convert(varchar(15),asset_id)+&#39; | &#39;+@ASSET_ID<br/>
+	ELSE convert(varchar(15),asset_id)<br/>
+	END,<br/>
+@ASSET_ID = CASE<br/>
+	WHEN issue_type=@issue_type  THEN	convert(varchar(15),asset_id)+&#39; | &#39;+@ASSET_ID<br/>
+	ELSE convert(varchar(15),asset_id)<br/>
+	END,<br/>
+@issue_type = issue_type,<br/>
+@Step = @Step + 1,<br/>
+ProcessStep = @Step<br/>
+GO<br/>
+select *<br/>
+from #t1<br/>
+group by issue_type<br/>
+having ProcessStep=max(ProcessStep)</pre><br><br/>
+   <br/>
+</div>

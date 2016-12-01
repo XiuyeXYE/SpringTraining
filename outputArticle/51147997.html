@@ -1,0 +1,208 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring 与 jsf整合            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_1_1935981"  name="code" class="java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+	xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;<br/>
+	xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;<br/>
+	id=&quot;WebApp_ID&quot; version=&quot;3.1&quot;&gt;<br/>
+	&lt;display-name&gt;E-Book&lt;/display-name&gt;<br/>
+	&lt;context-param&gt;<br/>
+		&lt;param-name&gt;javax.faces.STATE_SAVING_METHOD&lt;/param-name&gt;<br/>
+		&lt;param-value&gt;client&lt;/param-value&gt;<br/>
+	&lt;/context-param&gt;<br/>
+	&lt;welcome-file-list&gt;<br/>
+<br/>
+		&lt;welcome-file&gt;index.jsf&lt;/welcome-file&gt;<br/>
+<br/>
+	&lt;/welcome-file-list&gt;<br/>
+	&lt;!-- 必须写以下监听器，否则报错 --&gt;<br/>
+	&lt;listener&gt;<br/>
+		&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;<br/>
+	&lt;/listener&gt;<br/>
+	&lt;servlet&gt;<br/>
+		&lt;servlet-name&gt;facesServelet&lt;/servlet-name&gt;<br/>
+		&lt;servlet-class&gt;javax.faces.webapp.FacesServlet&lt;/servlet-class&gt;<br/>
+		&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;<br/>
+	&lt;/servlet&gt;<br/>
+	&lt;servlet-mapping&gt;<br/>
+		&lt;servlet-name&gt;facesServelet&lt;/servlet-name&gt;<br/>
+		&lt;url-pattern&gt;*.jsf&lt;/url-pattern&gt;<br/>
+	&lt;/servlet-mapping&gt;<br/>
+	&lt;servlet-mapping&gt;<br/>
+		&lt;servlet-name&gt;facesServelet&lt;/servlet-name&gt;<br/>
+		&lt;url-pattern&gt;*.face&lt;/url-pattern&gt;<br/>
+	&lt;/servlet-mapping&gt;<br/>
+	&lt;servlet-mapping&gt;<br/>
+		&lt;servlet-name&gt;facesServelet&lt;/servlet-name&gt;<br/>
+		&lt;url-pattern&gt;/faces/*&lt;/url-pattern&gt;<br/>
+	&lt;/servlet-mapping&gt;<br/>
+	&lt;servlet-mapping&gt;<br/>
+		&lt;servlet-name&gt;facesServelet&lt;/servlet-name&gt;<br/>
+		&lt;url-pattern&gt;*.xhtml&lt;/url-pattern&gt;<br/>
+	&lt;/servlet-mapping&gt;<br/>
+	&lt;!-- 以下代码可以注释掉，因为spring入口不会干扰jsf入口 --&gt;<br/>
+	&lt;!-- &lt;servlet&gt;<br/>
+	    &lt;servlet-name&gt;springDispatcher&lt;/servlet-name&gt;<br/>
+	    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;<br/>
+	    &lt;init-param&gt;<br/>
+	         &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;<br/>
+          &lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;<br/>
+	    &lt;/init-param&gt;<br/>
+	    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;<br/>
+	&lt;/servlet&gt;<br/>
+	&lt;servlet-mapping&gt;<br/>
+	    &lt;servlet-name&gt;springDispatcher&lt;/servlet-name&gt;<br/>
+	    &lt;url-pattern&gt;*.do&lt;/url-pattern&gt;<br/>
+	&lt;/servlet-mapping&gt; --&gt;<br/>
+<br/>
+&lt;/web-app&gt;</pre><br><br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_2_1903744"  name="code" class="java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;faces-config<br/>
+    xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;<br/>
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+    xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd&quot;<br/>
+    version=&quot;2.2&quot;&gt;<br/>
+	&lt;application&gt;<br/>
+	    &lt;el-resolver&gt;<br/>
+	        org.springframework.web.jsf.el.SpringBeanFacesELResolver<br/>
+	    &lt;/el-resolver&gt;<br/>
+	    <br/>
+	&lt;/application&gt;<br/>
+<br/>
+<br/>
+<br/>
+&lt;/faces-config&gt;<br/>
+</pre><br><br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_3_7377602"  name="code" class="java">&lt;beans default-destroy-method=&quot;destroy&quot; default-init-method=&quot;init&quot;<br/>
+    default-lazy-init=&quot;true&quot; <br/>
+    xmlns=&quot;http://www.springframework.org/schema/beans&quot;<br/>
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;<br/>
+    xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;<br/>
+    xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot;<br/>
+    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;<br/>
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;<br/>
+    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;<br/>
+    xmlns:util=&quot;http://www.springframework.org/schema/util&quot;<br/>
+    <br/>
+    xsi:schemaLocation=&quot;<br/>
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd<br/>
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd<br/>
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd<br/>
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd<br/>
+    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd<br/>
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd<br/>
+    <br/>
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd<br/>
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd<br/>
+    <br/>
+    &quot;<br/>
+       <br/>
+    &gt;    <br/>
+    <br/>
+    &lt;context:component-scan base-package=&quot;com.xiuye&quot;&gt;&lt;/context:component-scan&gt;<br/>
+    <br/>
+&lt;/beans&gt;</pre><br><br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_4_4695406"  name="code" class="java">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;<br/>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;<br/>
+      xmlns:f=&quot;http://java.sun.com/jsf/core&quot;<br/>
+      xmlns:h=&quot;http://java.sun.com/jsf/html&quot;<br/>
+      xmlns:p=&quot;http://primefaces.org/ui&quot;&gt;<br/>
+	&lt;h:head&gt;<br/>
+		&lt;title&gt;主页&lt;/title&gt;<br/>
+	&lt;/h:head&gt;<br/>
+	&lt;h:body&gt;<br/>
+		&lt;p:button value=&quot;#{testView.testBean.username}&quot;&gt;&lt;/p:button&gt;<br/>
+		&lt;p:button value=&quot;#{testView.testBean.password}&quot;&gt;&lt;/p:button&gt;<br/>
+		&lt;h:form action=&quot;&quot; &gt;<br/>
+			&lt;p:outputLabel id=&quot;display&quot; value=&quot;#{testView.value}&quot;&gt;&lt;/p:outputLabel&gt;<br/>
+			&lt;br/&gt;<br/>
+			&lt;p:inputText value=&quot;#{testView.value}&quot;&gt;&lt;/p:inputText&gt;<br/>
+			&lt;p:commandButton update=&quot;display&quot; icon=&quot;ui-icon-check&quot; value=&quot;Submit&quot;&gt;&lt;/p:commandButton&gt;<br/>
+		&lt;/h:form&gt;<br/>
+	&lt;/h:body&gt;<br/>
+&lt;/html&gt;</pre><br><br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_5_6265570"  name="code" class="java">package com.xiuye.views;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+import javax.faces.bean.ManagedBean;<br/>
+import javax.faces.bean.ManagedProperty;<br/>
+import javax.faces.bean.RequestScoped;<br/>
+<br/>
+import com.xiuye.beans.TestBean;<br/>
+<br/>
+@ManagedBean<br/>
+@RequestScoped<br/>
+public class TestView {<br/>
+<br/>
+	@ManagedProperty(&quot;#{testBean}&quot;)<br/>
+	private TestBean testBean;<br/>
+	<br/>
+	private String value;<br/>
+<br/>
+	public TestBean getTestBean() {<br/>
+		return testBean;<br/>
+	}<br/>
+<br/>
+	public void setTestBean(TestBean testBean) {<br/>
+		this.testBean = testBean;<br/>
+	}<br/>
+<br/>
+	public String getValue() {<br/>
+		return value;<br/>
+	}<br/>
+<br/>
+	public void setValue(String value) {<br/>
+		this.value = value;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1646703" snippet_file_name="blog_20160413_6_9471936"  name="code" class="java">package com.xiuye.beans;<br/>
+<br/>
+import javax.faces.bean.ManagedBean;<br/>
+<br/>
+import org.springframework.stereotype.Component;<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+@Component<br/>
+public class TestBean {<br/>
+	<br/>
+	private String username;<br/>
+	private String password;<br/>
+	<br/>
+	public TestBean() {<br/>
+		this.username=&quot;xiuye&quot;;<br/>
+		this.password=&quot;123456&quot;;<br/>
+	}<br/>
+	public TestBean(String username, String password) {<br/>
+		<br/>
+		this.username = username;<br/>
+		this.password = password;<br/>
+	}<br/>
+	public String getUsername() {<br/>
+		return username;<br/>
+	}<br/>
+	public void setUsername(String username) {<br/>
+		this.username = username;<br/>
+	}<br/>
+	public String getPassword() {<br/>
+		return password;<br/>
+	}<br/>
+	public void setPassword(String password) {<br/>
+		this.password = password;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<p><img src="http://img.blog.csdn.net/20160413234416518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160413234427893?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+   <br/>
+</div>

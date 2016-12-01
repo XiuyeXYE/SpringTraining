@@ -1,0 +1,305 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring 全注解配置 bean 和 调用 (1)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><span style="font-size:24px">开发环境准备:</span></p><br/>
+<p><span style="font-size:24px">IDE:eclipse</span></p><br/>
+<p><span style="font-size:24px">JDK:1.8</span></p><br/>
+<p><span style="font-size:24px">Spring:4.2.2</span></p><br/>
+<p><span style="font-size:24px">Junit:4</span></p><br/>
+<p><span style="font-size:24px">所需jar包<span style="font-size:24px">配图</span>:</span></p><br/>
+<p><span style="font-size:24px"><img src="http://img.blog.csdn.net/20161112112213634?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px"><img src="http://img.blog.csdn.net/20161112112224196?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px"><img src="http://img.blog.csdn.net/20161112112232540?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px">工程配图:</span></p><br/>
+<p><span style="font-size:24px"><img src="http://img.blog.csdn.net/20161112112314212?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px">源代码:</span></p><br/>
+<p><span style="font-size:24px">java配置类:</span></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_1_113038"  code_snippet_id="1980749" snippet_file_name="blog_20161112_1_113038" name="code" class="java">package com.xiuye.config;<br/>
+<br/>
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;<br/>
+import org.springframework.context.annotation.Bean;<br/>
+import org.springframework.context.annotation.ComponentScan;<br/>
+import org.springframework.context.annotation.Configuration;<br/>
+import org.springframework.context.annotation.Scope;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+<br/>
+@Configuration<br/>
+@ComponentScan(&quot;com.xiuye.component&quot;)<br/>
+public class BeanConfiguration1 {<br/>
+<br/>
+	@Bean<br/>
+	public Student student() {<br/>
+		return new Student(&quot;xiuye&quot;, &quot;man&quot;, 18, 99);<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * @param name<br/>
+	 * @param sex<br/>
+	 * @param age<br/>
+	 * @param level<br/>
+	 * @return<br/>
+	 */<br/>
+	@Bean<br/>
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // 必须原生,否则no longer has<br/>
+													// any effect<br/>
+	public Student student(String name, String sex, int age, int level) {<br/>
+		return new Student(name, sex, age, level);<br/>
+	}<br/>
+<br/>
+	@Bean<br/>
+	public ComponentForStudent2 cfs2(Student s) {<br/>
+		ComponentForStudent2 cfs2 = new ComponentForStudent2();<br/>
+		cfs2.setStudent(s);<br/>
+		return cfs2;<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p></p><br/>
+<p><span style="font-size:24px">javaBean类:</span></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_2_7146652"  code_snippet_id="1980749" snippet_file_name="blog_20161112_2_7146652" name="code" class="java">package com.xiuye.bean;<br/>
+<br/>
+public class Student {<br/>
+<br/>
+	private String name;<br/>
+	private String sex;<br/>
+	private int age;<br/>
+	private int level;<br/>
+<br/>
+<br/>
+<br/>
+	public Student(String name, String sex, int age, int level) {<br/>
+		this.name = name;<br/>
+		this.sex = sex;<br/>
+		this.age = age;<br/>
+		this.level = level;<br/>
+	}<br/>
+<br/>
+	public String getName() {<br/>
+		return name;<br/>
+	}<br/>
+	public void setName(String name) {<br/>
+		this.name = name;<br/>
+	}<br/>
+	public String getSex() {<br/>
+		return sex;<br/>
+	}<br/>
+	public void setSex(String sex) {<br/>
+		this.sex = sex;<br/>
+	}<br/>
+	public int getAge() {<br/>
+		return age;<br/>
+	}<br/>
+	public void setAge(int age) {<br/>
+		this.age = age;<br/>
+	}<br/>
+	public int getLevel() {<br/>
+		return level;<br/>
+	}<br/>
+	public void setLevel(int level) {<br/>
+		this.level = level;<br/>
+	}<br/>
+	@Override<br/>
+	public String toString() {<br/>
+		return &quot;Student [name=&quot; + name + &quot;, sex=&quot; + sex + &quot;, age=&quot; + age + &quot;, level=&quot; + level + &quot;]&quot;;<br/>
+	}<br/>
+<br/>
+<br/>
+<br/>
+}<br/>
+</pre><span style="font-size:24px">javaComponent类:</span><br/>
+<p></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_3_8433407"  code_snippet_id="1980749" snippet_file_name="blog_20161112_3_8433407" name="code" class="java">package com.xiuye.component;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.springframework.stereotype.Component;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+<br/>
+@Component<br/>
+public class ComponentForStudent {<br/>
+<br/>
+	@Resource<br/>
+	private Student s;<br/>
+<br/>
+	public void studentInfo(){<br/>
+		System.out.println(s);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1980749" snippet_file_name="blog_20161112_4_6132113"  code_snippet_id="1980749" snippet_file_name="blog_20161112_4_6132113" name="code" class="java">package com.xiuye.component;<br/>
+<br/>
+<br/>
+import org.springframework.stereotype.Component;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+<br/>
+@Component<br/>
+public class ComponentForStudent2 {<br/>
+<br/>
+	private Student s;<br/>
+<br/>
+	public void setStudent(Student s){<br/>
+		this.s = s;<br/>
+	}<br/>
+<br/>
+	public void studentInfo(){<br/>
+		System.out.println(s);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1980749" snippet_file_name="blog_20161112_5_1878972"  code_snippet_id="1980749" snippet_file_name="blog_20161112_5_1878972" name="code" class="java">package com.xiuye.component;<br/>
+<br/>
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;<br/>
+import org.springframework.context.annotation.Scope;<br/>
+<br/>
+@org.springframework.stereotype.Component<br/>
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // 必须原生,否则no longer has any<br/>
+												// effect<br/>
+public class Component {<br/>
+	private String _1;<br/>
+	private String _2;<br/>
+<br/>
+	public Component(String _1, String _2) {<br/>
+		super();<br/>
+		this._1 = _1;<br/>
+		this._2 = _2;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public String toString() {<br/>
+		return &quot;Component [_1=&quot; + _1 + &quot;, _2=&quot; + _2 + &quot;]&quot;;<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><span style="font-size:24px">主函数类:</span><br/>
+<p></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_6_6230389"  code_snippet_id="1980749" snippet_file_name="blog_20161112_6_6230389" name="code" class="java">package com.xiuye.main;<br/>
+<br/>
+import org.springframework.context.ApplicationContext;<br/>
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;<br/>
+<br/>
+import com.xiuye.bean.Student;<br/>
+import com.xiuye.component.Component;<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+public class Main {<br/>
+<br/>
+	public static void main(String []args) {<br/>
+<br/>
+		ApplicationContext ac = new AnnotationConfigApplicationContext(BeanConfiguration1.class);<br/>
+		Student s = ac.getBean(Student.class);<br/>
+		System.out.println(s);<br/>
+		s = ac.getBean(Student.class, &quot;Linda&quot;,&quot;Woman&quot;,22,70);<br/>
+		System.out.println(s);<br/>
+		ComponentForStudent cf = ac.getBean(ComponentForStudent.class);<br/>
+		cf.studentInfo();<br/>
+		Component c = ac.getBean(Component.class, &quot;100&quot;,&quot;200&quot;);<br/>
+		System.out.println(c);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><span style="font-size:24px">结合Spring的单元测试类:</span><br/>
+<p></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_7_4801147"  code_snippet_id="1980749" snippet_file_name="blog_20161112_7_4801147" name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import javax.annotation.Resource;<br/>
+<br/>
+import org.junit.Test;<br/>
+import org.junit.runner.RunWith;<br/>
+import org.springframework.test.context.ContextConfiguration;<br/>
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;<br/>
+<br/>
+import com.xiuye.component.ComponentForStudent;<br/>
+import com.xiuye.component.ComponentForStudent2;<br/>
+import com.xiuye.config.BeanConfiguration1;<br/>
+<br/>
+@RunWith(SpringJUnit4ClassRunner.class)<br/>
+@ContextConfiguration(classes=BeanConfiguration1.class)<br/>
+public class TestMain {<br/>
+<br/>
+<br/>
+	@Resource<br/>
+	private ComponentForStudent cfs;<br/>
+	@Resource<br/>
+	private ComponentForStudent2 cfs2;<br/>
+<br/>
+<br/>
+	@Test<br/>
+	public void testCfs(){<br/>
+		cfs.studentInfo();<br/>
+	}<br/>
+	@Test<br/>
+	public void testCfs2(){<br/>
+		cfs2.studentInfo();<br/>
+	}<br/>
+<br/>
+<br/>
+}<br/>
+</pre><span style="font-size:24px">注:1.spring在bean类中有参构造函数,使用ApplicationContext.getBean时,bean必须是原生的否则报错,或者使用默认构造函数去创建类.<br><br/>
+2.@Configuration------------------------------------------配置类</span><br/>
+<p></p><br/>
+<p><span style="font-size:24px">@ComponentScan(packageName)-------------------扫描指定包下的bean,没有<span style="font-size:24px">packageName默认为当前包下</span></span></p><br/>
+<p><span style="font-size:24px">@Bean-------------------------------------------------------Spring创建bean的实例对象</span></p><br/>
+<p><span style="font-size:24px">@Scope------------------------------------------------------Spring创建bean实例对象模式,单例或者原生,默认为单例模式</span></p><br/>
+<p><span style="font-size:24px">@RunWith--------------------------------------------------Junit指定与某框架集成测试(个人理解)</span></p><br/>
+<p><span style="font-size:24px">@ContextConfiguration----------------------------------Spring单元测试指明配置类<br><br/>
+<br><br/>
+<br><br/>
+<br><br/>
+运行结果:</span></p><br/>
+<p><span style="font-size:24px">Main:</span></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_8_8533260"  code_snippet_id="1980749" snippet_file_name="blog_20161112_8_8533260" name="code" class="java">十一月 12, 2016 11:43:38 上午 org.springframework.context.annotation.AnnotationConfigApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@1af6ecc: startup date [Sat Nov 12 11:43:38 CST 2016]; root of context hierarchy<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Student [name=Linda, sex=Woman, age=22, level=70]<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Component [_1=100, _2=200]<br/>
+</pre><br><br/>
+<span style="font-size:24px">TestMain:</span><br/>
+<p></p><br/>
+<p><span style="font-size:24px"></span></p><br/>
+<pre code_snippet_id="1980749" snippet_file_name="blog_20161112_9_5359913"  code_snippet_id="1980749" snippet_file_name="blog_20161112_9_5359913" name="code" class="java">十一月 12, 2016 11:44:13 上午 org.springframework.test.context.support.DefaultTestContextBootstrapper getDefaultTestExecutionListenerClassNames<br/>
+信息: Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]<br/>
+十一月 12, 2016 11:44:13 上午 org.springframework.test.context.support.DefaultTestContextBootstrapper instantiateListeners<br/>
+信息: Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]<br/>
+十一月 12, 2016 11:44:13 上午 org.springframework.test.context.support.DefaultTestContextBootstrapper getTestExecutionListeners<br/>
+信息: Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@10375b3, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@17c7260, org.springframework.test.context.support.DirtiesContextTestExecutionListener@1209079, org.springframework.test.context.transaction.TransactionalTestExecutionListener@1df28bb, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@171769e]<br/>
+十一月 12, 2016 11:44:13 上午 org.springframework.context.support.GenericApplicationContext prepareRefresh<br/>
+信息: Refreshing org.springframework.context.support.GenericApplicationContext@7471b5: startup date [Sat Nov 12 11:44:13 CST 2016]; root of context hierarchy<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+Student [name=xiuye, sex=man, age=18, level=99]<br/>
+</pre><br><br/>
+<img src="http://img.blog.csdn.net/20161112114455533?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+<br><br/>
+<p></p><br/>
+<p><span style="font-size:24px"><br><br/>
+</span></p><br/>
+<br><br/>
+<br><br/>
+<p><span style="font-size:24px"><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px">下载:<a target="_blank" target="_blank" href="http://download.csdn.net/detail/xiuye2015/9681372">demo源代码</a></span></p><br/>
+<p><br><br/>
+</p><br/>
+<p><span style="font-size:24px"><br><br/>
+</span></p><br/>
+<p><span style="font-size:24px"><br><br/>
+</span></p><br/>
+   <br/>
+</div>

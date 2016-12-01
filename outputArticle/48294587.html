@@ -1,0 +1,114 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        客户端发送xml数据，服务器端接收之            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.xml;<br/>
+<br/>
+import java.io.InputStream;<br/>
+import java.net.ServerSocket;<br/>
+import java.net.Socket;<br/>
+import java.util.List;<br/>
+<br/>
+import org.dom4j.Document;<br/>
+import org.dom4j.Element;<br/>
+import org.dom4j.io.SAXReader;<br/>
+<br/>
+public class Server {<br/>
+<br/>
+	public static void main(String args[])<br/>
+	{<br/>
+		try{<br/>
+			ServerSocket server = new ServerSocket(8888);<br/>
+			System.out.println(&quot;listening...&quot;);<br/>
+			<br/>
+			Socket socket = server.accept();<br/>
+			<br/>
+			System.out.println(&quot;connected by client&quot;);<br/>
+			InputStream in = socket.getInputStream();<br/>
+			<br/>
+			SAXReader reader = new SAXReader();<br/>
+			<br/>
+			System.out.println(&quot;analyze xml from client&quot;);<br/>
+			<br/>
+			Document doc = reader.read(in);<br/>
+			Element root = doc.getRootElement();<br/>
+			<br/>
+			List&lt;Element&gt; elements = root.elements();<br/>
+			<br/>
+			for(Element e : elements)<br/>
+			{<br/>
+				<br/>
+				int id = Integer.parseInt(e.attributeValue(&quot;id&quot;));<br/>
+				String name = e.elementText(&quot;name&quot;);<br/>
+				int age = Integer.parseInt(e.elementText(&quot;age&quot;));<br/>
+				String geneder = e.elementText(&quot;geneder&quot;);<br/>
+				double salary = Double.parseDouble(e.elementText(&quot;salary&quot;));<br/>
+				<br/>
+				System.out.println(id+&quot;,&quot;+name<br/>
+						+&quot;,&quot;+age+&quot;,&quot;+geneder<br/>
+						+&quot;,&quot;+salary);<br/>
+				<br/>
+			}<br/>
+			<br/>
+			server.close();<br/>
+			<br/>
+		}<br/>
+		catch(Exception e)<br/>
+		{<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java"><br/>
+</pre><pre name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;package com.xiuye.xml;<br/>
+<br/>
+import java.io.File;<br/>
+import java.io.IOException;<br/>
+import java.io.OutputStream;<br/>
+import java.net.Socket;<br/>
+import java.net.UnknownHostException;<br/>
+<br/>
+import org.dom4j.Document;<br/>
+import org.dom4j.DocumentException;<br/>
+import org.dom4j.io.SAXReader;<br/>
+import org.dom4j.io.XMLWriter;<br/>
+<br/>
+public class Client {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		try {<br/>
+			Socket socket = new Socket(&quot;localhost&quot;,8888);<br/>
+			OutputStream out = socket.getOutputStream();<br/>
+			<br/>
+			SAXReader reader = new SAXReader();<br/>
+			<br/>
+			Document doc = reader.read(new File(&quot;EmpList.xml&quot;));<br/>
+			XMLWriter writer = new XMLWriter(System.out);<br/>
+			writer.setOutputStream(out);<br/>
+			writer.write(doc);<br/>
+			socket.close();<br/>
+			<br/>
+		} catch (UnknownHostException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		} catch (DocumentException e) {<br/>
+			// TODO Auto-generated catch block<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

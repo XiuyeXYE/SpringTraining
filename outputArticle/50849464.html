@@ -1,0 +1,107 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        尝试提取类成员地址（2）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1605263" snippet_file_name="blog_20160310_1_1585712"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;cstdio&gt;<br/>
+using namespace std;<br/>
+<br/>
+class A{<br/>
+	public:<br/>
+	void f(){<br/>
+		cout &lt;&lt; &quot;ordinary&quot; &lt;&lt; endl;<br/>
+	}	<br/>
+	static void e(){<br/>
+		<br/>
+		cout &lt;&lt; &quot;static&quot; &lt;&lt; endl;<br/>
+		<br/>
+	}<br/>
+	int a;<br/>
+	int b;<br/>
+	static int c;<br/>
+	static const int d = 100;//could assgined<br/>
+};<br/>
+int A::c = 123;//别忘了int，a要赋值啊，否则后面的取地址操作会失败,报：<br/>
+/*<br/>
+C:\Users\jackz\AppData\Local\Temp\ccim1Smc.o:&amp;ClassPointer.cpp:(.text+0x5f): und<br/>
+efined reference to `A::c&#39;<br/>
+collect2.exe: error: ld returned 1 exit status<br/>
+*/<br/>
+/*<br/>
+如果类的静态成员变量未赋值，是不是相当于编译的时候变量不存在，没有占空间？<br/>
+，然后去编译，就报错误，不能连接到地址。<br/>
+*/<br/>
+int main(){<br/>
+	A p;<br/>
+	int *a = &amp;p.a;<br/>
+	int p1 = (int)a;<br/>
+	cout &lt;&lt; &quot;memember:&quot;  &lt;&lt; p1 &lt;&lt; endl;<br/>
+	<br/>
+	int *pc = &amp;A::c;<br/>
+	cout &lt;&lt; &quot;static memember:&quot; &lt;&lt; pc &lt;&lt; endl;<br/>
+	cout &lt;&lt; A::d &lt;&lt; endl;<br/>
+	<br/>
+	int A::*p2 = &amp;A::b;<br/>
+	cout &lt;&lt; &quot;memember:&quot;  &lt;&lt; p2 &lt;&lt; endl;//1<br/>
+	printf(&quot;memember:%d,%p\n&quot;,p2,p2);<br/>
+	<br/>
+	typedef void (A::*pf)();<br/>
+	pf f = &amp;A::f; <br/>
+	//cout 未重载 好像是某个函数的调用约定，未重载某种运算输出会变成bool型来判断吗？<br/>
+	//存在为1(true),不存在为0(false)?<br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f &lt;&lt; endl; //1 <br/>
+	<br/>
+	printf(&quot;%d\n&quot;,f);<br/>
+	(p.*f)();<br/>
+	typedef void (*pf1)();// <br/>
+	pf1 f1 = &amp;A::e;<br/>
+	cout &lt;&lt; &quot;static function:&quot; &lt;&lt; (int)f1 &lt;&lt; endl; <br/>
+	void (*ef)();<br/>
+	ef = A::e;<br/>
+	cout &lt;&lt; &quot;static function:&quot; &lt;&lt; ef &lt;&lt; endl;<br/>
+<br/>
+	void (*f3)();//<br/>
+	f3 = A::e;<br/>
+	f3(); <br/>
+	cout &lt;&lt; &quot;static function:&quot; &lt;&lt; (int)f3 &lt;&lt; endl;<br/>
+	void (A::*f4)();<br/>
+	f4 = &amp;A::f;<br/>
+	(p.*f4)();<br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f4 &lt;&lt; endl;<br/>
+/*<br/>
+	pf f2 = p.f;<br/>
+	cout &lt;&lt; &quot;function:&quot; &lt;&lt; f2 &lt;&lt; endl;*/<br/>
+	f4 = &amp;p.f;<br/>
+	(p.*f4)();<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1605263" snippet_file_name="blog_20160310_2_6885629"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ &quot;&amp;ClassPointer.cpp&quot;<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+memember:2686684<br/>
+static memember:0x4b8000<br/>
+100<br/>
+memember:1<br/>
+memember:4,00000004<br/>
+function:1<br/>
+4425776<br/>
+ordinary<br/>
+static function:4425728<br/>
+static function:1<br/>
+static<br/>
+static function:4425728<br/>
+ordinary<br/>
+function:1<br/>
+ordinary</pre><pre code_snippet_id="1605263" snippet_file_name="blog_20160310_3_91996"  name="code" class="cpp">成员地址提取方式能通过编译器的：<br/>
+<br/>
+&amp;className :: memember<br/>
+&amp;className :: static memember<br/>
+&amp;className :: static function<br/>
+&amp;className :: function<br/>
+&amp;classNameObject.memember<br/>
+&amp;classNameObject.static memember<br/>
+&#160;<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,26 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring mvc ResponseBody 输出乱码解决方案            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="2003033" snippet_file_name="blog_20161123_1_943182"  name="code" class="java">@RequestMapping(value = &quot;article.sb&quot;, produces = &quot;text/html; charset=utf-8&quot;)<br/>
+	@ResponseBody<br/>
+	public String article(int type, String id) {<br/>
+<br/>
+		String content = null;<br/>
+<br/>
+		switch (type) {<br/>
+		case 0:<br/>
+		case 4:<br/>
+		case 5:<br/>
+			content = this.articleDao.findByIdAndType(id, type);<br/>
+			break;<br/>
+<br/>
+		}<br/>
+		log.debug(&quot;content := &quot; + content);<br/>
+<br/>
+		return content;<br/>
+<br/>
+	}</pre><br><br/>
+<a target="_blank" href="http://www.cnblogs.com/dyllove98/p/3180158.html" target="_blank">参考连接</a><br/>
+   <br/>
+</div>

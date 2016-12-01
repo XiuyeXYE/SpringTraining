@@ -1,0 +1,424 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        KMP算法代码实现和优化（不太能理解具体的过程和该算法思想）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1866047" snippet_file_name="blog_20160904_1_2052656"  name="code" class="java">package com.xiuye.algorithm.string;<br/>
+<br/>
+import java.util.Arrays;<br/>
+<br/>
+public class KMP {<br/>
+<br/>
+	public KMP() {<br/>
+	}<br/>
+<br/>
+	public void getNext(char a[], int next[]) {<br/>
+<br/>
+		System.out<br/>
+				.println(&quot;\n=================== start ========================\n&quot;);<br/>
+		next[1] = 0;<br/>
+		int j = 0;<br/>
+		int i = 1;<br/>
+		System.out.println(&quot;prepared conditions:&quot;);<br/>
+		System.out.println(&quot;next[1] := 0&quot;);<br/>
+		System.out.println(&quot;j := 0&quot;);<br/>
+		System.out.println(&quot;i := 1&quot;);<br/>
+		System.out.println();<br/>
+		while (i &lt; a[0]) {<br/>
+<br/>
+			System.out.println(&quot;begin : {&quot;);<br/>
+			System.out.println(Arrays.toString(a).replaceAll(&quot;,&quot;, &quot;&quot;)<br/>
+					.replaceAll(&quot;\\[|\\]&quot;, &quot;&quot;).replaceAll(&quot;\\s&quot;, &quot;&quot;));<br/>
+			System.out.println(&quot;012345678&quot;);<br/>
+			for (int n = 0; n &lt; next.length; n++) {<br/>
+				System.out.print(next[n]);<br/>
+			}<br/>
+			System.out.println();<br/>
+			System.out.println(&quot;}&quot;);<br/>
+			System.out.println();<br/>
+			System.out.println(&quot;NEXT STEP :&quot;);<br/>
+			if (j == 0 || a[i] == a[j]) {<br/>
+<br/>
+				System.out.println(&quot;entry! why? &quot;<br/>
+						+ (j == 0 ? &quot;j := 0&quot; : &quot;a[&quot; + i + &quot;] := a[&quot; + j + &quot;]&quot;));<br/>
+				String ai = &quot;a[&quot; + i + &quot;(i)] := &quot; + a[i];<br/>
+				String aj = &quot;a[&quot; + j + &quot;(j)] := &quot; + a[j];<br/>
+				String equivalent = j == 0 ? &quot;j == 0&quot; : &quot;j != 0 \n{\n&quot; + ai<br/>
+						+ &quot;\n&quot; + aj + &quot; \n}&quot;;<br/>
+				System.out.println(equivalent);<br/>
+				i++;<br/>
+				j++;<br/>
+				System.out.println(&quot;i := &quot; + i + &quot;(i)&quot;);<br/>
+				System.out.println(&quot;j := &quot; + j + &quot;(j)&quot;);<br/>
+<br/>
+				next[i] = j;<br/>
+<br/>
+				System.out.println(&quot;next[&quot; + i + &quot;(i)] := &quot; + j + &quot;(j)&quot;);<br/>
+				System.out.println(&quot;a[&quot; + j + &quot;(j)]\t\t?=\t&quot; + &quot;a[&quot; + i<br/>
+						+ &quot;(i)]&quot;);<br/>
+				System.out.println(a[j] + &quot;\t\t&quot; + (a[j] == a[i] ? &quot;=&quot; : &quot;!&quot;)<br/>
+						+ &quot;=\t&quot; + a[i]);<br/>
+				System.out.println();<br/>
+<br/>
+			} else {<br/>
+				int k = j;<br/>
+				j = next[j];<br/>
+				System.out.println(&quot;back to :&quot;);<br/>
+				System.out.println(&quot;j := next[&quot; + k + &quot;(j)]&quot;);<br/>
+				System.out.println(&quot;j := &quot; + next[k]);<br/>
+				System.out.println();<br/>
+			}<br/>
+			System.out.println(&quot;end : {&quot;);<br/>
+			System.out.println(Arrays.toString(a).replaceAll(&quot;,&quot;, &quot;&quot;)<br/>
+					.replaceAll(&quot;\\[|\\]&quot;, &quot;&quot;).replaceAll(&quot;\\s&quot;, &quot;&quot;));<br/>
+			System.out.println(&quot;012345678&quot;);<br/>
+			for (int n = 0; n &lt; next.length; n++) {<br/>
+				System.out.print(next[n]);<br/>
+			}<br/>
+			System.out.println();<br/>
+			System.out.println(&quot;}&quot;);<br/>
+<br/>
+			System.out<br/>
+					.println(&quot;\n===========================================\n&quot;);<br/>
+		}<br/>
+		System.out.println();<br/>
+	}<br/>
+<br/>
+	public void getNext2(char a[], int next[]) {<br/>
+<br/>
+		next[1] = 0;<br/>
+		int j = 0;<br/>
+		int i = 1;<br/>
+		while (i &lt; a[0]) {<br/>
+<br/>
+			if (j == 0 || a[i] == a[j]) {<br/>
+				i++;<br/>
+				j++;<br/>
+				if (a[i] != a[j]) {<br/>
+					next[i] = j;<br/>
+				} else {<br/>
+					next[i] = next[j];<br/>
+				}<br/>
+<br/>
+			} else {<br/>
+				j = next[j];<br/>
+			}<br/>
+		}<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		KMP kmp = new KMP();<br/>
+		String s = &quot;abaabcac&quot;;<br/>
+		char[] a = new char[9];<br/>
+		a[0] = 8;<br/>
+		for (int i = 1; i &lt; 9; i++) {<br/>
+			a[i] = s.charAt(i - 1);<br/>
+		}<br/>
+		for (char c : a) {<br/>
+			System.out.print(c);<br/>
+		}<br/>
+<br/>
+		System.out.println();<br/>
+<br/>
+		int[] next = new int[a.length];<br/>
+<br/>
+		kmp.getNext(a, next);<br/>
+<br/>
+		for (int i : next) {<br/>
+			System.out.print(i);<br/>
+		}<br/>
+<br/>
+		System.out.println();<br/>
+<br/>
+		kmp.getNext2(a, next);<br/>
+<br/>
+		for (int i : next) {<br/>
+			System.out.print(i);<br/>
+		}<br/>
+		System.out.println();<br/>
+		s = &quot;aaaab&quot;;<br/>
+		a = new char[6];<br/>
+		a[0] = 5;<br/>
+		for (int i = 1; i &lt; 6; i++) {<br/>
+			a[i] = s.charAt(i - 1);<br/>
+		}<br/>
+<br/>
+		kmp.getNext2(a, next);<br/>
+<br/>
+		for (int i : next) {<br/>
+			System.out.print(i);<br/>
+		}<br/>
+		System.out.println();<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1866047" snippet_file_name="blog_20160904_2_7352573"  name="code" class="java">abaabcac<br/>
+<br/>
+=================== start ========================<br/>
+<br/>
+prepared conditions:<br/>
+next[1] := 0<br/>
+j := 0<br/>
+i := 1<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+000000000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? j := 0<br/>
+j == 0<br/>
+i := 2(i)<br/>
+j := 1(j)<br/>
+next[2(i)] := 1(j)<br/>
+a[1(j)]		?=	a[2(i)]<br/>
+a		!=	b<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001000000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001000000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+back to :<br/>
+j := next[1(j)]<br/>
+j := 0<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001000000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001000000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? j := 0<br/>
+j == 0<br/>
+i := 3(i)<br/>
+j := 1(j)<br/>
+next[3(i)] := 1(j)<br/>
+a[1(j)]		?=	a[3(i)]<br/>
+a		==	a<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001100000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001100000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? a[3] := a[1]<br/>
+j != 0 <br/>
+{<br/>
+a[3(i)] := a<br/>
+a[1(j)] := a <br/>
+}<br/>
+i := 4(i)<br/>
+j := 2(j)<br/>
+next[4(i)] := 2(j)<br/>
+a[2(j)]		?=	a[4(i)]<br/>
+b		!=	a<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001120000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001120000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+back to :<br/>
+j := next[2(j)]<br/>
+j := 1<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001120000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001120000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? a[4] := a[1]<br/>
+j != 0 <br/>
+{<br/>
+a[4(i)] := a<br/>
+a[1(j)] := a <br/>
+}<br/>
+i := 5(i)<br/>
+j := 2(j)<br/>
+next[5(i)] := 2(j)<br/>
+a[2(j)]		?=	a[5(i)]<br/>
+b		==	b<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122000<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122000<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? a[5] := a[2]<br/>
+j != 0 <br/>
+{<br/>
+a[5(i)] := b<br/>
+a[2(j)] := b <br/>
+}<br/>
+i := 6(i)<br/>
+j := 3(j)<br/>
+next[6(i)] := 3(j)<br/>
+a[3(j)]		?=	a[6(i)]<br/>
+a		!=	c<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+back to :<br/>
+j := next[3(j)]<br/>
+j := 1<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+back to :<br/>
+j := next[1(j)]<br/>
+j := 0<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122300<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? j := 0<br/>
+j == 0<br/>
+i := 7(i)<br/>
+j := 1(j)<br/>
+next[7(i)] := 1(j)<br/>
+a[1(j)]		?=	a[7(i)]<br/>
+a		==	a<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122310<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+begin : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122310<br/>
+}<br/>
+<br/>
+NEXT STEP :<br/>
+entry! why? a[7] := a[1]<br/>
+j != 0 <br/>
+{<br/>
+a[7(i)] := a<br/>
+a[1(j)] := a <br/>
+}<br/>
+i := 8(i)<br/>
+j := 2(j)<br/>
+next[8(i)] := 2(j)<br/>
+a[2(j)]		?=	a[8(i)]<br/>
+b		!=	c<br/>
+<br/>
+end : {<br/>
+abaabcac<br/>
+012345678<br/>
+001122312<br/>
+}<br/>
+<br/>
+===========================================<br/>
+<br/>
+<br/>
+001122312<br/>
+001021302<br/>
+000004302<br/>
+</pre><br><br/>
+   <br/>
+</div>

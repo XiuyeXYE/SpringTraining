@@ -1,0 +1,287 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        单例模式优化探索            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+public class Test12 {<br/>
+<br/>
+	public static void main(String[] args) throws InterruptedException {<br/>
+<br/>
+		//天生线程安全<br/>
+		<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+			Thread t = new Thread() {<br/>
+<br/>
+				public void run() {<br/>
+					Singleton s = Singleton.getInstance();<br/>
+					System.out.println(s.hashCode());<br/>
+<br/>
+				}<br/>
+			};<br/>
+			t.start();<br/>
+			t.join();<br/>
+		}<br/>
+		System.out.println(&quot;================================&quot;);<br/>
+		//非线程安全<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+			Thread t = new Thread() {<br/>
+<br/>
+				public void run() {<br/>
+					Singleton2 s= Singleton2.getInstance();<br/>
+					System.out.println(s.hashCode());<br/>
+<br/>
+				}<br/>
+			};<br/>
+			t.start();<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+<br/>
+class Singleton {<br/>
+<br/>
+	private Singleton() {<br/>
+<br/>
+	}<br/>
+<br/>
+	private static class SingletonHolder {<br/>
+<br/>
+		private static Singleton instance = new Singleton();<br/>
+<br/>
+	}<br/>
+<br/>
+	public static Singleton getInstance() {<br/>
+<br/>
+		return SingletonHolder.instance;<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+<br/>
+class Singleton2{<br/>
+	<br/>
+	private static Singleton2 s = null;<br/>
+	<br/>
+	private Singleton2(){<br/>
+		<br/>
+	}<br/>
+	public static Singleton2 getInstance(){<br/>
+		<br/>
+		if(s == null){<br/>
+			s = new Singleton2();<br/>
+		}<br/>
+		return s;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">运行结果：</pre><pre name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+18725445<br/>
+================================<br/>
+5998631<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+21479899<br/>
+</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

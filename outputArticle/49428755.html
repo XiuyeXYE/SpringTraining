@@ -1,0 +1,93 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        对java类override的探讨            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.note;<br/>
+<br/>
+public class TestClassOverrideMethod {<br/>
+	public static void main(String[] args) {<br/>
+		System.out.println(&quot;第一组：&quot;);<br/>
+		A a = new B();		<br/>
+		a.f(new C());//其实是父方法f的参数C类<br/>
+		a.f(new D());//其实是父方法f的参数C类 //f只是父类的方法<br/>
+		System.out.println(&quot;第二组：&quot;);<br/>
+		B b = new B();<br/>
+		b.f(new C());//其实是子类重载f方法C类<br/>
+		b.f(new  D());//其实是子类重载f方法D类<br/>
+		System.out.println(&quot;第三组：&quot;);<br/>
+		E e = new E();<br/>
+		e.f(new C());//f方法C类<br/>
+		e.f(new D());//f方法D类<br/>
+		//采用最佳适配策略<br/>
+		<br/>
+		//以上充分说明子类重载了f方法即使是D是C的子类，但仍是两个不同的类<br/>
+		//可以重载<br/>
+	}<br/>
+}<br/>
+<br/>
+class A{<br/>
+	<br/>
+	void f(C c){<br/>
+		c.f();<br/>
+	}<br/>
+	<br/>
+}<br/>
+<br/>
+class B extends A{<br/>
+	void f(D d){<br/>
+		d.f();<br/>
+		d.g();<br/>
+	}<br/>
+}<br/>
+<br/>
+class C{<br/>
+	void f(){<br/>
+		System.out.println(&quot;c.f&quot;);<br/>
+		System.out.println(&quot;=========&quot;);<br/>
+	}<br/>
+}<br/>
+<br/>
+class D extends C{<br/>
+	void f(){<br/>
+		System.out.println(&quot;d.f&quot;);<br/>
+		System.out.println(&quot;=========&quot;);<br/>
+	}<br/>
+	void g(){<br/>
+		System.out.println(&quot;d.g&quot;);<br/>
+		System.out.println(&quot;=========&quot;);<br/>
+	}<br/>
+}<br/>
+class E{<br/>
+	void f(C c){<br/>
+		System.out.println(&quot;e.f.c&quot;);<br/>
+		System.out.println(&quot;=========&quot;);<br/>
+	}<br/>
+	void f(D d){<br/>
+		System.out.println(&quot;e.f.d&quot;);<br/>
+		System.out.println(&quot;=========&quot;);<br/>
+	}<br/>
+}</pre><br/>
+<p>运行结果：</p><br/>
+<p><pre name="code" class="plain">第一组：<br/>
+c.f<br/>
+=========<br/>
+d.f<br/>
+=========<br/>
+第二组：<br/>
+c.f<br/>
+=========<br/>
+d.f<br/>
+=========<br/>
+d.g<br/>
+=========<br/>
+第三组：<br/>
+e.f.c<br/>
+=========<br/>
+e.f.d<br/>
+=========<br/>
+</pre><br><br/>
+引用：</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

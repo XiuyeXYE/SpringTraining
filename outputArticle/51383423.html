@@ -1,0 +1,55 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        传入参数为函数并且该函数的参数也同时传入            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><img src="http://img.blog.csdn.net/20160512133431630?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1680477" snippet_file_name="blog_20160512_1_3294457"  code_snippet_id="1680477" snippet_file_name="blog_20160512_1_3294457" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+template&lt;class Fun,class... Args&gt;<br/>
+void runFunc(Fun &amp;&amp;f,Args&amp;&amp;... args){//注意空格啊<br/>
+	f(args...);//注意内部怎么传参的啊<br/>
+}<br/>
+//总之注意以上的&quot;...&quot;<br/>
+void f1(){<br/>
+	cout &lt;&lt; &quot;f1&quot; &lt;&lt; endl;<br/>
+}<br/>
+void f2(int a){<br/>
+	cout &lt;&lt; &quot;f2:&quot; &lt;&lt; a &lt;&lt; endl;<br/>
+}<br/>
+void f3(int a,int b,int c){<br/>
+	cout &lt;&lt; &quot;f3:&quot; &lt;&lt; a &lt;&lt; b &lt;&lt; c &lt;&lt; endl;<br/>
+}<br/>
+void f4(int a,double d){<br/>
+cout &lt;&lt; &quot;f4&quot; &lt;&lt; a &lt;&lt; d &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+int main(){<br/>
+	runFunc(f1);<br/>
+	runFunc(f2,10);<br/>
+	runFunc(f3,1,2,3);<br/>
+        runFunc(f4,1,10.22);//可以是不同的类型<br/>
+	return 0;<br/>
+}</pre><pre code_snippet_id="1680477" snippet_file_name="blog_20160512_2_3392734"  code_snippet_id="1680477" snippet_file_name="blog_20160512_2_3392734" name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++11 In_Param_Function_and_In_Param_FuncParam.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+f1<br/>
+f2:10<br/>
+f3:123<br/>
+f4:110.22</pre>编译错误日志：<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1680477" snippet_file_name="blog_20160512_3_9106571"  code_snippet_id="1680477" snippet_file_name="blog_20160512_3_9106571" name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++11 In_Param_Function_and_In_Param_FuncParam.cpp<br/>
+In_Param_Function_and_In_Param_FuncParam.cpp: In function &#39;void runFunc(Fun, Arg<br/>
+s ...)&#39;:<br/>
+In_Param_Function_and_In_Param_FuncParam.cpp:5:9: error: parameter packs not exp<br/>
+anded with &#39;...&#39;:<br/>
+  f(args);<br/>
+         ^<br/>
+In_Param_Function_and_In_Param_FuncParam.cpp:5:9: note:         &#39;args&#39;</pre><br><br/>
+<br><br/>
+<a target="_blank" target="_blank" href="http://en.cppreference.com/w/cpp/language/parameter_pack">模板参考来源</a><br><br/>
+<br><br/>
+<p></p><br/>
+   <br/>
+</div>

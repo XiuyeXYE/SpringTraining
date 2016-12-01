@@ -1,0 +1,41 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        快速转置矩阵            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1627109" snippet_file_name="blog_20160328_1_30493"  name="code" class="cpp">#define MAXSIZE 12500   //假设非零元个数的最大值为12500<br/>
+typedef struct{         //该非零元的行下标和列下标<br/>
+    int i,j;<br/>
+    ElemType e;<br/>
+}Triple;<br/>
+typedef struct{<br/>
+    Triple data[MAXSIZE+1];     //非零元三元组表，data[0]未用<br/>
+    int mu,nu,tu;               //矩阵的行数、列数、和非零元<br/>
+}TSMatrix;<br/>
+Status FastTransposeSMatrix(TSMatrix M,TSMatrix &amp;T)<br/>
+{<br/>
+    //采用三元组顺序表存储表示，求稀疏矩阵M的转置矩阵T<br/>
+    T.mu=M.mu;<br/>
+    T.nu=M.nu;<br/>
+    T.tu=M.tu;<br/>
+    if(T.tu)<br/>
+    {<br/>
+        for(col=1;col&lt;=M.nu;col++)<br/>
+        num[col]=0;<br/>
+        for(t=1;t&lt;=M.tu;t++) ++num[M.data[t].j];<br/>
+        cpot[1]=1;<br/>
+        //求第col列中第一个非零元在b.data中的序号<br/>
+        for(col=2;col&lt;=M.nu;++col) cpot[col]=cpot[col-1]+num[col-1];<br/>
+        for(p=1;p&lt;=M.tu;++p)<br/>
+        {<br/>
+            col=M.data[p].j;<br/>
+            q=cpot[col];<br/>
+            T.data[q].i=M.data[p].j;<br/>
+            T.data[q].j=M.data[p].i;<br/>
+            T.data[q].e=M.data[p].e;<br/>
+            ++cpot[col];<br/>
+        }<br/>
+    }<br/>
+}<br/>
+ </pre><br><br/>
+   <br/>
+</div>

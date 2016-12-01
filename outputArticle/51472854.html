@@ -1,0 +1,19 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        get current env path string            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691937" snippet_file_name="blog_20160521_1_5297899"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;tchar.h&gt;<br/>
+#include&lt;stdio.h&gt;<br/>
+int main(){<br/>
+    <br/>
+    <br/>
+    PTSTR str = GetEnvironmentStrings();<br/>
+    _tprintf(&quot;%s&quot;,str);<br/>
+    <br/>
+}<br/>
+</pre><pre code_snippet_id="1691937" snippet_file_name="blog_20160521_2_2854901"  name="code" class="cpp">d:\programming\C++&gt;GetEnvironmentStrings<br/>
+=D:=d:\programming\C++</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

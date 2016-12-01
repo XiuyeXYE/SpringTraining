@@ -1,0 +1,45 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Get Java System Properties and Get OS Envs            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1726285" snippet_file_name="blog_20160623_1_355621"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import java.util.Map;<br/>
+import java.util.Properties;<br/>
+import java.util.Set;<br/>
+<br/>
+public class GetPlatform_X86_OR_X64 {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		/**<br/>
+		 * jvm 32 <br/>
+		 * os Windows 7<br/>
+		 * <br/>
+		 */<br/>
+		System.out.println(System.getProperty(&quot;sun.arch.data.model&quot;));<br/>
+		System.out.println(System.getProperty(&quot;os.name&quot;));<br/>
+<br/>
+		Properties props = System.getProperties();<br/>
+<br/>
+		Set&lt;?&gt; keys = props.keySet();<br/>
+<br/>
+		System.out.println(&quot;==================java system&#39;s properties=====================&quot;);<br/>
+		for (Object o : keys) {<br/>
+			System.out.println(o + &quot; = &quot; + System.getProperty(o.toString()));<br/>
+		}<br/>
+		System.out.println(&quot;===============================================================&quot;);<br/>
+		<br/>
+		Map&lt;String,String&gt; map = System.getenv();<br/>
+		Set&lt;String&gt; set = map.keySet();<br/>
+		System.out.println(&quot;======================java system&#39;s envs=======================&quot;);<br/>
+		for(String s : set){<br/>
+			System.out.println(s+ &quot; = &quot;+System.getenv(s));<br/>
+		}<br/>
+		System.out.println(&quot;===============================================================&quot;);<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

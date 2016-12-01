@@ -1,0 +1,98 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring事务applicationContext.xml            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;<br/>
+ xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br/>
+ xmlns:context=&quot;http://www.springframework.org/schema/context&quot;<br/>
+ xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;<br/>
+	xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot;<br/>
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;<br/>
+	xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;<br/>
+	xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;<br/>
+	xmlns:util=&quot;http://www.springframework.org/schema/util&quot;<br/>
+	xsi:schemaLocation=&quot;<br/>
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd<br/>
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd<br/>
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd<br/>
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd<br/>
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd<br/>
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd<br/>
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd<br/>
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd<br/>
+		&quot;<br/>
+&gt;<br/>
+<br/>
+	&lt;bean id=&quot;dbcp&quot; class=&quot;org.apache.commons.dbcp2.BasicDataSource&quot;&gt;<br/>
+		&lt;property name=&quot;driverClassName&quot; value=&quot;#{db.driverClassName}&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;url&quot; value=&quot;#{db.url}&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;username&quot; value=&quot;#{db.username}&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;password&quot; value=&quot;#{db.password}&quot;&gt;&lt;/property&gt;<br/>
+		<br/>
+	&lt;/bean&gt;<br/>
+	&lt;util:properties id=&quot;db&quot; location=&quot;classpath:db.properties&quot;&gt;&lt;/util:properties&gt;<br/>
+	<br/>
+	&lt;context:component-scan base-package=&quot;com.xiuye.controller&quot;&gt;&lt;/context:component-scan&gt;<br/>
+	&lt;context:component-scan base-package=&quot;com.xiuye.dao&quot;&gt;&lt;/context:component-scan&gt;<br/>
+	&lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;<br/>
+	<br/>
+	&lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;<br/>
+		&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;<br/>
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dbcp&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;sqlSessionFactoryBean&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;<br/>
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dbcp&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/xiuye/bean/*.xml&quot;&gt;&lt;/property&gt;<br/>
+		<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;<br/>
+		&lt;property name=&quot;basePackage&quot; value=&quot;com.xiuye.dao&quot;&gt;&lt;/property&gt;<br/>
+		&lt;!-- &lt;property name=&quot;annotationClass&quot; value=&quot;&quot;&gt;&lt;/property&gt; --&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;operateLogger&quot; class=&quot;com.xiuye.aop.logger.OperateLogger&quot;&gt;&lt;/bean&gt;<br/>
+	&lt;!-- &lt;aop:config&gt;<br/>
+		&lt;aop:aspect ref=&quot;operateLogger&quot;&gt;<br/>
+			&lt;aop:before method=&quot;log1&quot; <br/>
+				pointcut=&quot;within(com.xiuye.controller..*)&quot;<br/>
+			/&gt;<br/>
+		&lt;/aop:aspect&gt;<br/>
+	&lt;/aop:config&gt; --&gt;<br/>
+	<br/>
+	<br/>
+	&lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot;&gt;&lt;/aop:aspectj-autoproxy&gt;<br/>
+	&lt;context:component-scan base-package=&quot;com.xiuye.aop.logger&quot;&gt;&lt;/context:component-scan&gt;<br/>
+	<br/>
+	&lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;<br/>
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dbcp&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt; <br/>
+	&lt;!-- 开启事务注解 --&gt;<br/>
+	&lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot; proxy-target-class=&quot;true&quot;/&gt;<br/>
+	&lt;!-- 配置事务注解的范围 --&gt;<br/>
+	&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;transactionManager&quot;&gt;<br/>
+		&lt;tx:attributes&gt;<br/>
+			&lt;tx:method name=&quot;find*&quot; read-only=&quot;true&quot;/&gt;<br/>
+			&lt;tx:method name=&quot;add*&quot; propagation=&quot;REQUIRED&quot; <br/>
+				rollback-for=&quot;java.lang.ClassNotFoundException&quot;<br/>
+			/&gt;<br/>
+			&lt;tx:method name=&quot;update*&quot; propagation=&quot;REQUIRED&quot;<br/>
+				rollback-for=&quot;java.lang.Exception&quot;<br/>
+			/&gt;<br/>
+			&lt;tx:method name=&quot;delete*&quot; propagation=&quot;REQUIRED&quot;<br/>
+				rollback-for=&quot;java.lang.Exception&quot;<br/>
+			/&gt;<br/>
+			<br/>
+			<br/>
+		&lt;/tx:attributes&gt;<br/>
+	&lt;/tx:advice&gt;<br/>
+	&lt;aop:config proxy-target-class=&quot;true&quot;&gt;<br/>
+		&lt;aop:advisor advice-ref=&quot;txAdvice&quot;<br/>
+			 pointcut=&quot;within(com.xiuye.controller..*)&quot;<br/>
+		/&gt;<br/>
+	&lt;/aop:config&gt;<br/>
+&lt;/beans&gt;</pre><br><br/>
+   <br/>
+</div>

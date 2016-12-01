@@ -1,0 +1,65 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Spring框架配置文件：applicationContext.xml            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;<br/>
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;<br/>
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;<br/>
+	xmlns:util=&quot;http://www.springframework.org/schema/util&quot; xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;<br/>
+	xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot;<br/>
+<br/>
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd<br/>
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd<br/>
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd<br/>
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd<br/>
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd<br/>
+			http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd			<br/>
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd<br/>
+			<br/>
+			&quot;&gt;<br/>
+	<br/>
+    &lt;bean id=&quot;b3&quot; class=&quot;springmvc4.beans.Bean3&quot;&gt;<br/>
+    	&lt;property name=&quot;name&quot; value=&quot;xiuye&quot;&gt;&lt;/property&gt;<br/>
+    	&lt;property name=&quot;age&quot; value=&quot;25&quot;&gt;&lt;/property&gt;<br/>
+    	&lt;property name=&quot;score&quot; value=&quot;1000&quot;&gt;&lt;/property&gt;    <br/>
+    &lt;/bean&gt;<br/>
+    &lt;bean id=&quot;b5&quot; class=&quot;springmvc4.beans.Bean5&quot; autowire=&quot;byName&quot;&gt;&lt;/bean&gt;<br/>
+    &lt;bean id=&quot;b4&quot; class=&quot;springmvc4.beans.Bean4&quot;&gt;<br/>
+        &lt;property name=&quot;AG&quot; value=&quot;AK-47&quot;&gt;&lt;/property&gt;<br/>
+        &lt;property name=&quot;sha&quot; value=&quot;Fire&quot;&gt;&lt;/property&gt;<br/>
+    &lt;/bean&gt;<br/>
+    <br/>
+    &lt;bean id=&quot;date3&quot; factory-bean=&quot;date&quot; factory-method=&quot;getTime&quot;&gt;&lt;/bean&gt;<br/>
+    &lt;bean id=&quot;date2&quot; class=&quot;java.util.Calendar&quot; factory-method=&quot;getInstance&quot;&gt;&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;date&quot; class=&quot;java.util.GregorianCalendar&quot;&gt;&lt;/bean&gt;<br/>
+	&lt;context:component-scan base-package=&quot;springmvc4.beans&quot;&gt;&lt;/context:component-scan&gt;<br/>
+	&lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;<br/>
+	&lt;context:component-scan base-package=&quot;springmvc4.controllers&quot;&gt;&lt;/context:component-scan&gt;<br/>
+	&lt;bean id=&quot;int&quot; class=&quot;java.lang.Integer&quot;&gt;<br/>
+	    &lt;constructor-arg index=&quot;0&quot; value=&quot;120&quot;&gt;&lt;/constructor-arg&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;str&quot; class=&quot;java.lang.String&quot;&gt;<br/>
+	    &lt;constructor-arg index=&quot;0&quot; value=&quot;xiuye&quot;&gt;&lt;/constructor-arg&gt;<br/>
+	&lt;/bean&gt;<br/>
+<br/>
+	&lt;bean<br/>
+		class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;<br/>
+		&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;prefix&quot; value=&quot;/jsp/&quot;&gt;&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+	&lt;bean id=&quot;b1&quot; class=&quot;springmvc4.beans.Bean1&quot;&gt;<br/>
+		&lt;property name=&quot;name&quot; value=&quot;xiuye&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;age&quot; value=&quot;25&quot;&gt;&lt;/property&gt;<br/>
+		&lt;property name=&quot;props&quot;&gt;<br/>
+		    &lt;props&gt;<br/>
+		        &lt;prop key=&quot;wuming&quot;&gt;js&lt;/prop&gt;<br/>
+		        &lt;prop key=&quot;sha&quot;&gt;hao&lt;/prop&gt;<br/>
+		    &lt;/props&gt;<br/>
+		&lt;/property&gt;<br/>
+	&lt;/bean&gt;<br/>
+<br/>
+	<br/>
+	<br/>
+&lt;/beans&gt;</pre><br><br/>
+   <br/>
+</div>

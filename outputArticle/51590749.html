@@ -1,0 +1,86 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        JSF对应的实体类一定要使用set和get方法            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1708574" snippet_file_name="blog_20160605_1_1584602"  name="code" class="java">package com.xiuye.orm;<br/>
+<br/>
+import java.util.Date;<br/>
+<br/>
+public class User {<br/>
+<br/>
+	private String userid;<br/>
+	private String username;<br/>
+	private String password;<br/>
+	private String sex;<br/>
+	private Date birthday;<br/>
+	private String email;<br/>
+	private String qq;<br/>
+	private String phone;<br/>
+	private boolean isAdmin;<br/>
+	public String getUserid() {<br/>
+		return userid;<br/>
+	}<br/>
+	public void setUserid(String userid) {<br/>
+		this.userid = userid;<br/>
+	}<br/>
+	public String getUsername() {<br/>
+		return username;<br/>
+	}<br/>
+	public void setUsername(String username) {<br/>
+		this.username = username;<br/>
+	}<br/>
+	public String getPassword() {<br/>
+		return password;<br/>
+	}<br/>
+	public void setPassword(String password) {<br/>
+		this.password = password;<br/>
+	}<br/>
+	public String getSex() {<br/>
+		return sex;<br/>
+	}<br/>
+	public void setSex(String sex) {<br/>
+		this.sex = sex;<br/>
+	}<br/>
+	public Date getBirthday() {<br/>
+		return birthday;<br/>
+	}<br/>
+	public void setBirthday(Date birthday) {<br/>
+		this.birthday = birthday;<br/>
+	}<br/>
+	public String getEmail() {<br/>
+		return email;<br/>
+	}<br/>
+	public void setEmail(String email) {<br/>
+		this.email = email;<br/>
+	}<br/>
+	public String getQq() {<br/>
+		return qq;<br/>
+	}<br/>
+	public void setQq(String qq) {<br/>
+		this.qq = qq;<br/>
+	}<br/>
+	public String getPhone() {<br/>
+		return phone;<br/>
+	}<br/>
+	public void setPhone(String phone) {<br/>
+		this.phone = phone;<br/>
+	}<br/>
+	public boolean isAdmin() {<br/>
+		return isAdmin;<br/>
+	}<br/>
+	public void setAdmin(boolean isAdmin) {<br/>
+		this.isAdmin = isAdmin;<br/>
+	}<br/>
+	<br/>
+	public boolean getIsAdmin() {<br/>
+		return isAdmin;<br/>
+	}<br/>
+	public void setIsAdmin(boolean isAdmin) {<br/>
+		this.isAdmin = isAdmin;<br/>
+	}<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre>Mybatis 能使用 is等方法 但JSF必须使用get和set方法 ，在实体类中<br/>
+   <br/>
+</div>

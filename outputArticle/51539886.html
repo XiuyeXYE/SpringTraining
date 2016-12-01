@@ -1,0 +1,287 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        IBM MQ 发送 和 接收            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1701847" snippet_file_name="blog_20160530_1_5830501"  code_snippet_id="1701847" snippet_file_name="blog_20160530_1_5830501" name="code" class="java">package com.xiuye.mq;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.util.List;<br/>
+<br/>
+import org.apache.log4j.Logger;<br/>
+<br/>
+import com.ibm.mq.MQC;<br/>
+import com.ibm.mq.MQEnvironment;<br/>
+import com.ibm.mq.MQException;<br/>
+import com.ibm.mq.MQMessage;<br/>
+import com.ibm.mq.MQQueue;<br/>
+import com.ibm.mq.MQQueueManager;<br/>
+import com.tienon.message.entity.Push_App;<br/>
+<br/>
+public class SendDataToMQ {<br/>
+	private static Logger log = Logger.getLogger(SendDataToMQ.class);<br/>
+	static {<br/>
+		MQEnvironment.hostname = &quot;localhost&quot;;<br/>
+		MQEnvironment.port = 1417;<br/>
+		MQEnvironment.CCSID = 1381;<br/>
+		MQEnvironment.channel = &quot;Server&quot;;//服务器通道<br/>
+<br/>
+	}<br/>
+	private static MQQueueManager manager = null;<br/>
+	private static MQQueue queue = null;<br/>
+<br/>
+	public static void openMQ(String qMgr, String q) throws MQException {<br/>
+		manager = new MQQueueManager(qMgr);<br/>
+		queue = manager.accessQueue(q, MQC.MQOO_OUTPUT);<br/>
+	}<br/>
+<br/>
+	@SuppressWarnings(&quot;deprecation&quot;)<br/>
+	public static &lt;T&gt; void sendMsg(T data) throws MQException, IOException {<br/>
+<br/>
+		MQMessage msg = new MQMessage();<br/>
+<br/>
+		msg.writeObject(data);<br/>
+<br/>
+		queue.put(msg);<br/>
+		manager.commit();<br/>
+		queue.close();<br/>
+		manager.disconnect();<br/>
+<br/>
+		if (data instanceof Push_App) {<br/>
+			Push_App app = (Push_App) data;<br/>
+			log.info(&quot;批次号:&quot; + app.getBatId() + &quot;流水号:&quot; + app.getSerial() + &quot;内容:&quot;<br/>
+					+ app.getMsg() + &quot; 成功插入数据到MQ&quot;);<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+	public static &lt;T&gt; void sendMsgs(List&lt;T&gt; datas) throws MQException,<br/>
+			IOException {<br/>
+<br/>
+		for (T data : datas) {<br/>
+<br/>
+			MQMessage msg = new MQMessage();<br/>
+			msg.writeObject(data);<br/>
+			queue.put(msg);<br/>
+			manager.commit();<br/>
+			if (data instanceof Push_App) {<br/>
+				Push_App app = (Push_App) data;<br/>
+				log.info(&quot;批次号:&quot; + app.getBatId() + &quot;流水号:&quot; + app.getSerial()<br/>
+						+ &quot;内容:&quot; + app.getMsg() + &quot; 成功插入数据到MQ&quot;);<br/>
+			}<br/>
+		}<br/>
+<br/>
+		queue.close();<br/>
+		manager.disconnect();<br/>
+<br/>
+	}<br/>
+<br/>
+	public static void closeMQ() throws MQException {<br/>
+<br/>
+		//manager.commit();//不要重复commit，否者会报错的<br/>
+		queue.close();<br/>
+		manager.disconnect();<br/>
+<br/>
+	}<br/>
+}<br/>
+</pre><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1701847" snippet_file_name="blog_20160530_2_3639456"  code_snippet_id="1701847" snippet_file_name="blog_20160530_2_3639456" name="code" class="java">package com.xiuye.mq;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.io.InvalidClassException;<br/>
+import java.io.OptionalDataException;<br/>
+import java.io.StreamCorruptedException;<br/>
+import java.util.ArrayList;<br/>
+import java.util.List;<br/>
+<br/>
+import com.ibm.mq.MQC;<br/>
+import com.ibm.mq.MQEnvironment;<br/>
+import com.ibm.mq.MQException;<br/>
+import com.ibm.mq.MQMessage;<br/>
+import com.ibm.mq.MQQueue;<br/>
+import com.ibm.mq.MQQueueManager;<br/>
+<br/>
+public class ReceiveDataFromMQ {<br/>
+<br/>
+	static {<br/>
+		MQEnvironment.hostname = &quot;localhost&quot;;<br/>
+		MQEnvironment.port = 1417;<br/>
+		MQEnvironment.CCSID = 1381;<br/>
+		MQEnvironment.channel = &quot;Server&quot;;//服务器通道<br/>
+<br/>
+	}<br/>
+	private static MQQueueManager manager = null;<br/>
+	private static MQQueue queue = null;<br/>
+<br/>
+	public static void openMQ(String qMgr, String q) throws MQException {<br/>
+		manager = new MQQueueManager(qMgr);<br/>
+		//必须要写MQC.MQOO_INQUIRE，否者无法查询队列深度（即消息条数）<br/>
+		queue = manager.accessQueue(q, MQC.MQOO_INPUT_AS_Q_DEF|MQC.MQOO_INQUIRE);<br/>
+	}<br/>
+<br/>
+	public static void closeMQ() throws MQException {<br/>
+<br/>
+		<br/>
+		queue.close();<br/>
+		manager.disconnect();<br/>
+<br/>
+	}<br/>
+<br/>
+	public static Object receivedMsg() throws MQException,<br/>
+			StreamCorruptedException, OptionalDataException,<br/>
+			ClassNotFoundException, IOException {<br/>
+<br/>
+		MQMessage msg = new MQMessage();<br/>
+		queue.get(msg);<br/>
+<br/>
+		Object obj = msg.readObject();<br/>
+<br/>
+		manager.commit();<br/>
+		return obj;<br/>
+<br/>
+	}<br/>
+<br/>
+	public static List&lt;Object&gt; receiveAllMsgs() throws MQException,<br/>
+			StreamCorruptedException, OptionalDataException,<br/>
+			ClassNotFoundException, IOException {<br/>
+<br/>
+		List&lt;Object&gt; datas = new ArrayList&lt;Object&gt;();<br/>
+		<br/>
+		while ( queue.getCurrentDepth() &gt; 0) {<br/>
+<br/>
+			MQMessage msg = new MQMessage();<br/>
+			queue.get(msg);<br/>
+			datas.add(msg.readObject());<br/>
+			manager.commit();<br/>
+			<br/>
+		}<br/>
+		<br/>
+		return datas;<br/>
+	}<br/>
+<br/>
+	public static List&lt;Object&gt; receivePartMsgs(int sum) throws MQException,<br/>
+			InvalidClassException, StreamCorruptedException,<br/>
+			OptionalDataException, ClassNotFoundException, IOException {<br/>
+<br/>
+		List&lt;Object&gt; datas = new ArrayList&lt;Object&gt;();<br/>
+<br/>
+		while (sum &gt; 0) {<br/>
+<br/>
+			MQMessage msg = new MQMessage();<br/>
+			queue.get(msg);<br/>
+			datas.add(msg.readObject());<br/>
+			manager.commit();<br/>
+			sum--;<br/>
+<br/>
+		}<br/>
+<br/>
+		return datas;<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1701847" snippet_file_name="blog_20160530_3_4337567"  code_snippet_id="1701847" snippet_file_name="blog_20160530_3_4337567" name="code" class="java">@Test<br/>
+	public void sendMsg() {<br/>
+		List&lt;Push_App&gt; list = appDao.findTenDatas();<br/>
+		System.out.println(list.size());<br/>
+		for (Push_App app : list) {<br/>
+<br/>
+			System.out.println(app.getSerial() + &quot;:&quot; + app.getMsg());<br/>
+<br/>
+		}<br/>
+		<br/>
+		try {<br/>
+			SendDataToMQ.openMQ(&quot;AppMsg&quot;, &quot;SendMsg&quot;);<br/>
+			SendDataToMQ.sendMsgs(list);<br/>
+			//SendDataToMQ.sendMsg(list.get(0));<br/>
+			SendDataToMQ.closeMQ();<br/>
+			<br/>
+			<br/>
+		} catch (MQException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Test<br/>
+	public void receiveMsg(){<br/>
+		try {<br/>
+			<br/>
+			ReceiveDataFromMQ.openMQ(&quot;AppMsg&quot;, &quot;SendMsg&quot;);<br/>
+			List&lt;Object&gt; list = ReceiveDataFromMQ.receiveAllMsgs();<br/>
+			//List&lt;Object&gt; list = ReceiveDataFromMQ.receivePartMsgs(10);<br/>
+			for(Object data : list){<br/>
+				<br/>
+				if(data instanceof Push_App){<br/>
+					Push_App app = (Push_App) data;<br/>
+					System.out.println(&quot;序列号:&quot;+app.getSerial()+&quot; 发送的消息是:&quot; + app.getMsg());<br/>
+					<br/>
+				}<br/>
+				<br/>
+			}<br/>
+			ReceiveDataFromMQ.closeMQ();<br/>
+			<br/>
+			<br/>
+			<br/>
+		} catch (MQException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (StreamCorruptedException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (OptionalDataException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (ClassNotFoundException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+	}</pre><br><br/>
+<pre code_snippet_id="1701847" snippet_file_name="blog_20160530_4_2319681"  code_snippet_id="1701847" snippet_file_name="blog_20160530_4_2319681" name="code" class="java">10<br/>
+23:123456<br/>
+2:123456<br/>
+30:123456<br/>
+22:123456<br/>
+888:123456<br/>
+21:123456<br/>
+24:123456<br/>
+5:123456<br/>
+4:123456<br/>
+28:123456</pre><pre code_snippet_id="1701847" snippet_file_name="blog_20160530_5_6191138"  code_snippet_id="1701847" snippet_file_name="blog_20160530_5_6191138" name="code" class="java">序列号:23 发送的消息是:123456<br/>
+序列号:2 发送的消息是:123456<br/>
+序列号:30 发送的消息是:123456<br/>
+序列号:22 发送的消息是:123456<br/>
+序列号:888 发送的消息是:123456<br/>
+序列号:21 发送的消息是:123456<br/>
+序列号:24 发送的消息是:123456<br/>
+序列号:5 发送的消息是:123456<br/>
+序列号:4 发送的消息是:123456<br/>
+序列号:28 发送的消息是:123456</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160530175314943?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br/>
+<p></p><br/>
+<p><img src="http://img.blog.csdn.net/20160530175327209?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

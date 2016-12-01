@@ -1,0 +1,38 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java的Constructor和static块            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">public class demo988<br/>
+{<br/>
+	public static void main(String args[])<br/>
+	{<br/>
+		A a = new B();<br/>
+		System.out.println();<br/>
+		a = new B();<br/>
+<br/>
+	}<br/>
+}<br/>
+class A{<br/>
+	static{<br/>
+		System.out.print(1);<br/>
+	}<br/>
+	public A(){<br/>
+		System.out.print(2);<br/>
+	}<br/>
+}<br/>
+class B extends A{<br/>
+	static{<br/>
+		System.out.print(&quot;a&quot;);<br/>
+	}<br/>
+	public B(){<br/>
+		System.out.print(&quot;b&quot;);<br/>
+	}<br/>
+}<br/>
+</pre><br/>
+<p>优先执行static块且只执行一次！</p><br/>
+<p>运行结果：</p><br/>
+<p>1a2b<br><br/>
+2b<br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,209 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        MyBatis正确插入带有主键（使用oracle序列号）的数据到oracle数据库            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1681898" snippet_file_name="blog_20160513_1_6345808"  name="code" class="html">&lt;insert id=&quot;insertSelective&quot; parameterType=&quot;com.tienon.message.entity.Raw_msg_batch&quot; &gt;    <br/>
+    insert into RAW_MSG_BATCH<br/>
+    &lt;trim prefix=&quot;(&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot; &gt;<br/>
+      &lt;if test=&quot;true&quot; &gt;//设置为true<br/>
+        SERAIL,//主键<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;occDate != null&quot; &gt;<br/>
+        OCC_DATE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;occTime != null&quot; &gt;<br/>
+        OCC_TIME,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;state != null&quot; &gt;<br/>
+        STATE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msg != null&quot; &gt;<br/>
+        MSG,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;bsnCd != null&quot; &gt;<br/>
+        BSN_CD,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msgType != null&quot; &gt;<br/>
+        MSG_TYPE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;prior != null&quot; &gt;<br/>
+        PRIOR1,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendTimes != null&quot; &gt;<br/>
+        SEND_TIMES,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendTime != null&quot; &gt;<br/>
+        SEND_TIME,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;reportFlag != null&quot; &gt;<br/>
+        REPORT_FLAG,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendWay != null&quot; &gt;<br/>
+        SEND_WAY,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;customId != null&quot; &gt;<br/>
+        CUSTOM_ID,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;inChannle != null&quot; &gt;<br/>
+        IN_CHANNLE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;inChanCustomId != null&quot; &gt;<br/>
+        IN_CHAN_CUSTOM_ID,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;outChannle != null&quot; &gt;<br/>
+        OUT_CHANNLE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;outChanCustomId != null&quot; &gt;<br/>
+        OUT_CHAN_CUSTOM_ID,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;filter != null&quot; &gt;<br/>
+        FILTER,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;groupId != null&quot; &gt;<br/>
+        GROUP_ID,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batId != null&quot; &gt;<br/>
+        BAT_ID,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batOrder != null&quot; &gt;<br/>
+        BAT_ORDER,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batSlice != null&quot; &gt;<br/>
+        BAT_SLICE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;splitFlag != null&quot; &gt;<br/>
+        SPLIT_FLAG,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;linkFlag != null&quot; &gt;<br/>
+        LINK_FLAG,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msgRemark != null&quot; &gt;<br/>
+        MSG_REMARK,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendNow != null&quot; &gt;<br/>
+        SEND_NOW,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;schBegTime != null&quot; &gt;<br/>
+        SCH_BEG_TIME,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;schEndTime != null&quot; &gt;<br/>
+        SCH_END_TIME,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;ope != null&quot; &gt;<br/>
+        OPE,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;org != null&quot; &gt;<br/>
+        ORG,<br/>
+      &lt;/if&gt;<br/>
+    &lt;/trim&gt;<br/>
+    &lt;trim prefix=&quot;values (&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot; &gt;<br/>
+      &lt;if test=&quot;true&quot;&gt;//设置为true<br/>
+       serial.nextval,<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;occDate != null&quot; &gt;<br/>
+        #{occDate,jdbcType=TIMESTAMP},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;occTime != null&quot; &gt;<br/>
+        #{occTime,jdbcType=TIMESTAMP},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;state != null&quot; &gt;<br/>
+        #{state,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msg != null&quot; &gt;<br/>
+        #{msg,jdbcType=VARCHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;bsnCd != null&quot; &gt;<br/>
+        #{bsnCd,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msgType != null&quot; &gt;<br/>
+        #{msgType,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;prior != null&quot; &gt;<br/>
+        #{prior,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendTimes != null&quot; &gt;<br/>
+        #{sendTimes,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendTime != null&quot; &gt;<br/>
+        #{sendTime,jdbcType=TIMESTAMP},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;reportFlag != null&quot; &gt;<br/>
+        #{reportFlag,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendWay != null&quot; &gt;<br/>
+        #{sendWay,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;customId != null&quot; &gt;<br/>
+        #{customId,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;inChannle != null&quot; &gt;<br/>
+        #{inChannle,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;inChanCustomId != null&quot; &gt;<br/>
+        #{inChanCustomId,jdbcType=VARCHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;outChannle != null&quot; &gt;<br/>
+        #{outChannle,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;outChanCustomId != null&quot; &gt;<br/>
+        #{outChanCustomId,jdbcType=VARCHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;filter != null&quot; &gt;<br/>
+        #{filter,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;groupId != null&quot; &gt;<br/>
+        #{groupId,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batId != null&quot; &gt;<br/>
+        #{batId,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batOrder != null&quot; &gt;<br/>
+        #{batOrder,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;batSlice != null&quot; &gt;<br/>
+        #{batSlice,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;splitFlag != null&quot; &gt;<br/>
+        #{splitFlag,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;linkFlag != null&quot; &gt;<br/>
+        #{linkFlag,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;msgRemark != null&quot; &gt;<br/>
+        #{msgRemark,jdbcType=VARCHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;sendNow != null&quot; &gt;<br/>
+        #{sendNow,jdbcType=DECIMAL},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;schBegTime != null&quot; &gt;<br/>
+        #{schBegTime,jdbcType=TIMESTAMP},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;schEndTime != null&quot; &gt;<br/>
+        #{schEndTime,jdbcType=TIMESTAMP},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;ope != null&quot; &gt;<br/>
+        #{ope,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+      &lt;if test=&quot;org != null&quot; &gt;<br/>
+        #{org,jdbcType=CHAR},<br/>
+      &lt;/if&gt;<br/>
+    &lt;/trim&gt;<br/>
+  &lt;/insert&gt;</pre><br/>
+<p>如果主键&lt;if&gt;表达式不为true，例：test=“serial != null”或test=&quot;serial == null&quot;或删除&lt;if&gt;标签等，极有可能报：</p><br/>
+<p>ORA-00913: &#20540;过多<br><br/>
+ORA-00947: 没有足够的&#20540;<br><br/>
+出现不支持的 SQL92 标记: 654: SERIAL<br><br/>
+</p><br/>
+<p>等等错误，</p><br/>
+<p>经过检验：还是设置为true后，oracle序列号起作用了，插入语句正确运行。</p><br/>
+<p>注：像什么先查序列号再插入主键的，经测试在这个trim语句中无效。</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

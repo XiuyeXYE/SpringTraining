@@ -1,0 +1,28 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java中调用声明没实现方法体的类完全运行正常            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1655545" snippet_file_name="blog_20160421_1_7850102"  name="code" class="java">public class TestNoCallMethod<br/>
+{<br/>
+	<br/>
+	public static void  main(String args[]){<br/>
+		Listener l = null;<br/>
+		<br/>
+		if(l != null)<br/>
+			l.f();<br/>
+		System.out.println(&quot;end&quot;);<br/>
+<br/>
+	}<br/>
+}<br/>
+/*private */interface Listener{//不能为private<br/>
+	public void f();//仅仅是声明而已<br/>
+}<br/>
+/*private */class A{//不能为private<br/>
+}<br/>
+</pre><pre code_snippet_id="1655545" snippet_file_name="blog_20160421_2_1819054"  name="code" class="java">D:\programming\java&gt;javac TestNoCallMethod.java<br/>
+<br/>
+D:\programming\java&gt;java TestNoCallMethod<br/>
+end</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

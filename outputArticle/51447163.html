@@ -1,0 +1,32 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Interface Default Static            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1688391" snippet_file_name="blog_20160518_1_8012824"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+public interface TestInterfaceDefault {<br/>
+<br/>
+	static void f() {<br/>
+		System.out.println(&quot;f&quot;);<br/>
+	}<br/>
+<br/>
+	public default void g() {<br/>
+		System.out.println(&quot;g&quot;);<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		TestInterfaceDefault.f();<br/>
+		TestInterfaceDefault t = new TestInterfaceDefault() {<br/>
+<br/>
+		};<br/>
+		t.g();<br/>
+<br/>
+	}<br/>
+<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1688391" snippet_file_name="blog_20160518_2_2615413"  name="code" class="java">f<br/>
+g<br/>
+</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,12 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        简述SAX和DOM解析方式的不同            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>DOM：(Document Object Model, 即文档对象模型) 是 W3C 组织推荐的处理 XML 的一种方式。DOM解析器在解析XML文档时，会把文档中的所有元素，按照其出现的层次关系，解析成各个Node对象(节点)。</p><br/>
+<p>优点:把xml文件在内存中构造树形结构，可以遍历和修改节点</p><br/>
+<p>缺点：如果文件比较大，内存有压力，解析的时间会比较长</p><br/>
+<p>SAX（simple API for XML）是一种XML解析的替代方法。相比于DOM，SAX是一种速度更快，更有效的方法。它逐行扫描文档，一边扫描一边解析。而且相比于DOM，SAX可以在解析文档的任意时刻停止解析。</p><br/>
+<p>优点： 解析可以立即开始，速度快，没有内存压力</p><br/>
+<p>缺点： 不能对节点做修改</p><br/>
+   <br/>
+</div>

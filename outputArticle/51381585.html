@@ -1,0 +1,11 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        框架的事务管理            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1680187" snippet_file_name="blog_20160512_1_5270125"  name="code" class="java">不管是注解声明事务还是框架调用API进行事务管理，必须保证所需要的bean在框架的管理下，否则事务功能不能生效。<br/>
+例：<br/>
+spring的中普通java bean 如果是直接new 出来的对象，就没有spring管理下增加的功能，如事务管理，如果手工调用管理事务，可能会出错。因为数据库连接池<br/>
+多个connection，谁知道哪个是当前的connection，可以进行事务管理。<br/>
+框架管理下的bean才能实现注入，注解，事务等等的功能。</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,64 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        windows程序错误码到错误信息的转换            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691284" snippet_file_name="blog_20160521_1_1626054"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;iostream&gt;<br/>
+#pragma comment(linker,&quot;/entry:_tWinMain /subsystem:windows&quot;)<br/>
+using namespace std;<br/>
+int WINAPI _tWinMain(HINSTANCE hInstance,HINSTANCE ,PTSTR pszCmdLine,int ){<br/>
+    HWND hwnd = GetDesktopWindow();<br/>
+   // DWORD  dwError = GetDlgItemInt(hwnd,IDC_ERRORCODE,NULL,FALSE);<br/>
+    HLOCAL hlocal = NULL;<br/>
+    DWORD systemLocale = MAKELANGID(LANG_NEUTRAL,SUBLANG_NEUTRAL);<br/>
+    BOOL fOK = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,<br/>
+        NULL,2/*错误码*/,systemLocale,(PTSTR)&amp;hlocal,0,NULL<br/>
+    );<br/>
+    if(!fOK){<br/>
+        HMODULE hDll = LoadLibraryEx(TEXT(&quot;netmsg.dll&quot;),NULL,DONT_RESOLVE_DLL_REFERENCES);<br/>
+        if(hDll != NULL){<br/>
+            fOK = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS|FORMAT_MESSAGE_ALLOCATE_BUFFER,<br/>
+            hDll,2,systemLocale,(PTSTR)&amp;hlocal,0,NULL<br/>
+            );<br/>
+            FreeLibrary(hDll);<br/>
+        }<br/>
+    }<br/>
+    if(fOK &amp;&amp; (hlocal != NULL)){<br/>
+      //  SetDlgItemText(hwnd,IDC_ERRORTEXT,(PCTSTR)LocalLock(hlocal));<br/>
+      //cout &lt;&lt; (PCTSTR)LocalLock(hlocal) &lt;&lt; endl;//不能输出在控制台 也许规定子系统为windows后，c++的输入输出被禁掉了 <br/>
+     //或者 c++中未定义重载此类型输入输出<br/>
+        MessageBox(NULL,(PCTSTR)LocalLock(hlocal),&quot;OK&quot;,MB_OK);//可以执行<br/>
+        MessageBox(NULL,(PCTSTR)hlocal,&quot;OK&quot;,MB_OK);//可以<br/>
+        LocalFree(hlocal);<br/>
+    }<br/>
+    else{<br/>
+       // SetDlgItemText(hwnd,IDC_ERRORTEXT,TEXT(&quot;No Text found for this error number.&quot;));<br/>
+       //cout &lt;&lt; TEXT(&quot;No Text found for this error number.&quot;) &lt;&lt; endl;//不能输出<br/>
+       MessageBox(NULL,TEXT(&quot;No Text found for this error number.&quot;),TEXT(&quot;No&quot;),MB_OK);<br/>
+    }<br/>
+    return 0;<br/>
+}</pre><br><br/>
+<pre code_snippet_id="1691284" snippet_file_name="blog_20160521_2_165358"  name="code" class="cpp">d:\programming\C++&gt;cl /EHsc FormatMessageTest.cpp /link user32.lib<br/>
+用于 x86 的 Microsoft (R) C/C++ 优化编译器 18.00.21005.1 版版权所有(C) Microsoft<br/>
+ Corporation。  保留所有权利。<br/>
+<br/>
+FormatMessageTest.cpp<br/>
+FormatMessageTest.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字<br/>
+符。请将该文件保存为 Unicode 格式以防止数据丢失<br/>
+c:\program files (x86)\microsoft sdks\windows\v7.1a\include\sal_supp.h(57) : war<br/>
+ning C4005: “__useHeader”: 宏重定义<br/>
+        F:\360Apps\vs2013\VC\include\sal.h(2886) : 参见“__useHeader”的前一个定<br/>
+义<br/>
+c:\program files (x86)\microsoft sdks\windows\v7.1a\include\specstrings_supp.h(7<br/>
+7) : warning C4005: “__on_failure”: 宏重定义<br/>
+        F:\360Apps\vs2013\VC\include\sal.h(2896) : 参见“__on_failure”的前一个<br/>
+定义<br/>
+Microsoft (R) Incremental Linker Version 12.00.21005.1<br/>
+Copyright (C) Microsoft Corporation.  All rights reserved.<br/>
+<br/>
+/out:FormatMessageTest.exe<br/>
+user32.lib<br/>
+FormatMessageTest.obj</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160521104941053?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br/>
+   <br/>
+</div>

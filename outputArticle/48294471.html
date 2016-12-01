@@ -1,0 +1,124 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        输出数据到xml文件（java实现）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.utils;<br/>
+<br/>
+import java.io.File;<br/>
+import java.io.FileNotFoundException;<br/>
+import java.io.FileOutputStream;<br/>
+import java.io.IOException;<br/>
+import java.io.UnsupportedEncodingException;<br/>
+import java.util.Random;<br/>
+<br/>
+import org.dom4j.Document;<br/>
+import org.dom4j.DocumentHelper;<br/>
+import org.dom4j.Element;<br/>
+import org.dom4j.io.OutputFormat;<br/>
+import org.dom4j.io.XMLWriter;<br/>
+<br/>
+public class OutputEmpListXml {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		// prepare char&#39;s array to generate random name<br/>
+		char letters[] = new char[54];<br/>
+		letters[0] = &#39; &#39;;<br/>
+		letters[1] = &#39;-&#39;;<br/>
+		// a~z<br/>
+		for (int i = 0 + 2, j = 0; i &lt; 26 + 2 &amp;&amp; j &lt; 26; i++, j++) {<br/>
+			letters[i] = (char) (&#39;a&#39; + j);<br/>
+		}<br/>
+		// A~Z<br/>
+		for (int i = 0 + 2 + 26, j = 0; i &lt; 26 + 2 + 26 &amp;&amp; j &lt; 26; i++, j++) {<br/>
+			letters[i] = (char) (&#39;A&#39; + j);<br/>
+		}<br/>
+<br/>
+		String sexs[] = { &quot;man&quot;, &quot;woman&quot; };<br/>
+<br/>
+		Random rnd = new Random();<br/>
+		// the whole xml file<br/>
+		Document doc = DocumentHelper.createDocument();<br/>
+		/**<br/>
+		 * only one root node,if not, IllegalAddException<br/>
+		 * <br/>
+		 */<br/>
+		// node root<br/>
+		Element root = doc.addElement(&quot;emp-list&quot;);<br/>
+		for (int i = 0; i &lt; 1000; i++) {<br/>
+			<br/>
+			<br/>
+			// node emp<br/>
+			Element emp = root.addElement(&quot;emp&quot;);<br/>
+			int id = rnd.nextInt(9999999);<br/>
+			// emp&#39;s attribute id<br/>
+			emp.addAttribute(&quot;id&quot;, Integer.toString(id));<br/>
+			// node name<br/>
+			Element name = emp.addElement(&quot;name&quot;);<br/>
+			name.setText(generateRandomName(letters));<br/>
+			// node age<br/>
+			Element age = emp.addElement(&quot;age&quot;);<br/>
+			// node geneder<br/>
+			Element geneder = emp.addElement(&quot;geneder&quot;);<br/>
+			// node salary<br/>
+			Element salary = emp.addElement(&quot;salary&quot;);<br/>
+			// random age<br/>
+			int ageInt = rnd.nextInt(100);<br/>
+			age.setText(Integer.toString(ageInt));// first way &quot;int -&gt; String&quot;<br/>
+			// random sex<br/>
+			int index = rnd.nextInt(2);<br/>
+			geneder.setText(sexs[index]);<br/>
+			// random salary<br/>
+			int money = rnd.nextInt(10000000);<br/>
+			salary.setText(&quot;&quot; + money);// second way &quot;int -&gt; String&quot;<br/>
+		}<br/>
+		<br/>
+		<br/>
+		try {<br/>
+			FileOutputStream out = new FileOutputStream(&quot;EmpList.xml&quot;);<br/>
+			OutputFormat format = OutputFormat.createPrettyPrint();<br/>
+			XMLWriter xmlw = new XMLWriter(out,format);<br/>
+			xmlw.write(doc);<br/>
+			<br/>
+			xmlw.close();<br/>
+			<br/>
+		} catch (FileNotFoundException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		} catch (UnsupportedEncodingException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		} catch (IOException e) {<br/>
+			<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+		System.out.println(&quot;that&#39;s over!&quot;);<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	// get a simple random name<br/>
+	private static String generateRandomName(char[] letters) {<br/>
+		//String name = null;<br/>
+		/**<br/>
+		 * name cannot be bull,beacause of <br/>
+		 * null += &quot;ABC&quot;;=&gt; nullABC<br/>
+		 * it&#39;s not my wanted.<br/>
+		 * <br/>
+		 */<br/>
+		String name = &quot;&quot;;<br/>
+		int nameLength = (int) (Math.random() * letters.length) + 1;<br/>
+		for (int i = 0; i &lt; nameLength; i++) {<br/>
+			int index = (int) (Math.random() * letters.length);<br/>
+			name += &quot;&quot; + letters[index];<br/>
+		}<br/>
+<br/>
+		return name;<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

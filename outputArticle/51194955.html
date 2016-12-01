@@ -1,0 +1,40 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++重载括号和重载类型探索            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1653701" snippet_file_name="blog_20160419_1_1643317"  name="code" class="java">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+class A{<br/>
+	public:<br/>
+		int operator ()(){<br/>
+			return 123;<br/>
+		}<br/>
+		operator int(){<br/>
+			return 345;<br/>
+		}<br/>
+};<br/>
+void print(A a){<br/>
+	cout &lt;&lt; a() &lt;&lt; endl;<br/>
+}<br/>
+int main(){<br/>
+	A b = A();//直接对象<br/>
+	cout &lt;&lt; b() &lt;&lt; endl; <br/>
+	print(A());//传入对象<br/>
+	A a;<br/>
+	cout &lt;&lt; a() &lt;&lt; endl;<br/>
+	//cout &lt;&lt; A() &lt;&lt; endl;//如果仅仅只是重载了括号，compile error A()相当于构造A对象吗？<br/>
+	cout &lt;&lt; A() &lt;&lt; endl;//强制类型转换<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1653701" snippet_file_name="blog_20160419_2_3278737"  name="code" class="cpp">D:\programming\C++&gt;g++ TestOperatorQuote.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+123<br/>
+123<br/>
+123<br/>
+345</pre><br><br/>
+   <br/>
+</div>

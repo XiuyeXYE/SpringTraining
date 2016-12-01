@@ -1,0 +1,75 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++类复制构造函数参数为nonconst和const的重载            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1604543" snippet_file_name="blog_20160310_1_4654570"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;vector&gt;<br/>
+using namespace std;<br/>
+class A{<br/>
+	private:<br/>
+	int value;<br/>
+	public:<br/>
+	A(){<br/>
+	cout &lt;&lt; &quot;constructor &quot; &lt;&lt; endl;<br/>
+<br/>
+	}<br/>
+	A(int n){<br/>
+	value=n;<br/>
+	cout &lt;&lt; &quot;constructor &quot; &lt;&lt; endl;<br/>
+	}<br/>
+	A(A &amp;o){//nonconst<br/>
+		this-&gt;value = o.value;<br/>
+		cout &lt;&lt; &quot;copy non const&quot; &lt;&lt; endl;<br/>
+	}<br/>
+<br/>
+<br/>
+	A(const A &amp;other){//const<br/>
+	value = other.value;<br/>
+	cout &lt;&lt; &quot;copy const&quot; &lt;&lt; endl; <br/>
+	}<br/>
+/*	A(A o){<br/>
+	value = o.value;<br/>
+	}<br/>
+*/	void print(){<br/>
+	cout &lt;&lt; value &lt;&lt; endl;<br/>
+	}<br/>
+};<br/>
+<br/>
+void print(A a){<br/>
+	a.print();<br/>
+}<br/>
+<br/>
+int main(){<br/>
+	A a(10);<br/>
+	A b = a;<br/>
+	A c(b);<br/>
+	b.print();<br/>
+	print(b);<br/>
+	<br/>
+	vector&lt;A&gt; v(10);<br/>
+	<br/>
+	<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1604543" snippet_file_name="blog_20160310_2_9911060"  name="code" class="cpp">$ ./a<br/>
+constructor<br/>
+copy non const<br/>
+copy non const<br/>
+10<br/>
+copy non const<br/>
+10<br/>
+constructor<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+copy const<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

@@ -1,0 +1,44 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        解决juqery ajax post方式传送数据乱码问题            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1588967" snippet_file_name="blog_20160226_1_2861826"  name="code" class="javascript">$.ajax({<br/>
+<br/>
+		url : &quot;checkLogin.do&quot;,<br/>
+		type : &quot;post&quot;,<br/>
+		dataType : &quot;html&quot;,<br/>
+		&lt;span style=&quot;color:#FF6666;&quot;&gt;/* 解决中文乱码 */<br/>
+		contentType : &quot;application/x-www-form-urlencoded;charset=UTF-8&quot;,&lt;/span&gt;<br/>
+		data : dataJson,<br/>
+		success : function(dataStr) {<br/>
+<br/>
+			if (dataStr.indexOf(&quot;登录失败&quot;) != -1) {<br/>
+				$(&quot;#showPage&quot;).html(dataStr);<br/>
+			} else if (dataStr.indexOf(&quot;no&quot;) != -1) {<br/>
+<br/>
+				/**<br/>
+				 * 设么都不做<br/>
+				 */<br/>
+			} else {<br/>
+				<br/>
+				var i = 0;				<br/>
+				var id = window.setInterval(function() {<br/>
+					i++;<br/>
+					$(&quot;.bar&quot;).css(&quot;width&quot;, (1 * i) + &quot;%&quot;);<br/>
+					if (i == 100) {<br/>
+						clearInterval(id);<br/>
+						//$(&quot;#as-progress&quot;).css(&quot;display&quot;, &quot;none&quot;);<br/>
+						$(&quot;#pageId&quot;).html(&quot;所有学生信息&quot;);<br/>
+						$(&quot;#headLogin&quot;).html(&quot;退出&quot;);<br/>
+						$(&quot;#showPage&quot;).html(dataStr);<br/>
+					}<br/>
+				}, 50);<br/>
+				<br/>
+				<br/>
+			}<br/>
+<br/>
+		}<br/>
+<br/>
+	});</pre><br><br/>
+   <br/>
+</div>

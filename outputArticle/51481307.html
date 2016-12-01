@@ -1,0 +1,91 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Java Spi 实践            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>创建父类Spi接口：</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1693404" snippet_file_name="blog_20160523_1_9047246"  code_snippet_id="1693404" snippet_file_name="blog_20160523_1_9047246" name="code" class="java">package com.xiuye.father;<br/>
+<br/>
+import java.util.List;<br/>
+<br/>
+public interface FatherSpi {<br/>
+<br/>
+	List&lt;String&gt; search();<br/>
+	<br/>
+}<br/>
+</pre>子类实现：<br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1693404" snippet_file_name="blog_20160523_2_5426959"  code_snippet_id="1693404" snippet_file_name="blog_20160523_2_5426959" name="code" class="java">package com.xiuye.son;<br/>
+<br/>
+import java.util.ArrayList;<br/>
+import java.util.List;<br/>
+<br/>
+import com.xiuye.father.FatherSpi;<br/>
+<br/>
+public class SonTOM implements FatherSpi {<br/>
+<br/>
+	@Override<br/>
+	public List&lt;String&gt; search() {<br/>
+		List&lt;String&gt; list = new ArrayList&lt;String&gt;();<br/>
+		list.add(&quot;Hello,&quot;);<br/>
+		list.add(&quot;I&#39;m TOM!&quot;);<br/>
+		list.add(&quot;If you see me,I will talk to you!&quot;);<br/>
+		list.add(&quot;Java Spi send me to here,&quot;);<br/>
+		list.add(&quot;I don&#39;t know what happened!&quot;);<br/>
+		list.add(&quot;Now , I&#39;m here ,using spi is successful!AI...&quot;);<br/>
+		return list;<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1693404" snippet_file_name="blog_20160523_3_3093428"  code_snippet_id="1693404" snippet_file_name="blog_20160523_3_3093428" name="code" class="java">package com.xiuye.son;<br/>
+<br/>
+import java.util.ArrayList;<br/>
+import java.util.List;<br/>
+<br/>
+import com.xiuye.father.FatherSpi;<br/>
+<br/>
+public class SonJOCK implements FatherSpi{<br/>
+<br/>
+	@Override<br/>
+	public List&lt;String&gt; search() {<br/>
+		<br/>
+		List&lt;String&gt; list = new ArrayList&lt;String&gt;();<br/>
+		list.add(&quot;Hello,&quot;);<br/>
+		list.add(&quot;I&#39;m JOCK!&quot;);<br/>
+		list.add(&quot;I&#39;m testing java SPI !&quot;);<br/>
+		list.add(&quot;Don&#39;t trouble me!&quot;);<br/>
+		list.add(&quot;if you receive my msg,&quot;);<br/>
+		list.add(&quot;you&#39;re successful! using spi &quot;);<br/>
+		return list;<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre>导出jar包：<br/>
+<p></p><br/>
+<p><img src="http://img.blog.csdn.net/20160523141911472?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>在META-INF下建立services文件夹：</p><br/>
+<p><img src="http://img.blog.csdn.net/20160523141924269?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>创建一个与父类几口同名的文件，文件编码必须为utf-8：<br><br/>
+<br><br/>
+<img src="http://img.blog.csdn.net/20160523142006910?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>文件的内容是子类名：</p><br/>
+<p><img src="http://img.blog.csdn.net/20160523142047589?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p>运行：</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1693404" snippet_file_name="blog_20160523_4_759897"  code_snippet_id="1693404" snippet_file_name="blog_20160523_4_759897" name="code" class="java">C:\Users\Administrator\Desktop&gt;java -jar JavaSpiTest.jar<br/>
+[Hello,, I&#39;m TOM!, If you see me,I will talk to you!, Java Spi send me to here,,<br/>
+ I don&#39;t know what happened!, Now , I&#39;m here ,using spi is successful!AI...]<br/>
+[Hello,, I&#39;m JOCK!, I&#39;m testing java SPI !, Don&#39;t trouble me!, if you receive my<br/>
+ msg,, you&#39;re successful! using spi ]</pre><br><br/>
+<br><br/>
+<p></p><br/>
+<p><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

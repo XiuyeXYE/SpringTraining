@@ -1,0 +1,142 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        IBM MQQueueManager 直接连接            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1701562" snippet_file_name="blog_20160530_1_5531019"  code_snippet_id="1701562" snippet_file_name="blog_20160530_1_5531019" name="code" class="java">package com.xiuye.mq;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.util.Properties;<br/>
+<br/>
+import com.ibm.mq.MQEnvironment;<br/>
+import com.ibm.mq.MQException;<br/>
+import com.ibm.mq.MQMessage;<br/>
+import com.ibm.mq.MQPutMessageOptions;<br/>
+import com.ibm.mq.MQQueue;<br/>
+import com.ibm.mq.MQQueueManager;<br/>
+<br/>
+public class SendMsgMQ2 {<br/>
+<br/>
+	public static void main(String[] args) throws MQException, IOException {<br/>
+		Properties props = new Properties();<br/>
+		props.put(&quot;hostname&quot;, &quot;192.168.1.120&quot;);<br/>
+		props.put(&quot;port&quot;,1415);<br/>
+		props.put(&quot;channel&quot;, &quot;MsgChannel&quot;);<br/>
+		props.put(&quot;CCSID&quot;,1381);//数字<br/>
+		<br/>
+//		props.put(&quot;transport&quot;, &quot;transmit&quot;);<br/>
+		<br/>
+		//以下正确<br/>
+//		MQEnvironment.hostname = &quot;localhost&quot;;<br/>
+//		MQEnvironment.port=1415;<br/>
+//		MQEnvironment.userID = &quot;MUSR_MQADMIN&quot;;//可以不要<br/>
+//		MQEnvironment.password = &quot;&quot;;//可以不要<br/>
+//		MQEnvironment.channel = &quot;MsgChannel&quot;;<br/>
+//		MQEnvironment.CCSID = 1381;<br/>
+		<br/>
+		System.out.println(MQEnvironment.hostname);<br/>
+		System.out.println(MQEnvironment.port);<br/>
+		System.out.println(MQEnvironment.CCSID);<br/>
+		System.out.println(MQEnvironment.getQueueManagerReference(1));<br/>
+		<br/>
+		System.out.println(MQEnvironment.getDefaultConnectionManager());<br/>
+		<br/>
+		<br/>
+		<br/>
+		MQQueueManager manager = new MQQueueManager(&quot;QM1&quot;,props);<br/>
+		<br/>
+		System.out.println(manager.getResolvedObjectString());<br/>
+		System.out.println(manager.name);<br/>
+		System.out.println(manager.getDescription());<br/>
+		System.out.println(manager.getName());<br/>
+		System.out.println(manager.getAlternateUserId());<br/>
+		System.out.println(manager.getCharacterSet());<br/>
+		System.out.println(manager.getCloseOptions());<br/>
+		System.out.println(manager.getCommandLevel());<br/>
+		System.out.println(manager.getOpenOptions());<br/>
+				<br/>
+		int openOptions = 16;<br/>
+		MQQueue q = manager.accessQueue(&quot;localq&quot;, openOptions);<br/>
+		<br/>
+		MQMessage putMessage = new MQMessage();<br/>
+		putMessage.writeUTF(&quot;TEST&quot;);<br/>
+		MQPutMessageOptions pmo = new MQPutMessageOptions();<br/>
+		q.put(putMessage,pmo);<br/>
+		<br/>
+		System.out.println(&quot;Message has been input into the remote queue&quot;);<br/>
+		q.close();<br/>
+		<br/>
+		manager.disconnect();<br/>
+		<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1701562" snippet_file_name="blog_20160530_2_9151305"  code_snippet_id="1701562" snippet_file_name="blog_20160530_2_9151305" name="code" class="java">1414<br/>
+819<br/>
+null<br/>
+null<br/>
+null<br/>
+QM1<br/>
+                                                                <br/>
+QM1<br/>
+<br/>
+1381<br/>
+0<br/>
+750<br/>
+32<br/>
+Message has been input into the remote queue<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160530144014854?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160530144138276?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1701562" snippet_file_name="blog_20160530_3_379138"  code_snippet_id="1701562" snippet_file_name="blog_20160530_3_379138" name="code" class="java">package com.xiuye.mq;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.util.Properties;<br/>
+<br/>
+import com.ibm.mq.MQC;<br/>
+import com.ibm.mq.MQException;<br/>
+import com.ibm.mq.MQGetMessageOptions;<br/>
+import com.ibm.mq.MQMessage;<br/>
+import com.ibm.mq.MQQueue;<br/>
+import com.ibm.mq.MQQueueManager;<br/>
+<br/>
+public class ReceiveMsgMQ2 {<br/>
+<br/>
+	public static void main(String[] args) throws MQException, IOException {<br/>
+<br/>
+		Properties props = new Properties();<br/>
+//		props.put(&quot;hostname&quot;, &quot;localhost&quot;);<br/>
+//		props.put(&quot;port&quot;, 1415);<br/>
+		props.put(&quot;hostname&quot;, &quot;192.168.1.120&quot;);<br/>
+		props.put(&quot;port&quot;,1415);<br/>
+		props.put(&quot;channel&quot;, &quot;MsgChannel&quot;);<br/>
+		props.put(&quot;CCSID&quot;,1381);//数字<br/>
+		MQQueueManager manager = new MQQueueManager(&quot;QM1&quot;, props);<br/>
+<br/>
+		@SuppressWarnings(&quot;deprecation&quot;)<br/>
+		int openOptions = MQC.MQOO_INPUT_AS_Q_DEF;<br/>
+		MQQueue q = manager.accessQueue(&quot;localq&quot;, openOptions);<br/>
+<br/>
+		MQGetMessageOptions gmo = new MQGetMessageOptions();<br/>
+		MQMessage msg = new MQMessage();<br/>
+		q.get(msg, gmo);<br/>
+<br/>
+		System.out.println(msg.readUTF());<br/>
+<br/>
+		q.close();<br/>
+<br/>
+		manager.disconnect();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1701562" snippet_file_name="blog_20160530_4_8568993"  code_snippet_id="1701562" snippet_file_name="blog_20160530_4_8568993" name="code" class="java">TEST</pre><br><br/>
+<br><br/>
+<br><br/>
+<p></p><br/>
+   <br/>
+</div>

@@ -1,0 +1,42 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java web 设置持久session            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1710236" snippet_file_name="blog_20160607_1_6655634"  code_snippet_id="1710236" snippet_file_name="blog_20160607_1_6655634" name="code" class="java">&lt;pre name=&quot;code&quot; class=&quot;java&quot;&gt;&lt;span style=&quot;font-family: Arial, Helvetica, sans-serif;&quot;&gt;当浏览器支持cookie的时候，设置服务器端的session周期是不够的，因为浏览器是以会话周期为限保存JSESSIONID的。如果如果想长时间的真正保存session需要设置服务器端的&lt;/span&gt;</pre>session期限，同时设置浏览器端的cookie为<span style="font-family:Arial,Helvetica,sans-serif">JSESSIONID的期限，才能在浏览器和服务器一致。（每次浏览器访问服务器的时候，都会传递cookies给服务器，而JSESSIONID代表session在cookie中对应项，服务器会在有JSESSIONID的cookie下，使用这次SESSIONID生成还原过去的session，如果其不存在，就创建新的session和JSESSIONID的cookie）</span><br/>
+<pre></pre><br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="1710236" snippet_file_name="blog_20160607_2_4082122"  code_snippet_id="1710236" snippet_file_name="blog_20160607_2_4082122" name="code" class="java">服务器端设置session的过期时间:(这保证该时间段内服务器不关闭的情况下有效吧？)<br/>
+session.setMaxInactiveInterval(5*60);</pre><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<p></p><br/>
+<pre code_snippet_id="1710236" snippet_file_name="blog_20160607_3_7288488"  code_snippet_id="1710236" snippet_file_name="blog_20160607_3_7288488" name="code" class="java">浏览器端通过服务器端的cookie设置，使其浏览器session的周期不会像下面这样：<br/>
+脚本可访问：否（仅 Http）<br/>
+已创建：	2016年6月7日星期二 上午10:41:59<br/>
+过期时间：浏览会话结束时<br/>
+<br/>
+而是设置成:</pre><pre code_snippet_id="1710236" snippet_file_name="blog_20160607_4_494855"  code_snippet_id="1710236" snippet_file_name="blog_20160607_4_494855" name="code" class="java">脚本可访问：是<br/>
+已创建：2016年6月7日星期二 上午10:39:48<br/>
+过期时间：2016年6月12日星期日 上午10:39:48<br/>
+这样也许服务器关闭，服务器开启后也能访问到原来的session吧？<br/>
+public void persistenceClientSession(HttpServletResponse response,HttpSession session,int savedSeconds){<br/>
+		<br/>
+		Cookie cookie = new Cookie(&quot;JSESSIONID&quot;,session.getId());<br/>
+		cookie.setPath(&quot;/&quot;);<br/>
+		cookie.setMaxAge(savedSeconds);//单位:s<br/>
+		response.addCookie(cookie);<br/>
+	}</pre><br><br/>
+<br><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+<br><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

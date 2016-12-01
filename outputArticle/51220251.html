@@ -1,0 +1,433 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java 线程池批量执行            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1657513" snippet_file_name="blog_20160422_1_2045675"  name="code" class="java">package com.test;<br/>
+<br/>
+import java.util.List;<br/>
+import java.util.concurrent.Callable;<br/>
+import java.util.concurrent.CompletionService;<br/>
+import java.util.concurrent.ExecutionException;<br/>
+import java.util.concurrent.ExecutorCompletionService;<br/>
+import java.util.concurrent.ExecutorService;<br/>
+import java.util.concurrent.Executors;<br/>
+import java.util.concurrent.Future;<br/>
+<br/>
+public class TestMultiThreads {<br/>
+<br/>
+	private static Integer num = 0;<br/>
+<br/>
+	//Test Shutdown <br/>
+	public static void executor1() throws Exception{<br/>
+		ExecutorService pool = Executors.newFixedThreadPool(100);<br/>
+<br/>
+		CompletionService completionService = new ExecutorCompletionService&lt;Integer&gt;(<br/>
+				pool);<br/>
+<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+			completionService.submit(new Callable&lt;Integer&gt;() {<br/>
+<br/>
+				@Override<br/>
+				public Integer call() throws Exception {<br/>
+					synchronized (num) {<br/>
+						return ++num;<br/>
+					}<br/>
+					<br/>
+				}<br/>
+<br/>
+			});<br/>
+		}<br/>
+		//pool.shutdown();//启动一次顺序关闭，执行以前提交的任务，但不接受新任务。<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+<br/>
+			Future&lt;Integer&gt; future = completionService.take();<br/>
+			System.out.println(future.get());<br/>
+<br/>
+		}<br/>
+		<br/>
+		System.out.println(&quot;==================================&quot;);<br/>
+		<br/>
+		if(pool.isShutdown()){<br/>
+			System.out.println(&quot;pool is shutdown!&quot;);<br/>
+		}<br/>
+		<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+			completionService.submit(new Callable&lt;Integer&gt;() {<br/>
+<br/>
+				@Override<br/>
+				public Integer call() throws Exception {<br/>
+					synchronized (num) {<br/>
+						return ++num;<br/>
+					}<br/>
+					<br/>
+				}<br/>
+<br/>
+			});<br/>
+		}<br/>
+		for (int i = 0; i &lt; 100; i++) {<br/>
+<br/>
+			Future&lt;Integer&gt; future = completionService.take();<br/>
+			System.out.println(future.get());<br/>
+<br/>
+		}<br/>
+		//启动一次顺序关闭，执行以前提交的任务，但不接受新任务。<br/>
+		pool.shutdown();// 必须要有shutdown否则出错<br/>
+	}<br/>
+	<br/>
+	//Test ShutdownNow<br/>
+	public static void executor2() throws InterruptedException, ExecutionException{<br/>
+		<br/>
+		ExecutorService pool = Executors.newFixedThreadPool(100);<br/>
+		CompletionService completionService = new ExecutorCompletionService&lt;Integer&gt;(pool);<br/>
+		<br/>
+		for(int i =0 ;i &lt; 100;i++){<br/>
+			<br/>
+			completionService.submit(new Callable&lt;Integer&gt;() {<br/>
+<br/>
+				@Override<br/>
+				public Integer call() throws Exception {<br/>
+					//不一定线程安全<br/>
+					return ++num;<br/>
+				}<br/>
+			});<br/>
+			<br/>
+		}<br/>
+		<br/>
+		<br/>
+		List&lt;Runnable&gt; restRunList = null;<br/>
+		for(int i=0;i&lt;100;i++){<br/>
+			<br/>
+			if(i&gt;50){<br/>
+				restRunList = pool.shutdownNow();//不成功<br/>
+				<br/>
+			}<br/>
+			System.out.println(completionService.take().get());<br/>
+		}<br/>
+		<br/>
+		System.out.println(&quot;===============================&quot;);<br/>
+		//restRunList为null<br/>
+		if(restRunList == null){<br/>
+			return;<br/>
+		}<br/>
+		for(Runnable r : restRunList ){<br/>
+			System.out.println(r);<br/>
+			r.run();<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+	public static void main(String[] args) throws Exception {<br/>
+		<br/>
+		executor1();<br/>
+		executor2();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1657513" snippet_file_name="blog_20160422_2_7683849"  name="code" class="java">2<br/>
+1<br/>
+3<br/>
+4<br/>
+5<br/>
+6<br/>
+7<br/>
+8<br/>
+9<br/>
+10<br/>
+11<br/>
+12<br/>
+13<br/>
+14<br/>
+15<br/>
+16<br/>
+17<br/>
+18<br/>
+19<br/>
+20<br/>
+21<br/>
+22<br/>
+23<br/>
+24<br/>
+25<br/>
+26<br/>
+27<br/>
+28<br/>
+29<br/>
+30<br/>
+31<br/>
+32<br/>
+33<br/>
+34<br/>
+35<br/>
+36<br/>
+37<br/>
+38<br/>
+39<br/>
+40<br/>
+41<br/>
+42<br/>
+43<br/>
+44<br/>
+45<br/>
+46<br/>
+47<br/>
+48<br/>
+49<br/>
+50<br/>
+51<br/>
+52<br/>
+53<br/>
+54<br/>
+55<br/>
+56<br/>
+57<br/>
+58<br/>
+59<br/>
+60<br/>
+61<br/>
+62<br/>
+63<br/>
+64<br/>
+65<br/>
+66<br/>
+67<br/>
+68<br/>
+69<br/>
+70<br/>
+71<br/>
+72<br/>
+73<br/>
+74<br/>
+75<br/>
+76<br/>
+77<br/>
+78<br/>
+79<br/>
+80<br/>
+81<br/>
+82<br/>
+83<br/>
+84<br/>
+85<br/>
+86<br/>
+87<br/>
+88<br/>
+89<br/>
+90<br/>
+91<br/>
+92<br/>
+93<br/>
+94<br/>
+95<br/>
+96<br/>
+97<br/>
+98<br/>
+99<br/>
+100<br/>
+==================================<br/>
+102<br/>
+101<br/>
+103<br/>
+104<br/>
+105<br/>
+106<br/>
+107<br/>
+108<br/>
+109<br/>
+110<br/>
+111<br/>
+112<br/>
+114<br/>
+115<br/>
+116<br/>
+117<br/>
+118<br/>
+119<br/>
+120<br/>
+121<br/>
+122<br/>
+123<br/>
+124<br/>
+125<br/>
+126<br/>
+127<br/>
+128<br/>
+129<br/>
+130<br/>
+131<br/>
+132<br/>
+133<br/>
+134<br/>
+135<br/>
+136<br/>
+137<br/>
+138<br/>
+139<br/>
+140<br/>
+141<br/>
+142<br/>
+143<br/>
+144<br/>
+145<br/>
+146<br/>
+147<br/>
+148<br/>
+149<br/>
+150<br/>
+151<br/>
+152<br/>
+153<br/>
+154<br/>
+155<br/>
+156<br/>
+157<br/>
+158<br/>
+159<br/>
+160<br/>
+161<br/>
+162<br/>
+163<br/>
+164<br/>
+165<br/>
+166<br/>
+167<br/>
+168<br/>
+169<br/>
+170<br/>
+171<br/>
+113<br/>
+172<br/>
+173<br/>
+174<br/>
+175<br/>
+176<br/>
+177<br/>
+178<br/>
+179<br/>
+180<br/>
+182<br/>
+181<br/>
+183<br/>
+184<br/>
+185<br/>
+186<br/>
+187<br/>
+188<br/>
+189<br/>
+190<br/>
+191<br/>
+192<br/>
+193<br/>
+194<br/>
+195<br/>
+196<br/>
+197<br/>
+198<br/>
+199<br/>
+200<br/>
+201<br/>
+201<br/>
+202<br/>
+203<br/>
+204<br/>
+205<br/>
+206<br/>
+207<br/>
+208<br/>
+209<br/>
+210<br/>
+211<br/>
+212<br/>
+213<br/>
+214<br/>
+215<br/>
+216<br/>
+217<br/>
+218<br/>
+219<br/>
+220<br/>
+221<br/>
+222<br/>
+223<br/>
+224<br/>
+225<br/>
+226<br/>
+227<br/>
+228<br/>
+229<br/>
+230<br/>
+231<br/>
+232<br/>
+233<br/>
+234<br/>
+235<br/>
+236<br/>
+237<br/>
+238<br/>
+239<br/>
+240<br/>
+241<br/>
+242<br/>
+243<br/>
+244<br/>
+245<br/>
+246<br/>
+247<br/>
+248<br/>
+249<br/>
+250<br/>
+251<br/>
+252<br/>
+253<br/>
+254<br/>
+255<br/>
+256<br/>
+257<br/>
+258<br/>
+259<br/>
+260<br/>
+261<br/>
+262<br/>
+263<br/>
+264<br/>
+265<br/>
+266<br/>
+267<br/>
+268<br/>
+269<br/>
+270<br/>
+271<br/>
+272<br/>
+273<br/>
+274<br/>
+275<br/>
+276<br/>
+277<br/>
+278<br/>
+279<br/>
+280<br/>
+281<br/>
+282<br/>
+283<br/>
+284<br/>
+285<br/>
+286<br/>
+287<br/>
+288<br/>
+289<br/>
+290<br/>
+291<br/>
+292<br/>
+293<br/>
+294<br/>
+295<br/>
+296<br/>
+297<br/>
+298<br/>
+299<br/>
+===============================<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

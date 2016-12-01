@@ -1,0 +1,43 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        array and vector            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1609002" snippet_file_name="blog_20160313_1_2950730"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;vector&gt;<br/>
+#include&lt;array&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(){<br/>
+	double a1[4] = {1.2,2.4,3.6,4.8};<br/>
+	vector&lt;double&gt; a2(4);<br/>
+	a2[0] = 1.0/2.0;<br/>
+	a2[1] = 1.0/5;<br/>
+	a2[2] = 1.0/7;<br/>
+	a2[3] = 1.0/9;<br/>
+	array&lt;double,4&gt; a3 = {3.14,2.72,1.62,1.41};<br/>
+	array&lt;double,4&gt; a4;<br/>
+	cout &lt;&lt; &quot;a1[2]:&quot; &lt;&lt; a1[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a1[2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a2[2]:&quot; &lt;&lt; a2[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a2[2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a3[2]:&quot; &lt;&lt; a3[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a3[2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a4[2]:&quot; &lt;&lt; a4[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a4[2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a1[-2]:&quot; &lt;&lt; a1[-2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a1[-2] &lt;&lt; endl;<br/>
+	a1[-2] = 20.2;<br/>
+	cout &lt;&lt; &quot;a1[-2]:&quot; &lt;&lt; a1[-2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a1[-2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a1[2]:&quot; &lt;&lt; a1[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a1[2] &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a1[2]:&quot; &lt;&lt; a1[2] &lt;&lt; &quot; at &quot; &lt;&lt; &amp;a1[2] &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1609002" snippet_file_name="blog_20160313_2_1457014"  name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++0x choice.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+a1[2]:3.6 at 0x28fee8<br/>
+a2[2]:0.142857 at 0x3ebf50<br/>
+a3[2]:1.62 at 0x28feb8<br/>
+a4[2]:6.9519e-308 at 0x28fe98<br/>
+a1[-2]:1.71036e-307 at 0x28fec8<br/>
+a1[-2]:20.2 at 0x28fec8<br/>
+a1[2]:3.6 at 0x28fee8<br/>
+a1[2]:3.6 at 0x28fee8</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

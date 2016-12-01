@@ -1,0 +1,112 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        File Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632422" snippet_file_name="blog_20160402_1_6231752"  name="code" class="java">package com.test.io;<br/>
+<br/>
+import java.io.File;<br/>
+<br/>
+public class FileTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		/**<br/>
+		 * 不管文件存不存在File都可得到实例对象，不会报异常（NullPointerException）<br/>
+		 * eclipse 下的src下的资源文件，导出工程所在目录的bin目录下，<br/>
+		 * <br/>
+		 */<br/>
+		File f = new File(&quot;bin&quot;, &quot;test.txt&quot;);<br/>
+		if (f != null) {<br/>
+			System.out.println(f);<br/>
+			System.out.println(&quot;Parent Path:&quot;+f.getParent());<br/>
+			System.out.println(&quot;Relative Path:&quot; + f.getPath());//相对位置<br/>
+			System.out.println(&quot;Absolute Path:&quot; + f.getAbsolutePath());<br/>
+			if(f.exists()){<br/>
+				System.out.println(&quot;test.txt exits&quot;);<br/>
+				System.out.println(f.getName());<br/>
+				System.out.println(&quot;是否是文件:&quot; + f.isFile());<br/>
+				System.out.println(&quot;是否是目录:&quot; + f.isDirectory());<br/>
+				<br/>
+			}<br/>
+			else{<br/>
+				System.out.println(&quot;test.txt not exits&quot;);<br/>
+			}<br/>
+			<br/>
+		}<br/>
+		<br/>
+		File f1 = new File(&quot;bin&quot;,&quot;notExist.txt&quot;);<br/>
+		<br/>
+		if(f1 != null){<br/>
+			System.out.println(f1);<br/>
+			System.out.println(&quot;Parent Path:&quot;+f1.getParent());<br/>
+			System.out.println(&quot;Relative Path:&quot; + f1.getPath());<br/>
+			System.out.println(&quot;Absolute Path:&quot; + f1.getAbsolutePath());<br/>
+			if(f1.exists()){<br/>
+				System.out.println(&quot;notExist.txt exits&quot;);<br/>
+				<br/>
+			}<br/>
+			else{<br/>
+				System.out.println(&quot;notExist.txt not exits&quot;);<br/>
+				System.out.println(f1.getName());<br/>
+				System.out.println(&quot;是否是文件:&quot; + f1.isFile());<br/>
+				System.out.println(&quot;是否是目录:&quot; + f1.isDirectory());<br/>
+				<br/>
+			}<br/>
+		}<br/>
+		/**<br/>
+		 * 直接文件名表示当前目录<br/>
+		 * <br/>
+		 */<br/>
+		File f2 = new File(&quot;test.txt&quot;);<br/>
+		if(f2 != null){<br/>
+			System.out.println(f2);<br/>
+			System.out.println(f2.getAbsolutePath());	<br/>
+			if(f2.exists()){<br/>
+				System.out.println(&quot;test.txt exits&quot;);<br/>
+			}<br/>
+			else{<br/>
+				System.out.println(&quot;test.txt not exits&quot;);<br/>
+			}<br/>
+		}<br/>
+		<br/>
+		<br/>
+		File f3 = new File(&quot;notExist.txt&quot;);<br/>
+		if(f3 != null){<br/>
+			System.out.println(f3);<br/>
+			System.out.println(f3.getAbsolutePath());	<br/>
+			if(f3.exists()){<br/>
+				System.out.println(&quot;notExist.txt exits&quot;);<br/>
+			}<br/>
+			else{<br/>
+				System.out.println(&quot;notExist.txt not exits&quot;);<br/>
+			}<br/>
+		}<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1632422" snippet_file_name="blog_20160402_2_3440090"  name="code" class="java">bin\test.txt<br/>
+Parent Path:bin<br/>
+Relative Path:bin\test.txt<br/>
+Absolute Path:D:\programming\java\JavaAPIs\bin\test.txt<br/>
+test.txt exits<br/>
+test.txt<br/>
+是否是文件:true<br/>
+是否是目录:false<br/>
+bin\notExist.txt<br/>
+Parent Path:bin<br/>
+Relative Path:bin\notExist.txt<br/>
+Absolute Path:D:\programming\java\JavaAPIs\bin\notExist.txt<br/>
+notExist.txt not exits<br/>
+notExist.txt<br/>
+是否是文件:false<br/>
+是否是目录:false<br/>
+test.txt<br/>
+D:\programming\java\JavaAPIs\test.txt<br/>
+test.txt not exits<br/>
+notExist.txt<br/>
+D:\programming\java\JavaAPIs\notExist.txt<br/>
+notExist.txt not exits<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

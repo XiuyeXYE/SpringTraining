@@ -1,0 +1,22 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++11 right value            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620230" snippet_file_name="blog_20160322_1_25670"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+	int &amp;&amp;a = 1+2;<br/>
+	cout &lt;&lt; a &lt;&lt; endl;<br/>
+	a += 10;<br/>
+	cout &lt;&lt; a &lt;&lt; endl;<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1620230" snippet_file_name="blog_20160322_2_4420515"  name="code" class="cpp">D:\programming\C++&gt;g++ -std=c++11 rvalue.cpp<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+3<br/>
+13</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

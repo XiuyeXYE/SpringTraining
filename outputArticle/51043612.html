@@ -1,0 +1,81 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Object wait T ms to run again            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632454" snippet_file_name="blog_20160402_1_5937540"  name="code" class="java">package com.test.thread;<br/>
+<br/>
+<br/>
+public class ThreadTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		class Interval{<br/>
+			public long start;<br/>
+			public long end;<br/>
+		}<br/>
+		<br/>
+		final Object obj = new Object();<br/>
+		<br/>
+		//以下变量为final类型一旦定义将不能改变，所以无法再内部中修改<br/>
+		//设了辅助类，类中值可以赋值<br/>
+		final long start = 0;<br/>
+		final long end = 0;<br/>
+		<br/>
+		final Interval in = new Interval();<br/>
+		<br/>
+		<br/>
+		Thread t1 = new Thread(){<br/>
+			@Override<br/>
+			public void run() {<br/>
+				<br/>
+				synchronized (obj) {<br/>
+					<br/>
+					System.out.println(&quot;Thread 1 entered.&quot;);<br/>
+					try {<br/>
+						//设定时间了，如果其他线程没有notify也会在1s后，本线程运行结束<br/>
+						obj.wait(1000);<br/>
+						<br/>
+					} catch (InterruptedException e) {<br/>
+						e.printStackTrace();<br/>
+					}<br/>
+					System.out.println(&quot;Thread1 come back! And waiting for over!&quot;);<br/>
+					in.end = System.currentTimeMillis();<br/>
+					System.out.println(&quot;cost time:&quot; + (in.end - in.start));<br/>
+				}<br/>
+				<br/>
+			}<br/>
+		};<br/>
+		<br/>
+		Thread t2 = new Thread(){<br/>
+			public void run() {<br/>
+				<br/>
+				synchronized (obj) {<br/>
+					<br/>
+					System.out.println(&quot;Thread2 entered!&quot;);<br/>
+					//obj.notify();<br/>
+					System.out.println(&quot;Thread2 let obj notify!&quot;);<br/>
+					System.out.println(&quot;Thread2 will first out than Thread1?&quot;);<br/>
+					System.out.println(&quot;Thread2 go out and life over!&quot;);<br/>
+					in.start = System.currentTimeMillis();<br/>
+				}<br/>
+				<br/>
+			}<br/>
+		};<br/>
+		<br/>
+		t1.start();<br/>
+		t2.start();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1632454" snippet_file_name="blog_20160402_2_4541318"  name="code" class="java">Thread 1 entered.<br/>
+Thread2 entered!<br/>
+Thread2 let obj notify!<br/>
+Thread2 will first out than Thread1?<br/>
+Thread2 go out and life over!<br/>
+Thread1 come back! And waiting for over!<br/>
+cost time:1000<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

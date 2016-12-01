@@ -1,0 +1,14 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javascript json属性用双引号还是单引号            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">JSON.parse(&quot;{name:45,age:909}&quot;)<br/>
+SyntaxError: JSON.parse: expected property name or &#39;}&#39; at line 1 column 2 of the JSON data<br/>
+JSON.parse(&quot;{&#39;name&#39;:45,&#39;age&#39;:909}&quot;)<br/>
+SyntaxError: JSON.parse: expected property name or &#39;}&#39; at line 1 column 2 of the JSON data<br/>
+JSON.parse(&quot;{&#39;name&#39;:&#39;45&#39;,&#39;age&#39;:&#39;909&#39;}&quot;)<br/>
+SyntaxError: JSON.parse: expected property name or &#39;}&#39; at line 1 column 2 of the JSON data<br/>
+JSON.parse(&#39;{&quot;name&quot;:45,&quot;age&quot;:909}&#39;)<br/>
+Object { name: 45, age: 909 }</pre><br><br/>
+   <br/>
+</div>

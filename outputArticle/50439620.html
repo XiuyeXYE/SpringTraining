@@ -1,0 +1,74 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        数据库数据横排显示            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="sql">L_ADVANTAGE11.1?if object_id(&#39;#case&#39;) is not null<br/>
+	drop table #case<br/>
+<br/>
+create table #case( id int identity ,<br/>
+issue_type varchar(20) null,<br/>
+asset_id int null)<br/>
+go    <br/>
+ insert into #case select &#39;for  issue&#39;,	1701335119                           <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,	1701335120       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,	1701335121       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,	1701335127       <br/>
+insert into #case(issue_type,asset_id) select &#39;for  issue&#39;,	1701335130       <br/>
+insert into #case(issue_type,asset_id) select &#39;for21 issue&#39;,	1701335131    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,	1701335132)    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,	1701335135)    <br/>
+insert into #case(issue_type,asset_id) values (&#39;for21 issue&#39;,	1701335140)    <br/>
+go<br/>
+select * from #case<br/>
+<br/>
+<br/>
+<br/>
+/*<br/>
+方案1<br/>
+*/<br/>
+<br/>
+DECLARE c cursor for select id from #case<br/>
+go <br/>
+DECLARE <br/>
+		@a varchar(300),<br/>
+		@b varchar(300),<br/>
+		@id int,<br/>
+		@i int,<br/>
+		@count int		<br/>
+		open c<br/>
+		select @count = count(*) from #case<br/>
+		SET @a = null<br/>
+		SET @b = null<br/>
+		fetch c into @id<br/>
+		SET @i = 1<br/>
+WHILE @i &lt; @count+1<br/>
+BEGIN<br/>
+	IF  (SELECT issue_type FROM #case WHERE id = @id) = &#39;for  issue&#39;<br/>
+		SET @a = @a<br/>
+					+&#39;|&#39;<br/>
+					+CONVERT(varchar(20),(SELECT asset_id FROM #case WHERE id = @id))<br/>
+    ELSE<br/>
+		 SET @b = @b<br/>
+					 +&#39;|&#39;<br/>
+					 +CONVERT(varchar(20),(SELECT asset_id FROM #case WHERE id = @id))<br/>
+	set @i = @i + 1<br/>
+	fetch c into @id	<br/>
+END<br/>
+close c<br/>
+deallocate c<br/>
+ SET @a = SUBSTRING(@a,2,CHAR_LENGTH(@a))<br/>
+ SET @b = SUBSTRING(@b,2,CHAR_LENGTH(@b))	<br/>
+SELECT issue_type,CASE issue_type<br/>
+                  WHEN &#39;for  issue&#39;<br/>
+                  THEN @a<br/>
+                  ELSE @b END<br/>
+		asset_id<br/>
+FROM #case<br/>
+GROUP BY issue_type<br/>
+</pre><pre name="code" class="sql">issue_type           asset_id                                                                                                                                                                                                                                                                                                     <br/>
+----------           --------                                                                                                                                                                                                                                                                                                     <br/>
+for21 issue          1701335131|1701335132|1701335135|1701335140                                                                                                                                                                                                                                                                  <br/>
+for  issue           1701335119|1701335120|1701335121|1701335127|1701335130 </pre><br><br/>
+<br><br/>
+   <br/>
+</div>

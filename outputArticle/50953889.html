@@ -1,0 +1,61 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        子类覆盖父类的成员变量            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1619203" snippet_file_name="blog_20160322_1_7259665"  code_snippet_id="1619203" snippet_file_name="blog_20160322_1_7259665" name="code" class="java">class A {<br/>
+	int a = 100;<br/>
+<br/>
+	void f() {<br/>
+		System.out.println(a);<br/>
+	}<br/>
+}<br/>
+<br/>
+class B extends A {<br/>
+<br/>
+	int a = 9999;<br/>
+<br/>
+	void f() {<br/>
+                System.out.println(a);<br/>
+		System.out.println(this.a);<br/>
+		System.out.println(super.a);<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+<br/>
+public class TestClient {<br/>
+<br/>
+	private static Context context;<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		A a = new B();<br/>
+		System.out.println(a.a);<br/>
+		a.f();<br/>
+		System.out.println(&quot;======================&quot;);<br/>
+		B b = new B();<br/>
+		b.f();<br/>
+		System.out.println(&quot;=======================&quot;);<br/>
+		((A) a).f();<br/>
+        }<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1619203" snippet_file_name="blog_20160322_2_6147633"  code_snippet_id="1619203" snippet_file_name="blog_20160322_2_6147633" name="code" class="java">100<br/>
+9999<br/>
+9999<br/>
+100<br/>
+======================<br/>
+9999<br/>
+9999<br/>
+100<br/>
+=======================<br/>
+9999<br/>
+9999<br/>
+100</pre><br/>
+<p>总结：子类覆盖父类的方法时，直接调用成员变量，其实是:this.成员变量。（应该是编译器自己加上的吧？）</p><br/>
+<p>如果要调用父类的变量，就得super.成员变量。</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

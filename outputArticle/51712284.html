@@ -1,0 +1,37 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        获取语音类别进行说话            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1721343" snippet_file_name="blog_20160619_1_167480"  name="code" class="cpp">#define _USING_V110_SDK71_<br/>
+#include&lt;sapi.h&gt;<br/>
+#include&lt;stdio.h&gt;<br/>
+#include&lt;sphelper.h&gt;<br/>
+int main(){<br/>
+	<br/>
+	::CoInitialize(NULL);<br/>
+	ISpVoice *pSpVoice = NULL;<br/>
+	IEnumSpObjectTokens *pSpEnumTokens = NULL;<br/>
+	if(FAILED(CoCreateInstance(CLSID_SpVoice,NULL,CLSCTX_INPROC_SERVER,IID_ISpVoice,(void**)&amp;pSpVoice))){<br/>
+		printf(&quot;Failed to create instance of ISpVoice!\n&quot;);<br/>
+		return -1;<br/>
+	}<br/>
+	if(SUCCEEDED(SpEnumTokens(SPCAT_VOICES,NULL,NULL,&amp;pSpEnumTokens))){<br/>
+		ISpObjectToken *pSpToken = NULL;<br/>
+		while(SUCCEEDED(pSpEnumTokens-&gt;Next(1,&amp;pSpToken,NULL)) &amp;&amp; pSpToken != NULL)<br/>
+		{<br/>
+			printf(&quot;ISpObjectToken\n&quot;);<br/>
+			pSpVoice-&gt;SetVoice(pSpToken);<br/>
+<br/>
+			pSpVoice-&gt;Speak(L&quot;Hello,Windows NT&quot;,SPF_DEFAULT,NULL);<br/>
+			pSpToken-&gt;Release();<br/>
+		}<br/>
+		pSpEnumTokens-&gt;Release();<br/>
+	}<br/>
+	pSpVoice-&gt;Release();<br/>
+	::CoUninitialize();<br/>
+	printf(&quot;over\n&quot;);<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

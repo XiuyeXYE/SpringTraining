@@ -1,0 +1,107 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        自定义实现输入输出模版的一个例子            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="cpp"> #include&lt;iostream&gt;<br/>
+#include&lt;string&gt;<br/>
+using namespace std;<br/>
+<br/>
+class Object;<br/>
+<br/>
+<br/>
+<br/>
+class Input{<br/>
+<br/>
+	public:<br/>
+		Input(){<br/>
+		cout&lt;&lt;&quot;Input Constructor&quot;&lt;&lt;endl;<br/>
+	}<br/>
+	template&lt;class T&gt;<br/>
+	Input &amp; operator&gt;&gt;(T &amp;o)<br/>
+	{<br/>
+		if(typeid(T).name()!=typeid(string).name())<br/>
+			cin&gt;&gt;o;<br/>
+		else<br/>
+		{<br/>
+			//cin.getline(o,100);//wrong<br/>
+			//cin.get(o,100,&#39;\n&#39;);//wrong<br/>
+			//cout&lt;&lt;&quot;OK&quot;&lt;&lt;endl;<br/>
+			//std::getline(cin,o,&#39;\n&#39;);//wrong<br/>
+			//getline(cin,o);<br/>
+			cin&gt;&gt;o;<br/>
+		}<br/>
+		//cout&lt;&lt;&quot;typeid=&quot;&lt;&lt;typeid(T).name()&lt;&lt;endl;<br/>
+		<br/>
+			//cin.get(o);<br/>
+<br/>
+			<br/>
+		return *this;<br/>
+	}<br/>
+<br/>
+};<br/>
+<br/>
+class Output<br/>
+{<br/>
+	public:<br/>
+		Output(){<br/>
+		cout&lt;&lt;&quot;Output Constructor&quot;&lt;&lt;endl;<br/>
+	}<br/>
+	template&lt;class T&gt;<br/>
+	Output &amp;operator&lt;&lt;(T &amp;o)<br/>
+	{<br/>
+		cout&lt;&lt;o;<br/>
+		return *this;<br/>
+<br/>
+	}<br/>
+};<br/>
+<br/>
+Input in;<br/>
+Output out;<br/>
+<br/>
+class Object<br/>
+{<br/>
+	int a;<br/>
+	int b;<br/>
+	int c;<br/>
+	string s;<br/>
+	public:<br/>
+	<br/>
+<br/>
+	Object(int a_=10,int b_=100,int c_=1000,string s_=&quot;&#39;hello world&#39;&quot;):a(a_),b(b_),c(c_),s(s_){}<br/>
+<br/>
+	Output &amp;operator&lt;&lt;(Output &amp;output)<br/>
+	{<br/>
+		output&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;&quot; &quot;&lt;&lt;c&lt;&lt;&quot; &quot;&lt;&lt;s;<br/>
+		return output;<br/>
+	}<br/>
+	Input &amp;operator&gt;&gt;(Input &amp;input)<br/>
+	{<br/>
+		input&gt;&gt;a&gt;&gt;b&gt;&gt;c&gt;&gt;s;<br/>
+		return input;<br/>
+	}<br/>
+	void printf(){<br/>
+		cout&lt;&lt;a&lt;&lt;&#39; &#39;&lt;&lt;b&lt;&lt;&#39; &#39;&lt;&lt;c&lt;&lt;&#39; &#39;&lt;&lt;s&lt;&lt;endl;<br/>
+	}<br/>
+<br/>
+};<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+int main()<br/>
+{<br/>
+<br/>
+	Object obj1;<br/>
+	obj1.printf();<br/>
+	//in&gt;&gt;obj1; //如要实现此种输入输出须用友元函数实现<br/>
+	//out&lt;&lt;obj1;<br/>
+	obj1.operator&gt;&gt;(<br/>
+		in);<br/>
+	obj1.operator&lt;&lt;(out);;<br/>
+	cout&lt;&lt;endl&lt;&lt;&#39;A&#39;&lt;&lt;endl;<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

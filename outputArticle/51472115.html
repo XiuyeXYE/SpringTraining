@@ -1,0 +1,53 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        windows获取进程id和当前进程的会话id            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1691785" snippet_file_name="blog_20160521_1_5581015"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;iostream&gt;<br/>
+#include&lt;tchar.h&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+    <br/>
+    DWORD processId = GetCurrentProcessId();//当前进程id<br/>
+    DWORD sessionId;<br/>
+    if(ProcessIdToSessionId(processId,&amp;sessionId)){<br/>
+        _tprintf(TEXT(&quot;Process &#39;%u&#39; runs in Terminal Services session &#39;%u&#39;&quot;),processId,sessionId);//该函数在tchar.h中<br/>
+    }<br/>
+    else{<br/>
+        _tprintf(TEXT(&quot;Unable to get Terminal Services session ID for process &#39;%u&#39;&quot;),processId);<br/>
+    }<br/>
+    <br/>
+}</pre><br><br/>
+<pre code_snippet_id="1691785" snippet_file_name="blog_20160521_2_7249454"  name="code" class="cpp">d:\programming\C++&gt;cl getSessionId.cpp<br/>
+用于 x86 的 Microsoft (R) C/C++ 优化编译器 18.00.21005.1 版版权所有(C) Microsoft<br/>
+ Corporation。  保留所有权利。<br/>
+<br/>
+getSessionId.cpp<br/>
+c:\program files (x86)\microsoft sdks\windows\v7.1a\include\sal_supp.h(57) : war<br/>
+ning C4005: “__useHeader”: 宏重定义<br/>
+        F:\360Apps\vs2013\VC\include\sal.h(2886) : 参见“__useHeader”的前一个定<br/>
+义<br/>
+c:\program files (x86)\microsoft sdks\windows\v7.1a\include\specstrings_supp.h(7<br/>
+7) : warning C4005: “__on_failure”: 宏重定义<br/>
+        F:\360Apps\vs2013\VC\include\sal.h(2896) : 参见“__on_failure”的前一个<br/>
+定义<br/>
+F:\360Apps\vs2013\VC\include\xlocale(337) : warning C4530: 使用了 C++ 异常处理程<br/>
+序，但未启用展开语义。请指定 /EHsc<br/>
+Microsoft (R) Incremental Linker Version 12.00.21005.1<br/>
+Copyright (C) Microsoft Corporation.  All rights reserved.<br/>
+<br/>
+/out:getSessionId.exe<br/>
+getSessionId.obj<br/>
+<br/>
+d:\programming\C++&gt;getSessionId<br/>
+Process &#39;5056&#39; runs in Terminal Services session &#39;1&#39;<br/>
+d:\programming\C++&gt;getSessionId<br/>
+Process &#39;6572&#39; runs in Terminal Services session &#39;1&#39;<br/>
+d:\programming\C++&gt;getSessionId<br/>
+Process &#39;8324&#39; runs in Terminal Services session &#39;1&#39;<br/>
+d:\programming\C++&gt;getSessionId<br/>
+Process &#39;8516&#39; runs in Terminal Services session &#39;1&#39;<br/>
+d:\programming\C++&gt;getSessionId<br/>
+Process &#39;7748&#39; runs in Terminal Services session &#39;1&#39;</pre><br><br/>
+   <br/>
+</div>

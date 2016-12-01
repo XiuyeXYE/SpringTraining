@@ -1,0 +1,54 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        WebSphere MQ简单的命令行操作            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><img src="http://img.blog.csdn.net/20160519162703406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><pre code_snippet_id="1689442" snippet_file_name="blog_20160519_1_5177825"  name="code" class="java">C:\Users\Administrator\Desktop&gt;crtmqm QM<br/>
+此 WebSphere MQ 副本的试用期还剩 89 天。<br/>
+WebSphere MQ 队列管理器已创建。<br/>
+已创建目录“F:\360Apps\IBM\WebSphereMQ\MQDataFolder\qmgrs\QM”。<br/>
+队列管理器与安装“WebSphereMQ”关联。<br/>
+正在创建或替换队列管理器“QM”的缺省对象。<br/>
+缺省对象统计：77 个已创建。0 个已替换。0 个已失败。<br/>
+正在完成设置。<br/>
+设置完成。<br/>
+<br/>
+C:\Users\Administrator\Desktop&gt;strmqm QM<br/>
+此 WebSphere MQ 副本的试用期还剩 89 天。<br/>
+WebSphere MQ 队列管理器“QM”正在启动。<br/>
+队列管理器与安装“WebSphereMQ”关联。<br/>
+在日志重放阶段在队列管理器“QM”上访问了 5 条日志记录。<br/>
+完成队列管理器“QM”的日志重放。<br/>
+为队列管理器“QM”恢复了事务管理器状态。<br/>
+使用 V7.5.0.2 启动了 WebSphere MQ 队列管理器“QM”。<br/>
+<br/>
+C:\Users\Administrator\Desktop&gt;runmqsc QM<br/>
+5724-H72 (C) Copyright IBM Corp. 1994, 2011.  ALL RIGHTS RESERVED.<br/>
+启动队列管理器 QM 的 MQSC。<br/>
+<br/>
+<br/>
+define qlocal(Q)<br/>
+     1 : define qlocal(Q)<br/>
+AMQ8006: WebSphere MQ 队列已创建。<br/>
+end<br/>
+     2 : end<br/>
+读取一个 MQSC 命令。<br/>
+所有命令均无语法错误。<br/>
+已处理所有的有效 MQSC 命令。<br/>
+<br/>
+C:\Users\Administrator\Desktop&gt;amqsput Q QM<br/>
+Sample AMQSPUT0 start<br/>
+target queue is Q<br/>
+hello world<br/>
+<br/>
+Sample AMQSPUT0 end<br/>
+<br/>
+C:\Users\Administrator\Desktop&gt;amqsget Q QM<br/>
+Sample AMQSGET0 start<br/>
+message &lt;hello world&gt;<br/>
+no more messages<br/>
+Sample AMQSGET0 end</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,15 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++求动态数组长度（windows通过）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1620250" snippet_file_name="blog_20160322_1_5621629"  name="code" class="cpp">vs编译器<br/>
+//在首地址前16个字节、即4个类型、单元共128位、前存储数据是：数组长度<br/>
+ int *p=new int[100];<br/>
+ <br/>
+ int  size = *(p-4);<br/>
+ <br/>
+ cout&lt;&lt;size&lt;&lt;endl;<br/>
+   <br/>
+ 结果：400；</pre><br><br/>
+   <br/>
+</div>

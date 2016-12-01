@@ -1,0 +1,29 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        oracle SQL 错误: ORA-02014: 不能从具有 DISTINCT, GROUP BY 等的视图选择 FOR UPDATE            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><br><br/>
+</p><br/>
+<p>错误的思路sql语句：</p><br/>
+<p><pre code_snippet_id="1702732" snippet_file_name="blog_20160531_1_5479098"  name="code" class="sql">select rownum,a.id,a.deptno  FROM (select  emp.* from emp where state=1 order by deptno asc) a<br/>
+ where rownum &lt;=10 for update;</pre>错误原因：</p><br/>
+<p><pre code_snippet_id="1702732" snippet_file_name="blog_20160531_2_6493637"  name="code" class="sql">SQL 错误: ORA-02014: 不能从具有 DISTINCT, GROUP BY 等的视图选择 FOR UPDATE<br/>
+02014. 00000 -  &quot;cannot select FOR UPDATE from view with DISTINCT, GROUP BY, etc.&quot;</pre><br><br/>
+<br><br/>
+<br><br/>
+</p><br/>
+<p>oracle：对查询满足条件的数据上锁，正确的sql如下：</p><br/>
+<p><pre code_snippet_id="1702732" snippet_file_name="blog_20160531_3_779799"  name="code" class="sql">select id,deptno  FROM emp<br/>
+ where id in  <br/>
+ (select id from<br/>
+ (select id  from emp <br/>
+ where state=1 order by deptno asc)<br/>
+ where rownum &lt;=10<br/>
+ )<br/>
+ order by deptno<br/>
+for update;</pre>内部排序后，取到相应的数据，但是用了in后，数据乱序，需重新order。</p><br/>
+<p>总结：<pre code_snippet_id="1702732" snippet_file_name="blog_20160531_4_2349963"  name="code" class="sql">DISTINCT, GROUP BY，order by等不要直接在from后的子查询中，否者无法使用for update。</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

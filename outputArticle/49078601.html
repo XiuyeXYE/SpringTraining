@@ -1,0 +1,55 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        表单选择时变色jquery实现            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!DOCTYPE html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;UTF-8&quot;&gt;<br/>
+&lt;title&gt;Insert title here&lt;/title&gt;<br/>
+&lt;script src=&quot;../scripts/jquery-2.1.4.js&quot;&gt;&lt;/script&gt;<br/>
+&lt;script&gt;<br/>
+	$(function(){<br/>
+		$(&quot;:checkbox&quot;).change(function(){<br/>
+			var $tr = $(&quot;:checked&quot;).parent().parent();<br/>
+			$tr.css(&quot;backgroundColor&quot;,&quot;yellow&quot;);<br/>
+			$tr = $(&quot;:not(:checked)&quot;).parent().parent();<br/>
+			$tr.css(&quot;backgroundColor&quot;,&quot;white&quot;);<br/>
+		});<br/>
+		<br/>
+	});<br/>
+&lt;/script&gt;<br/>
+&lt;style&gt;<br/>
+	table{<br/>
+	margin:auto;<br/>
+	border-collapse:collapse;<br/>
+	}<br/>
+	td{<br/>
+	width:100px;<br/>
+	border:1px solid;<br/>
+	}<br/>
+	caption{<br/>
+	font-size:30px;<br/>
+	}<br/>
+	#head{<br/>
+	background-color:#CCC;<br/>
+	}<br/>
+&lt;/style&gt;<br/>
+&lt;/head&gt;<br/>
+&lt;body&gt;<br/>
+&lt;table&gt;<br/>
+&lt;caption&gt;information of salary&lt;/caption&gt;<br/>
+	&lt;tr id=&quot;head&quot;&gt;<br/>
+	&lt;td&gt;checked&lt;/td&gt;&lt;td&gt;name&lt;/td&gt;&lt;td&gt;salary&lt;/td&gt;&lt;td&gt;age&lt;/td&gt;<br/>
+	&lt;/tr&gt;<br/>
+	&lt;tr&gt;<br/>
+	&lt;td&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/td&gt;&lt;td&gt;wuming&lt;/td&gt;&lt;td&gt;10000&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;<br/>
+	&lt;/tr&gt;<br/>
+	&lt;tr&gt;&lt;td&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/td&gt;&lt;td&gt;xiuye&lt;/td&gt;&lt;td&gt;100000&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;&lt;/tr&gt;<br/>
+	&lt;tr&gt;&lt;td&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/td&gt;&lt;td&gt;xiaojingyan&lt;/td&gt;&lt;td&gt;20000&lt;/td&gt;&lt;td&gt;45&lt;/td&gt;&lt;/tr&gt;<br/>
+	&lt;tr&gt;&lt;td&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/td&gt;&lt;td&gt;xufeng&lt;/td&gt;&lt;td&gt;30000&lt;/td&gt;&lt;td&gt;78&lt;/td&gt;&lt;/tr&gt;<br/>
+&lt;/table&gt;<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</pre><br><br/>
+   <br/>
+</div>

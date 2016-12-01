@@ -1,0 +1,68 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        apache uploadfile 文件上传注意事项            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<h1><span style="font-size:32px"><span style="font-family:Comic Sans MS"></span></span><pre code_snippet_id="1989720" snippet_file_name="blog_20161117_1_1548196"  name="code" class="html">&lt;form action=&quot;uploadImage.sb&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; &gt;</pre><br><br/>
+</h1><br/>
+<p><span style="font-size:32px">(1)method = &quot;post&quot;</span></p><br/>
+<p><span style="font-size:32px">(2)enctype=&quot;multipart/form-data&quot;</span></p><br/>
+<p></p><br/>
+<h1><span style="font-size:32px"><span style="font-family:Comic Sans MS"></span></span><pre code_snippet_id="1989720" snippet_file_name="blog_20161117_2_1167295"  name="code" class="html">&lt;input type=&quot;file&quot; name=&quot;picture&quot; accept=&quot;image/*&quot;/&gt;</pre><br><br/>
+</h1><br/>
+<span style="font-size:32px">(3)Tag &quot;input&quot; must have a attribute &quot;name&quot;,or uploading file fails.</span><br/>
+<p></p><br/>
+<p><span style="font-size:32px">spring &#43; apache uploadfile example's code:<br><br/>
+</span></p><br/>
+<h1><span style="font-family:Comic Sans MS"><span style="font-size:32px"></span></span><pre code_snippet_id="1989720" snippet_file_name="blog_20161117_3_1275979"  name="code" class="java">@RequestMapping(&quot;uploadImage.sb&quot;)<br/>
+public String uploadImage(HttpServletRequest req) {<br/>
+WebApplicationContext webApplicationContext = ContextLoader<br/>
+.getCurrentWebApplicationContext();<br/>
+ServletContext servletContext = webApplicationContext<br/>
+.getServletContext();<br/>
+boolean isMultipart = ServletFileUpload.isMultipartContent(req);<br/>
+if (isMultipart) {<br/>
+FileItemFactory factory = new DiskFileItemFactory();<br/>
+ServletFileUpload upload = new ServletFileUpload(factory);<br/>
+try {<br/>
+List&lt;FileItem&gt; items = upload.parseRequest(req);<br/>
+for (FileItem item : items) {<br/>
+if (item.isFormField()) {<br/>
+System.out.println(&quot;formFild := &quot; +<br/>
+item.getFieldName());<br/>
+System.out.println(&quot;formFild := &quot; +<br/>
+item.getString());<br/>
+System.out.println(&quot;formFild := &quot; +<br/>
+item.getContentType());<br/>
+System.out.println(&quot;formFild := &quot; + new<br/>
+String(item.get()));<br/>
+} else {<br/>
+System.out.println(&quot;not formFild := &quot; + item.getName());<br/>
+System.out.println(&quot;not formFild := &quot;<br/>
++ item.getFieldName());<br/>
+System.out.println(&quot;not formFild := &quot;<br/>
++ item.getString());<br/>
+System.out.println(&quot;not formFild := &quot;<br/>
++ item.getContentType());<br/>
+// System.out.println(&quot;not formFild := &quot; + item.get());<br/>
+String filePath = servletContext<br/>
+.getRealPath(&quot;/advertisement&quot;);<br/>
+File f = new File(filePath, item.getName());<br/>
+System.out.println(f);<br/>
+item.write(f);<br/>
+}<br/>
+}<br/>
+} catch (FileUploadException e) {<br/>
+e.printStackTrace();<br/>
+} catch (Exception e) {<br/>
+e.printStackTrace();<br/>
+}<br/>
+}<br/>
+return &quot;index&quot;;<br/>
+}</pre><br><br/>
+<span style="font-size:32px"></span></h1><br/>
+<span style="font-size:32px"><br><br/>
+<br><br/>
+</span><br/>
+<p></p><br/>
+   <br/>
+</div>

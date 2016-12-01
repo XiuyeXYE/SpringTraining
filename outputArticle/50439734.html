@@ -1,0 +1,21 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        提取表的sql原句            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="sql">select  a.name+&#39; &#39; +case a.usertype when 7 then &#39;int&#39; <br/>
+		when 6 then &#39;smallint&#39;<br/>
+		when 2 then &#39;varchar&#39;<br/>
+		when 11 then &#39;money&#39;<br/>
+		when 1 then &#39;char&#39;<br/>
+		when 8 then &#39;float&#39;<br/>
+		when 12 then &#39;datetime&#39;<br/>
+		when 19 then &#39;text&#39;<br/>
+		else &#39;other&#39; end<br/>
+	      +case when a.usertype in(2,1,8 ) then &#39;(&#39;+convert(varchar(4),a.length)+&#39;)&#39; end + &quot; &quot;<br/>
+		+case when a.status=0 then &#39;not NULL&#39; else &#39;NULL&#39; end + &quot;,&quot;<br/>
+from syscolumns a join sysobjects b on a.id = b.id<br/>
+where b.name = &#39;order_header&#39;<br/>
+order by a.colid<br/>
+go</pre><br/>
+   <br/>
+</div>

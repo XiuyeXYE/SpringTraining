@@ -1,0 +1,68 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        将文件内容准换为unicode码内容文件（java实现）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">import java.io.FileInputStream;<br/>
+import java.io.FileOutputStream;<br/>
+import java.io.InputStreamReader;<br/>
+import java.io.OutputStreamWriter;<br/>
+import java.io.BufferedReader;<br/>
+import java.io.File;<br/>
+import java.io.BufferedWriter;<br/>
+import java.io.IOException;<br/>
+import java.util.Scanner;<br/>
+<br/>
+<br/>
+public class TranslateToUnicodeJava<br/>
+{<br/>
+	public static void main(String args[]) throws IOException<br/>
+	{<br/>
+		Scanner in = new Scanner(System.in);<br/>
+		System.out.println(&quot;请输入已存在的文件名：&quot;);<br/>
+		String fileName = in.nextLine();<br/>
+		File f = new File(&quot;./&quot;+fileName);<br/>
+		if(!f.exists())<br/>
+		{<br/>
+			System.out.println(&quot;文件：&quot;+fileName+&quot;不存在！&quot;);<br/>
+			System.exit(0);<br/>
+		}<br/>
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));<br/>
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(&quot;c:/users/xiuye/desktop/&quot;+fileName)));<br/>
+		int i=-1;<br/>
+		String str=&quot;&quot;;<br/>
+		String unicodeOriginal=&quot;&quot;;<br/>
+		String unicodeTemp = &quot;&quot;;<br/>
+		while((i=br.read())!=-1)<br/>
+		{ <br/>
+			unicodeOriginal = Integer.toHexString(i);<br/>
+			int length = unicodeOriginal.length();<br/>
+			if(length==1)<br/>
+			{<br/>
+				unicodeTemp=&quot;000&quot;+unicodeOriginal;<br/>
+			}<br/>
+			else if(length==2)<br/>
+			{<br/>
+				unicodeTemp=&quot;00&quot;+unicodeOriginal;<br/>
+			}<br/>
+			else if(length == 3)<br/>
+			{<br/>
+				unicodeTemp=&quot;0&quot;+unicodeOriginal;<br/>
+			}<br/>
+			else{<br/>
+					unicodeTemp = unicodeOriginal;<br/>
+			}<br/>
+			str=&quot;\\u&quot;+unicodeTemp;<br/>
+			bw.write(str,0,str.length());<br/>
+			bw.flush();<br/>
+			System.out.print(&quot;\\u&quot;+unicodeTemp);<br/>
+<br/>
+		}<br/>
+<br/>
+		br.close();<br/>
+		bw.close();<br/>
+		in.close();<br/>
+<br/>
+	}<br/>
+}</pre><br><br/>
+   <br/>
+</div>

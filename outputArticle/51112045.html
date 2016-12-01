@@ -1,0 +1,19 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        在类中声明函数而不去定义编译通过            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1641052" snippet_file_name="blog_20160410_1_6830781"  code_snippet_id="1641052" snippet_file_name="blog_20160410_1_6830781" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+namespace test{<br/>
+class A{<br/>
+	public:<br/>
+		void f();<br/>
+};<br/>
+}<br/>
+int main(){<br/>
+	test::A a;<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1641052" snippet_file_name="blog_20160410_2_1846509"  code_snippet_id="1641052" snippet_file_name="blog_20160410_2_1846509" name="code" class="cpp">D:\programming\C++&gt;g++ ClassFunctionOnlyDeclared.cpp</pre>这种的前提是成员函数未被调用。<br/>
+   <br/>
+</div>

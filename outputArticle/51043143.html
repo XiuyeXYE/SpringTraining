@@ -1,0 +1,39 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        HashSet Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632363" snippet_file_name="blog_20160402_1_2347092"  name="code" class="java">package com.test.collection;<br/>
+<br/>
+import java.util.HashSet;<br/>
+import java.util.Iterator;<br/>
+import java.util.Set;<br/>
+<br/>
+public class SetTest {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Set&lt;Integer&gt; set = new HashSet&lt;Integer&gt;();<br/>
+		<br/>
+		set.add(123);<br/>
+		set.add(456);<br/>
+		System.out.println(set);<br/>
+		<br/>
+		set.remove(123);<br/>
+		System.out.println(set);<br/>
+		<br/>
+		Iterator&lt;Integer&gt; it = set.iterator();<br/>
+		<br/>
+		while(it.hasNext()){<br/>
+			System.out.println(it.next());<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1632363" snippet_file_name="blog_20160402_2_5443992"  name="code" class="java">[456, 123]<br/>
+[456]<br/>
+456<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

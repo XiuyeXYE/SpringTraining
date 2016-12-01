@@ -1,0 +1,87 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        编译器 内置宏 并且 支持不同c++标准，__cplusplus不同            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1761251" snippet_file_name="blog_20160713_1_1939789"  code_snippet_id="1761251" snippet_file_name="blog_20160713_1_1939789" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main()<br/>
+{<br/>
+<br/>
+        #ifdef __LINE__<br/>
+                cout &lt;&lt; &quot;__LINE__:&quot; &lt;&lt; __LINE__ &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+        #ifdef __FILE__<br/>
+                cout &lt;&lt; &quot;__FILE__:&quot; &lt;&lt; __FILE__ &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+        #ifdef __DATE__<br/>
+                cout &lt;&lt; &quot;__DATE__:&quot; &lt;&lt; __DATE__ &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+        #ifdef __TIME__<br/>
+                cout &lt;&lt; &quot;__TIME__:&quot; &lt;&lt; __TIME__ &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+        #ifdef __STDC__<br/>
+                cout &lt;&lt; &quot;__STDC__:&quot; &lt;&lt; __STDC__ &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+<br/>
+<br/>
+        #ifdef __cplusplus<br/>
+                cout &lt;&lt; &quot;__cplusplus:&quot; &lt;&lt; __cplusplus &lt;&lt;endl;<br/>
+<br/>
+        #endif<br/>
+        #ifdef __FUNCTION__<br/>
+                cout &lt;&lt; &quot;__FUNCTION__:&quot; &lt;&lt; __FUNCTION__ &lt;&lt; endl;<br/>
+        #endif<br/>
+        #ifdef __func__ //unknown macro (truely unsoupport macro,it may be keywords)<br/>
+                cout &lt;&lt; &quot;__func__:&quot; &lt;&lt; __func__ &lt;&lt; endl;<br/>
+        #endif<br/>
+        cout &lt;&lt; __func__ &lt;&lt; endl;<br/>
+<br/>
+        return 0;<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1761251" snippet_file_name="blog_20160713_2_4382787"  code_snippet_id="1761251" snippet_file_name="blog_20160713_2_4382787" name="code" class="cpp">Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ g++ standardmacro.cpp<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ ./a<br/>
+__LINE__:7<br/>
+__FILE__:standardmacro.cpp<br/>
+__DATE__:Jul 13 2016<br/>
+__TIME__:22:59:39<br/>
+__STDC__:1<br/>
+__cplusplus:199711<br/>
+main<br/>
+</pre><pre code_snippet_id="1761251" snippet_file_name="blog_20160713_3_9065382"  name="code" class="cpp">$ g++ -std=c++11 standardmacro.cpp<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ ./a<br/>
+__LINE__:7<br/>
+__FILE__:standardmacro.cpp<br/>
+__DATE__:Jul 13 2016<br/>
+__TIME__:23:00:57<br/>
+__STDC__:1<br/>
+__cplusplus:201103<br/>
+main<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ g++ -std=c++14 standardmacro.cpp<br/>
+<br/>
+Administrator@xiuye-PC /cygdrive/d/programming/c++<br/>
+$ ./a<br/>
+__LINE__:7<br/>
+__FILE__:standardmacro.cpp<br/>
+__DATE__:Jul 13 2016<br/>
+__TIME__:23:01:18<br/>
+__STDC__:1<br/>
+__cplusplus:201402<br/>
+main<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

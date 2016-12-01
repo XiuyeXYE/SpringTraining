@@ -1,0 +1,100 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        js对象如何实现数组索引功能并且自定义自己的方法 （4种方法）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">//js对象如何实现数组索引功能并且自定义自己的方法 4种方法<br/>
+	function Ele(e){<br/>
+		var a = {show:function(){alert(&quot;name&quot;)}};<br/>
+		var all = document.getElementsByTagName(e);<br/>
+		for(var i =0 ;i&lt;all.length;i++)<br/>
+		{<br/>
+			a[i] = all[i];	<br/>
+		}<br/>
+		a.length = all.length;<br/>
+		return a;<br/>
+	}<br/>
+	<br/>
+	function Ele2(e){<br/>
+		var a = new Object();<br/>
+		a.show = function(){<br/>
+			alert(&quot;name&quot;);<br/>
+		}<br/>
+		var all = document.getElementsByTagName(e);<br/>
+		for(var i =0 ;i&lt;all.length;i++)<br/>
+		{<br/>
+			a[i] = all[i];	<br/>
+		}<br/>
+		a.length = all.length;<br/>
+		return a;<br/>
+	}<br/>
+	function Ele3(e)<br/>
+	{<br/>
+		this.show = function(){<br/>
+			alert(&quot;name&quot;);<br/>
+		}<br/>
+		var all =document.getElementsByTagName(&quot;p&quot;);<br/>
+		for(var i =0 ;i&lt;all.length;i++)<br/>
+		{<br/>
+			this[i] = all[i];	<br/>
+		}<br/>
+		this.length = all.length;<br/>
+	}<br/>
+&lt;pre name=&quot;code&quot; class=&quot;html&quot;&gt;&#160; &#160; &#160; &#160; function Ele4(e)<br/>
+	{<br/>
+		&#160;var array = function(){};<br/>
+		&#160;array.prototype = new Array();<br/>
+		&#160;array.prototype.show = function(){<br/>
+			&#160;alert(&quot;name&quot;);<br/>
+		}<br/>
+		var all = document.getElementsByTagName(e);<br/>
+		for(var i =0 ;i&lt;all.length;i++){<br/>
+			&#160;array.prototype.push(all[i]);<br/>
+		}<br/>
+		return new array();<br/>
+	}</pre><br><br/>
+<br><br/>
+<pre></pre><br/>
+<p>运行结果：<br><br/>
+</p><br/>
+<p>var a1 = Ele(&quot;p&quot;);</p><br/>
+undefined<br><br/>
+a1<br><br/>
+Object { 0: &lt;p&gt;, 1: &lt;p.pline&gt;, 2: &lt;p#p3&gt;, show: Ele/a.show(), length: 3 }<br><br/>
+var a2 = Ele2(&quot;p&quot;);<br><br/>
+undefined<br><br/>
+a2<br><br/>
+Object { 0: &lt;p&gt;, 1: &lt;p.pline&gt;, 2: &lt;p#p3&gt;, show: Ele2/a.show(), length: 3 }<br><br/>
+var a3 = new Ele3(&quot;P&quot;);<br><br/>
+undefined<br><br/>
+a3<br><br/>
+Object { 0: &lt;p&gt;, 1: &lt;p.pline&gt;, 2: &lt;p#p3&gt;, show: Ele3/this.show(), length: 3 }<br><br/>
+a1.show();<br><br/>
+undefined<br><br/>
+a1[2]<br><br/>
+&lt;p id=&quot;p3&quot;&gt;<br><br/>
+a3[3]<br><br/>
+undefined<br><br/>
+a3[2]<br><br/>
+&lt;p id=&quot;p3&quot;&gt;<br><br/>
+a2.length<br><br/>
+3<br><br/>
+<br><br/>
+var a = Ele4(&quot;p&quot;);<br><br/>
+undefined<br><br/>
+a<br><br/>
+Object {&nbsp; }<br><br/>
+a.show();<br><br/>
+undefined<br><br/>
+a[1]<br><br/>
+&lt;p class=&quot;pline&quot;&gt;<br><br/>
+a.push(&quot;pppp&quot;);<br><br/>
+4<br><br/>
+a[4];<br><br/>
+undefined<br><br/>
+a[3];<br><br/>
+&quot;pppp&quot;<br><br/>
+a.length;<br><br/>
+4<br><br/>
+&nbsp; <br><br/>
+   <br/>
+</div>

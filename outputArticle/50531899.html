@@ -1,0 +1,137 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        ejb injection            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package local;<br/>
+<br/>
+import javax.ejb.Local;<br/>
+<br/>
+<br/>
+@Local<br/>
+public interface Service {<br/>
+<br/>
+	public String hello(String name);<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package stateless;<br/>
+<br/>
+import javax.ejb.Stateless;<br/>
+<br/>
+import local.Service;<br/>
+<br/>
+@Stateless(name=&quot;xy&quot;)<br/>
+public class ServiceBean implements Service {<br/>
+<br/>
+	@Override<br/>
+	public String hello(String name) {<br/>
+		<br/>
+		<br/>
+		<br/>
+		return name + &quot;,你好，现在的时间是：&quot; + new java.util.Date();<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package remote;<br/>
+<br/>
+import javax.ejb.Remote;<br/>
+<br/>
+@Remote<br/>
+public interface CallService {<br/>
+<br/>
+	String callHell(String name);<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package stateless;<br/>
+<br/>
+import javax.ejb.EJB;<br/>
+import javax.ejb.Stateless;<br/>
+<br/>
+import local.Service;<br/>
+import remote.CallService;<br/>
+<br/>
+@Stateless(mappedName=&quot;a&quot;)<br/>
+public class CallServiceBean implements CallService{<br/>
+<br/>
+	@EJB(beanName=&quot;xy&quot;)<br/>
+	private Service service;<br/>
+	<br/>
+	@Override<br/>
+	public String callHell(String name) {<br/>
+		<br/>
+		final String prefix = &quot;调用service ejb 成功，返回值:&quot;;<br/>
+		<br/>
+		String result = service.hello(name);<br/>
+		<br/>
+		System.out.println(prefix + result);<br/>
+		<br/>
+		return prefix + result;<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package ejb.client.test;<br/>
+<br/>
+<br/>
+import java.util.Properties;<br/>
+<br/>
+<br/>
+import javax.naming.Context;<br/>
+import javax.naming.InitialContext;<br/>
+<br/>
+<br/>
+import remote.CallService;<br/>
+<br/>
+<br/>
+public class InjectTest {<br/>
+<br/>
+<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;	&lt;/span&gt;public static void main(String[] args) {<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;try{<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;Properties props = new Properties();<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;props.setProperty(Context.URL_PKG_PREFIXES, &quot;org.jboss.ejb.client.naming&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;InitialContext ctx = new InitialContext(props);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;CallService service = (CallService)ctx.lookup(&quot;ejb:/inject/CallServiceBean!remote.CallService&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;service.callHell(&quot;AAAAAAAAAAA&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;service.callHell(&quot;BBBBBBBBBBB&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;service.callHell(&quot;CCCCCCCCCCC&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;service.callHell(&quot;DDDDDDDDDDD&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;service.callHell(&quot;FFFFFFFFFFF&quot;);<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;ctx.close();<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;}&lt;span style=&quot;white-space:pre&quot;&gt;	&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;catch(Exception e){<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;			&lt;/span&gt;e.printStackTrace();<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;}<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;		&lt;/span&gt;<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;	&lt;/span&gt;}<br/>
+&lt;span style=&quot;white-space:pre&quot;&gt;	&lt;/span&gt;<br/>
+}<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160117150746492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160117150750710?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><img src="http://img.blog.csdn.net/20160117150754941?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+   <br/>
+</div>

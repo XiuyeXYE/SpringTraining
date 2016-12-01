@@ -1,0 +1,34 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        try getAddress(1)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1609006" snippet_file_name="blog_20160313_1_6990137"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+int main(){<br/>
+	char *p = &quot;123&quot;;<br/>
+	cout &lt;&lt; (int *)p &lt;&lt; endl;<br/>
+	cout &lt;&lt; (int)p &lt;&lt; endl;<br/>
+	cout &lt;&lt; (int)&quot;123&quot; &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre><pre code_snippet_id="1609006" snippet_file_name="blog_20160313_2_2813443"  name="code" class="cpp">D:\programming\C++&gt;cl getAddressStr.cpp<br/>
+用于 x86 的 Microsoft (R) C/C++ 优化编译器 18.00.21005.1 版版权所有(C) Microsoft<br/>
+ Corporation。  保留所有权利。<br/>
+<br/>
+getAddressStr.cpp<br/>
+F:\360Apps\vs2013\VC\include\xlocale(337) : warning C4530: 使用了 C++ 异常处理程<br/>
+序，但未启用展开语义。请指定 /EHsc<br/>
+Microsoft (R) Incremental Linker Version 12.00.21005.1<br/>
+Copyright (C) Microsoft Corporation.  All rights reserved.<br/>
+<br/>
+/out:getAddressStr.exe<br/>
+getAddressStr.obj<br/>
+<br/>
+D:\programming\C++&gt;getAddressStr<br/>
+0101D190<br/>
+16896400<br/>
+16896404</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

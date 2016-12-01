@@ -1,0 +1,25 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        直接给字符指针赋字符串            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1599637" snippet_file_name="blog_20160306_1_3399037"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+#include&lt;string&gt;<br/>
+int main(){<br/>
+	using namespace std;<br/>
+	string s;<br/>
+	cin &gt;&gt; s;<br/>
+	cout &lt;&lt; sizeof(s.c_str()) &lt;&lt; endl;<br/>
+	cout &lt;&lt; sizeof(s) &lt;&lt; endl;<br/>
+	cout &lt;&lt; s &lt;&lt; endl;<br/>
+	char * cs = new char[10];<br/>
+<br/>
+	cin &gt;&gt; cs ;<br/>
+	cout &lt;&lt; sizeof(cs) &lt;&lt; endl;<br/>
+	cout &lt;&lt; cs &lt;&lt; endl;<br/>
+	delete []cs;<br/>
+	return 0;<br/>
+	<br/>
+}<br/>
+</pre>如果cs未分配空间在执行cin后就会直接运行异常直接终止。所以要先给字符指针分配空间后赋&#20540;，运行正常。<br/>
+   <br/>
+</div>

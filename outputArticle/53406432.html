@@ -1,0 +1,83 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        cpu cmpxchg 指令理解 (CAS)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p></p><br/>
+<pre code_snippet_id="2017591" snippet_file_name="blog_20161130_1_8430710"  code_snippet_id="2017591" snippet_file_name="blog_20161130_1_8430710" name="code" class="cpp">cmpxchg是汇编指令<br/>
+作用：比较并交换操作数.<br/>
+如：CMPXCHG r/m,r 将累加器AL/AX/EAX/RAX中的值与首操作数（目的操作数）比较，如果相等，第2操作数（源操作数）的值装载到首操作数，zf置1。如果不等， 首操作数的值装载到AL/AX/EAX/RAX并将zf清0<br/>
+该指令只能用于486及其后继机型。第2操作数（源操作数）只能用8位、16位或32位寄存器。第1操作数（目地操作数）则可用寄存器或任一种存储器寻址方式。</pre><br><br/>
+<p></p><br/>
+<p>内嵌汇编理解cmpxchg指令(CAS)</p><br/>
+<p></p><br/>
+<pre code_snippet_id="2017591" snippet_file_name="blog_20161130_2_4973956"  code_snippet_id="2017591" snippet_file_name="blog_20161130_2_4973956" name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+	int a=0,b=0,c=0;<br/>
+<br/>
+	__asm{<br/>
+		mov eax,100;<br/>
+		mov a,eax<br/>
+	}<br/>
+	cout &lt;&lt; &quot;a := &quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	b = 99;<br/>
+	c = 11;<br/>
+	__asm{<br/>
+		mov ebx,b<br/>
+		cmpxchg c,ebx<br/>
+		mov a,eax    <br/>
+	}<br/>
+	cout &lt;&lt; &quot;b := &quot; &lt;&lt; b &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;c := &quot; &lt;&lt; c &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a := &quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre>输出:(<span style="background-color:rgb(240,240,240)">如果不等， &quot;首操作数&quot;(c)的&#20540;装载到AL/AX/EAX/RAX并将zf清0)</span><br/>
+<p></p><br/>
+<p></p><br/>
+<pre code_snippet_id="2017591" snippet_file_name="blog_20161130_3_8909887"  code_snippet_id="2017591" snippet_file_name="blog_20161130_3_8909887" name="code" class="cpp">a := 100<br/>
+b := 99<br/>
+c := 11<br/>
+a := 11</pre><br/>
+<p><br><br/>
+</p><br/>
+<p><pre code_snippet_id="2017591" snippet_file_name="blog_20161130_4_9628383"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+	int a=0,b=0,c=0;<br/>
+<br/>
+	__asm{<br/>
+		mov eax,100;<br/>
+		mov a,eax<br/>
+	}<br/>
+	cout &lt;&lt; &quot;a := &quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	b = 99;<br/>
+	c = 99;<br/>
+	__asm{<br/>
+		mov eax,99<br/>
+		mov ebx,777<br/>
+		cmpxchg c,ebx<br/>
+		mov a,eax<br/>
+	}<br/>
+	cout &lt;&lt; &quot;b := &quot; &lt;&lt; b &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;c := &quot; &lt;&lt; c &lt;&lt; endl;<br/>
+	cout &lt;&lt; &quot;a := &quot; &lt;&lt; a &lt;&lt; endl;<br/>
+	return 0;<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+<br><br/>
+<p></p><br/>
+输出:(<span style="background-color:rgb(240,240,240)">如果相等，第2操作数（源操作数）的&#20540;装载到首操作数，zf置1</span>)<br><br/>
+<pre code_snippet_id="2017591" snippet_file_name="blog_20161130_5_5627074"  code_snippet_id="2017591" snippet_file_name="blog_20161130_5_5627074" name="code" class="cpp">a := 100<br/>
+b := 99<br/>
+c := 777<br/>
+a := 99<br/>
+</pre><br><br/>
+<br><br/>
+<p></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

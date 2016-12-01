@@ -1,0 +1,233 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        jquery操作商品            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;!DOCTYPE html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset=&quot;UTF-8&quot;&gt;<br/>
+&lt;title&gt;shopping&lt;/title&gt;<br/>
+	&lt;style&gt;<br/>
+		div{<br/>
+			text-align:center;			<br/>
+		}<br/>
+		table{<br/>
+			margin:auto;<br/>
+			border-collapse:collapse;<br/>
+		}<br/>
+		#goods{<br/>
+			border:1px solid red;<br/>
+			width:600px;<br/>
+			height:390px;<br/>
+			<br/>
+		}<br/>
+		<br/>
+		#goods td{<br/>
+			border:1px solid red;<br/>
+			<br/>
+		}<br/>
+		<br/>
+		#box{<br/>
+			width:600px;<br/>
+			border:1px solid blue;<br/>
+		}<br/>
+		#box td{<br/>
+			border:1px solid blue;<br/>
+		}<br/>
+		caption{<br/>
+			font-size:30px;<br/>
+			color:green;<br/>
+		}<br/>
+	&lt;/style&gt;<br/>
+	&lt;script src=&quot;../scripts/jquery-2.1.4.js&quot;&gt;&lt;/script&gt;<br/>
+	&lt;script&gt; <br/>
+		function add(btn)<br/>
+		{<br/>
+			//找到同行的商品名和单价<br/>
+			// 找到按钮的父亲td，然后找他父亲的兄弟<br/>
+			//其大哥、二哥时我们要找的目标<br/>
+			var $tds = $(btn).parent().siblings();<br/>
+			/* var name = $(tds[1]).text();<br/>
+			alert(name); *///success<br/>
+			//jquery方法返回的为jquery对象<br/>
+			var name = $tds.eq(1).text();<br/>
+			var price = $tds.eq(2).text();<br/>
+			//alert(name+&quot;:&quot;+price);<br/>
+			var id = $tds.eq(0).text();<br/>
+			var sumPrice = price;<br/>
+			<br/>
+			//创建新的一行<br/>
+			try{<br/>
+			<br/>
+			<br/>
+			var $tr = $(&quot;&lt;tr&gt;&quot;<br/>
+					+&quot;&lt;td&gt;&quot;+id+&quot;&lt;/td&gt;&quot;<br/>
+					+&quot;&lt;td&gt;&quot;+name+&quot;&lt;/td&gt;\n&quot;<br/>
+					+&quot;&lt;td&gt;&quot;+price+&quot;&lt;/td&gt;\n&quot;<br/>
+					+&quot;&lt;td&gt;&lt;input type=&#39;button&#39; value=&#39;-&#39; onclick=&#39;decrement(this);&#39;&gt;&quot;<br/>
+					+&quot;&lt;input type=&#39;text&#39; size=&#39;3&#39; value=&#39;1&#39; readonly&gt;&quot;<br/>
+					+&quot;&lt;input type=&#39;button&#39; value=&#39;+&#39; onclick=&#39;increment(this);&#39;&gt;&lt;/td&gt;\n&quot;<br/>
+					+&quot;&lt;td&gt;&quot;+sumPrice+&quot;&lt;/td&gt;\n&quot;<br/>
+					+&quot;&lt;td&gt;&lt;input type=&#39;button&#39; value=&#39;remove&#39; onclick=&#39;remove_ancestor(this);&#39;&gt;&lt;/td&gt;&quot;<br/>
+					+&quot;&lt;/tr&gt;&quot;<br/>
+					<br/>
+			);<br/>
+			$(&quot;#tb&quot;).append($tr);<br/>
+			total();<br/>
+			}<br/>
+			catch(e)<br/>
+			{<br/>
+				alert(e);<br/>
+			}<br/>
+		}<br/>
+		function remove_ancestor(btn)<br/>
+		{<br/>
+			$(btn).parent().parent().remove();<br/>
+			total();<br/>
+		}<br/>
+		function increment(btn)<br/>
+		{<br/>
+			var $text = $(btn).prev();<br/>
+			//var amount = parseInt($text[0].value);<br/>
+			var amount = parseInt($text.val());//jquery数组对象的方法操作第一个对象<br/>
+			$text.val(++amount);<br/>
+			//计算该商品要花费的总价<br/>
+			<br/>
+			var $price = $(btn).parent().prev();<br/>
+			var price = parseInt($price.text());<br/>
+			<br/>
+			var mny = price * amount;<br/>
+			$(btn).parent().next().text(mny);<br/>
+			total();<br/>
+		}<br/>
+		function decrement(btn)<br/>
+		{<br/>
+			var $text = $(btn).next();<br/>
+			//var amount = parseInt($text[0].value);<br/>
+			var amount = parseInt($text.val());//jquery数组对象的方法操作第一个对象<br/>
+			if(amount &gt; 1)<br/>
+			$text.val(--amount);<br/>
+			//计算该商品要花费的总价<br/>
+			<br/>
+			var $price = $(btn).parent().prev();<br/>
+			var price = parseInt($price.text());<br/>
+			<br/>
+			var mny = price * amount;<br/>
+			$(btn).parent().next().text(mny);<br/>
+			total();<br/>
+		}<br/>
+		//合计总花费total<br/>
+		function total()<br/>
+		{<br/>
+			var sum = 0;<br/>
+			//获取所有商品<br/>
+			var $trs = $(&quot;#tb tr&quot;)<br/>
+			//遍历所有行&lt;tr&gt;&lt;/tr&gt;<br/>
+			for(var i=1;i&lt;$trs.length;i++){<br/>
+				var $td = $trs.eq(i).children().eq(4);<br/>
+				//获得金额累计<br/>
+				var mny = parseInt($td.text());<br/>
+				sum += mny;<br/>
+				//alert(sum);<br/>
+			}<br/>
+			<br/>
+			//合计<br/>
+			$(&quot;#total&quot;).text(sum);<br/>
+			<br/>
+		}<br/>
+	&lt;/script&gt;<br/>
+<br/>
+&lt;/head&gt;<br/>
+&lt;body&gt;<br/>
+	&lt;!-- list of goods --&gt;<br/>
+	&lt;div&gt;<br/>
+	<br/>
+		&lt;table id=&quot;goods&quot;&gt;<br/>
+		&lt;caption&gt;商品&lt;/caption&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;id&lt;/td&gt;<br/>
+				&lt;td&gt;name&lt;/td&gt;<br/>
+				&lt;td&gt;price&lt;/td&gt;<br/>
+				&lt;td&gt;number&lt;/td&gt;<br/>
+				&lt;td&gt;add&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;001&lt;/td&gt;<br/>
+				&lt;td&gt;镭射鼠标&lt;/td&gt;<br/>
+				&lt;td&gt;200&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;002&lt;/td&gt;<br/>
+				&lt;td&gt;火星键盘&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;003&lt;/td&gt;<br/>
+				&lt;td&gt;2015电脑&lt;/td&gt;<br/>
+				&lt;td&gt;4000&lt;/td&gt;<br/>
+				&lt;td&gt;50&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;004&lt;/td&gt;<br/>
+				&lt;td&gt;lol鼠标垫&lt;/td&gt;<br/>
+				&lt;td&gt;20&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;005&lt;/td&gt;<br/>
+				&lt;td&gt;无线耳机&lt;/td&gt;<br/>
+				&lt;td&gt;100&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;006&lt;/td&gt;<br/>
+				&lt;td&gt;8G内存卡&lt;/td&gt;<br/>
+				&lt;td&gt;200&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;007&lt;/td&gt;<br/>
+				&lt;td&gt;2G显卡&lt;/td&gt;<br/>
+				&lt;td&gt;300&lt;/td&gt;<br/>
+				&lt;td&gt;150&lt;/td&gt;<br/>
+				&lt;td&gt;&lt;input type=&quot;button&quot; value=&quot;add&quot; onclick=&quot;add(this);&quot;&gt;&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+		&lt;/table&gt;<br/>
+	&lt;/div&gt;<br/>
+	&lt;p&gt;&lt;/p&gt;<br/>
+	&lt;hr&gt;<br/>
+	&lt;p&gt;&lt;/p&gt;<br/>
+	&lt;!-- shoppingbox --&gt;<br/>
+	&lt;div&gt;<br/>
+		&lt;table id=&quot;box&quot;&gt;<br/>
+		&lt;caption&gt;购物车&lt;/caption&gt;<br/>
+		&lt;tbody id=&quot;tb&quot;&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td&gt;id&lt;/td&gt;<br/>
+				&lt;td&gt;name&lt;/td&gt;<br/>
+				&lt;td&gt;price&lt;/td&gt;<br/>
+				&lt;td&gt;number&lt;/td&gt;<br/>
+				&lt;td&gt;sumPrice&lt;/td&gt;<br/>
+				&lt;td&gt;delete&lt;/td&gt;<br/>
+			&lt;/tr&gt;<br/>
+			&lt;/tbody&gt;<br/>
+			&lt;tr&gt;<br/>
+				&lt;td colspan=&quot;3&quot;&gt;total:&lt;/td&gt;<br/>
+				&lt;td  colspan=&quot;3&quot;&gt;&lt;span&gt;￥&lt;/span&gt;&lt;span id=&quot;total&quot;&gt;0&lt;/span&gt;&lt;/td&gt; <br/>
+			&lt;/tr&gt;<br/>
+		&lt;/table&gt;<br/>
+	<br/>
+	&lt;/div&gt;<br/>
+	<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</pre><br><br/>
+   <br/>
+</div>

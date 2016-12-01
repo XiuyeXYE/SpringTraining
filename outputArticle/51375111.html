@@ -1,0 +1,13 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        spring 调用getBean得到类不能保证类中@Resource注解成功注入            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1679249" snippet_file_name="blog_20160511_1_2892626"  name="code" class="java">class A{<br/>
+@Resource<br/>
+B b;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1679249" snippet_file_name="blog_20160511_2_5127881"  name="code" class="java">AbstractApplicationContext ac = new ClassPathXmlApplicationContext(configs);<br/>
+A a = ac.getBean(A.class);</pre><pre code_snippet_id="1679249" snippet_file_name="blog_20160511_3_8334247"  name="code" class="java">System.out.println(a.b);//null</pre><br><br/>
+   <br/>
+</div>

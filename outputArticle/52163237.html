@@ -1,0 +1,49 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java类对this的探索            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1818588" snippet_file_name="blog_20160809_1_4248634"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+public class DynamicThis {<br/>
+<br/>
+	static class A implements Cloneable{<br/>
+		<br/>
+		<br/>
+		public void performB(){<br/>
+			B b = (B) this;//在父类中直接转化为子类，验证this到底指向谁，this的继承？<br/>
+			b.f();<br/>
+			try {<br/>
+				b = (B) this.clone();//调用clone方法必须实现clonable<br/>
+				b.f();<br/>
+			} catch (CloneNotSupportedException e) {<br/>
+				e.printStackTrace();<br/>
+			}<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	static class B extends A{<br/>
+		<br/>
+		public void f(){<br/>
+			System.out.println(&quot;OK&quot;);<br/>
+		}<br/>
+		<br/>
+		<br/>
+	}<br/>
+	<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		A a = new B();<br/>
+		a.performB();<br/>
+		<br/>
+//		a = new A();<br/>
+//		a.performB();<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1818588" snippet_file_name="blog_20160809_2_8120092"  name="code" class="java">OK<br/>
+OK<br/>
+</pre><br><br/>
+   <br/>
+</div>

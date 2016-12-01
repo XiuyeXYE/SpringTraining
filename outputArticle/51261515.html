@@ -1,0 +1,285 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        原子类操作也许并不安全            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1663918" snippet_file_name="blog_20160427_1_6881125"  name="code" class="java">package com.test;<br/>
+<br/>
+import java.util.concurrent.ExecutorService;<br/>
+import java.util.concurrent.Executors;<br/>
+import java.util.concurrent.atomic.AtomicLong;<br/>
+<br/>
+public class TestAtomicLong {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		final AtomicLong al = new AtomicLong();<br/>
+		<br/>
+		System.out.println(al);<br/>
+		<br/>
+		ExecutorService pool = Executors.newFixedThreadPool(100);<br/>
+		<br/>
+		for(int i = 0; i &lt; 100 ; i++ ){<br/>
+			pool.execute(new Runnable(){<br/>
+<br/>
+				@Override<br/>
+				public void run() {<br/>
+					<br/>
+					al.addAndGet(10L);<br/>
+					System.out.println(al);<br/>
+					<br/>
+				}<br/>
+				<br/>
+				<br/>
+			});<br/>
+		}<br/>
+		pool.shutdown();<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1663918" snippet_file_name="blog_20160427_2_1373465"  name="code" class="java">0<br/>
+10<br/>
+20<br/>
+30<br/>
+40<br/>
+50<br/>
+60<br/>
+70<br/>
+80<br/>
+90<br/>
+100<br/>
+110<br/>
+120<br/>
+130<br/>
+140<br/>
+150<br/>
+160<br/>
+170<br/>
+180<br/>
+190<br/>
+200<br/>
+210<br/>
+220<br/>
+230<br/>
+240<br/>
+250<br/>
+260<br/>
+270<br/>
+280<br/>
+290<br/>
+300<br/>
+310<br/>
+320<br/>
+330<br/>
+340<br/>
+350<br/>
+360<br/>
+370<br/>
+380<br/>
+390<br/>
+400<br/>
+410<br/>
+420<br/>
+430<br/>
+440<br/>
+450<br/>
+460<br/>
+470<br/>
+480<br/>
+490<br/>
+500<br/>
+510<br/>
+520<br/>
+530<br/>
+540<br/>
+550<br/>
+560<br/>
+570<br/>
+580<br/>
+590<br/>
+600<br/>
+610<br/>
+620<br/>
+630<br/>
+640<br/>
+650<br/>
+660<br/>
+670<br/>
+680<br/>
+690<br/>
+700<br/>
+710<br/>
+720<br/>
+730<br/>
+740<br/>
+750<br/>
+760<br/>
+770<br/>
+780<br/>
+790<br/>
+800<br/>
+810<br/>
+820<br/>
+830<br/>
+840<br/>
+850<br/>
+860<br/>
+870<br/>
+880<br/>
+890<br/>
+900<br/>
+910<br/>
+920<br/>
+930<br/>
+940<br/>
+950<br/>
+960<br/>
+970<br/>
+980<br/>
+990<br/>
+1000<br/>
+</pre><br><br/>
+<pre code_snippet_id="1663918" snippet_file_name="blog_20160427_3_9628577"  name="code" class="java">package com.test;<br/>
+<br/>
+import java.util.concurrent.ExecutorService;<br/>
+import java.util.concurrent.Executors;<br/>
+import java.util.concurrent.atomic.AtomicReference;<br/>
+<br/>
+public class TestAtomicReference {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		final AtomicReference&lt;Long&gt; i = new AtomicReference&lt;Long&gt;();//非线程安全<br/>
+<br/>
+		i.getAndSet(10L);<br/>
+<br/>
+		System.out.println(i);<br/>
+<br/>
+		ExecutorService pool = Executors.newFixedThreadPool(100);<br/>
+<br/>
+		for (int j = 0; j &lt; 100; j++) {<br/>
+			pool.execute(new Runnable() {<br/>
+<br/>
+				@Override<br/>
+				public void run() {<br/>
+<br/>
+					i.set(i.get()+10L);<br/>
+					System.out.println(i);<br/>
+<br/>
+				}<br/>
+<br/>
+			});<br/>
+		}<br/>
+		pool.shutdown();<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1663918" snippet_file_name="blog_20160427_4_9486873"  name="code" class="java">10<br/>
+20<br/>
+30<br/>
+40<br/>
+50<br/>
+60<br/>
+70<br/>
+80<br/>
+90<br/>
+100<br/>
+110<br/>
+120<br/>
+130<br/>
+140<br/>
+150<br/>
+160<br/>
+170<br/>
+180<br/>
+190<br/>
+200<br/>
+210<br/>
+220<br/>
+230<br/>
+240<br/>
+250<br/>
+250<br/>
+260<br/>
+270<br/>
+280<br/>
+290<br/>
+300<br/>
+310<br/>
+320<br/>
+330<br/>
+340<br/>
+350<br/>
+360<br/>
+370<br/>
+370<br/>
+380<br/>
+390<br/>
+400<br/>
+410<br/>
+590<br/>
+580<br/>
+600<br/>
+570<br/>
+560<br/>
+610<br/>
+620<br/>
+550<br/>
+490<br/>
+630<br/>
+540<br/>
+650<br/>
+530<br/>
+520<br/>
+510<br/>
+500<br/>
+480<br/>
+690<br/>
+710<br/>
+430<br/>
+720<br/>
+730<br/>
+470<br/>
+750<br/>
+460<br/>
+770<br/>
+450<br/>
+780<br/>
+440<br/>
+420<br/>
+820<br/>
+810<br/>
+800<br/>
+790<br/>
+760<br/>
+740<br/>
+700<br/>
+680<br/>
+670<br/>
+660<br/>
+640<br/>
+640<br/>
+660<br/>
+670<br/>
+680<br/>
+690<br/>
+700<br/>
+710<br/>
+720<br/>
+730<br/>
+720<br/>
+740<br/>
+750<br/>
+760<br/>
+770<br/>
+780<br/>
+800<br/>
+790<br/>
+</pre><br><br/>
+   <br/>
+</div>

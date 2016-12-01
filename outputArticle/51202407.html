@@ -1,0 +1,16 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        windows C/C++自定义函数入口            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1654673" snippet_file_name="blog_20160420_1_7868896"  name="code" class="cpp"><br/>
+#pragma comment(linker,&quot;/subsystem:console /entry:f&quot;)<br/>
+int f(int num,int power)<br/>
+{<br/>
+	__asm{<br/>
+		mov eax,num;<br/>
+		mov ecx,power;<br/>
+		shl eax,cl;<br/>
+	}<br/>
+}</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,23 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        提取xml中所有节点的text数据            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1860101" snippet_file_name="blog_20160831_1_6202005"  name="code" class="java">Element e = doc.getRootElement();<br/>
+Stack&lt;Element&gt; stack = new Stack&lt;Element&gt;();<br/>
+<br/>
+			stack.push(e);<br/>
+			while (!stack.isEmpty()) {<br/>
+				Element node = stack.pop();<br/>
+				if (!node.isTextOnly() &amp;&amp; node.hasContent()) {<br/>
+					List&lt;Element&gt; l = node.elements();<br/>
+					for(Element ele : l){<br/>
+						stack.push(ele);//所有非文本的节点一下子“装”<br/>
+					}<br/>
+					<br/>
+				}<br/>
+				else{<br/>
+					System.out.println(node.getTextTrim());<br/>
+				}<br/>
+			}</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,13 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        C++ eof            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1629404" snippet_file_name="blog_20160330_1_8940207"  code_snippet_id="1629404" snippet_file_name="blog_20160330_1_8940207" name="code" class="cpp">while(!in.eof()){<br/>
+in &gt;&gt; str;//空字符都会结束输入<br/>
+cout &lt;&lt; str &lt;&lt; endl;<br/>
+&#160;}</pre><pre code_snippet_id="1629404" snippet_file_name="blog_20160330_2_5384394"  code_snippet_id="1629404" snippet_file_name="blog_20160330_2_5384394" name="code" class="cpp">有可能最后字符重复输出：因为ifstream 是读取文件读到不能再读的时候，就设置EOF,所以读取最后字符后，还未设置EOF，再读未读到再设置EOF<br/>
+注：EOF是流中的，不是文件中，文件中并未有EOF标志。<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

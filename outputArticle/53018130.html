@@ -1,0 +1,295 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        D3DX11 简单的 编译通过和运行            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1963945" snippet_file_name="blog_20161103_1_3381813"  name="code" class="cpp">#ifndef _D3DX_BASE_H_<br/>
+#define _D3DX_BASE_H_<br/>
+#include&lt;d3d11.h&gt;<br/>
+#include&lt;d3dx11.h&gt;<br/>
+#include&lt;DxErr.h&gt;<br/>
+<br/>
+class D3DXBase{<br/>
+	<br/>
+	public:<br/>
+		D3DXBase();<br/>
+		virtual ~D3DXBase();<br/>
+		bool Initialize(HINSTANCE hInstance,HWND hwnd);<br/>
+		void Shutdown();<br/>
+		<br/>
+		virtual bool LoadContent();<br/>
+		virtual void UnloadContent();<br/>
+		<br/>
+		virtual void Update(float dt) = 0;<br/>
+		virtual void Render() = 0;<br/>
+	protected:<br/>
+		HINSTANCE hInstance_;<br/>
+		HWND hwnd_;<br/>
+		D3D_DRIVER_TYPE driverType_;<br/>
+		D3D_FEATURE_LEVEL featureLevel_;<br/>
+		<br/>
+		ID3D11Device *d3dDevice_;<br/>
+		ID3D11DeviceContext *d3dContext_;<br/>
+		IDXGISwapChain *swapChain_;<br/>
+		ID3D11RenderTargetView *backBufferTarget_;<br/>
+		<br/>
+};<br/>
+<br/>
+#endif</pre>D3DX.cpp<br><br/>
+<pre code_snippet_id="1963945" snippet_file_name="blog_20161103_2_7394974"  name="code" class="cpp">#include&quot;D3DX.h&quot;<br/>
+<br/>
+D3DXBase::D3DXBase():driverType_(D3D_DRIVER_TYPE_NULL),featureLevel_(D3D_FEATURE_LEVEL_11_0),d3dDevice_(0),d3dContext_(0),swapChain_(0),backBufferTarget_(0){}<br/>
+D3DXBase::~D3DXBase(){<br/>
+	Shutdown();<br/>
+}<br/>
+bool D3DXBase::LoadContent(){<br/>
+	return true;<br/>
+}<br/>
+void D3DXBase::UnloadContent(){<br/>
+	<br/>
+}<br/>
+void D3DXBase::Shutdown(){<br/>
+	UnloadContent();<br/>
+	if(backBufferTarget_)backBufferTarget_-&gt;Release();<br/>
+	if(swapChain_)swapChain_-&gt;Release();<br/>
+	if(d3dContext_)d3dContext_-&gt;Release();<br/>
+	if(d3dDevice_)d3dDevice_-&gt;Release();<br/>
+	backBufferTarget_ = 0;<br/>
+	swapChain_ = 0;<br/>
+	d3dContext_ = 0;<br/>
+	d3dDevice_ = 0;<br/>
+	 <br/>
+}<br/>
+bool D3DXBase::Initialize(HINSTANCE hInstance,HWND hwnd){<br/>
+	hInstance_ = hInstance;<br/>
+	hwnd_ = hwnd;<br/>
+	<br/>
+	RECT dimensions;<br/>
+	GetClientRect(hwnd,&amp;dimensions);<br/>
+	unsigned int width = dimensions.right - dimensions.left;<br/>
+	unsigned int height = dimensions.bottom - dimensions.top;<br/>
+	D3D_DRIVER_TYPE driverTypes[] = {<br/>
+		D3D_DRIVER_TYPE_HARDWARE,D3D_DRIVER_TYPE_WARP,<br/>
+		D3D_DRIVER_TYPE_REFERENCE,D3D_DRIVER_TYPE_SOFTWARE<br/>
+	};<br/>
+	unsigned int totalDriverTypes = ARRAYSIZE(driverTypes);<br/>
+	<br/>
+	D3D_FEATURE_LEVEL featureLevels[] = {<br/>
+		//D3D_FEATURE_LEVEL_11_1,//not supported<br/>
+		D3D_FEATURE_LEVEL_11_0,<br/>
+		D3D_FEATURE_LEVEL_10_1,<br/>
+		D3D_FEATURE_LEVEL_10_0,<br/>
+		D3D_FEATURE_LEVEL_9_1,<br/>
+		D3D_FEATURE_LEVEL_9_2,<br/>
+		D3D_FEATURE_LEVEL_9_3<br/>
+	};<br/>
+	unsigned int totalFeatureLevels = ARRAYSIZE(featureLevels);<br/>
+	<br/>
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;<br/>
+	ZeroMemory(&amp;swapChainDesc,sizeof(swapChainDesc));<br/>
+	swapChainDesc.BufferCount = 1;<br/>
+	swapChainDesc.BufferDesc.Width = width;<br/>
+	swapChainDesc.BufferDesc.Height = height;<br/>
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;<br/>
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;<br/>
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;<br/>
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;<br/>
+	swapChainDesc.OutputWindow = hwnd;<br/>
+	swapChainDesc.Windowed = true;<br/>
+	swapChainDesc.SampleDesc.Count = 1;<br/>
+	swapChainDesc.SampleDesc.Quality = 0;<br/>
+	//swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;//让显卡驱动程序选择最高效的显示模式。<br/>
+	//swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;//那么当应用程序切换到全屏模式时，Direct3D会自动选择与当前的后台缓冲区设置最匹配的显示模式。如果未指定该标志值，那么当应用程序切换到全屏模式时，Direct3D会使用当前的桌面显示模式。我们在示例框架中没有使用该标志值，因为对于我们的演示程序来说，在全屏模式下使用当前的桌面显示模式可以得到很好的效果。<br/>
+	unsigned int creationFlags = 0;<br/>
+#ifdef _DEBUG<br/>
+	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;<br/>
+#endif<br/>
+	HRESULT result;<br/>
+	unsigned int driver = 0;<br/>
+	//创建Dx设备上下文,dx设备和交换链(IDXGISwapChain)<br/>
+	for(driver = 0;driver &lt; totalDriverTypes ; ++driver){<br/>
+		result = D3D11CreateDeviceAndSwapChain(0,driverTypes[driver],0,creationFlags,featureLevels,totalFeatureLevels,D3D11_SDK_VERSION,&amp;swapChainDesc,&amp;swapChain_,&amp;d3dDevice_,&amp;featureLevel_,&amp;d3dContext_);<br/>
+		if(SUCCEEDED(result)){<br/>
+			driverType_ = driverTypes[driver];<br/>
+			break;<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	if(FAILED(result)){<br/>
+		DXTRACE_MSG(&quot;Failed to create the Direct3D device!&quot;);<br/>
+		return false;<br/>
+	}<br/>
+	<br/>
+	//缓存纹理<br/>
+	ID3D11Texture2D *backBufferTexture;<br/>
+	result = swapChain_-&gt;GetBuffer(0,_uuidof(ID3D11Texture2D),(LPVOID*)&amp;backBufferTexture);<br/>
+	<br/>
+	<br/>
+	if(FAILED(result)){<br/>
+		DXTRACE_MSG(&quot;Failed to get the swap chain back buffer!&quot;);<br/>
+		return false;<br/>
+	}<br/>
+	//目标视图<br/>
+	result = d3dDevice_ -&gt; CreateRenderTargetView(backBufferTexture,0,&amp;backBufferTarget_);<br/>
+	<br/>
+	if(backBufferTexture){<br/>
+		backBufferTexture -&gt; Release();<br/>
+	}<br/>
+	if(FAILED(result)){<br/>
+		DXTRACE_MSG(&quot;Failed to create the render target view!&quot;);<br/>
+		return false;<br/>
+	}<br/>
+	//渲染目标<br/>
+	d3dContext_-&gt;OMSetRenderTargets(1,&amp;backBufferTarget_,0);<br/>
+	//视口<br/>
+	D3D11_VIEWPORT viewport;<br/>
+	<br/>
+	viewport.Width = static_cast&lt;float&gt;(width);<br/>
+	viewport.Height = static_cast&lt;float&gt;(height);<br/>
+	viewport.MinDepth = 0.0f;<br/>
+	viewport.MaxDepth = 1.0f;<br/>
+	viewport.TopLeftX = 0.0f;<br/>
+	viewport.TopLeftY = 0.0f;<br/>
+	//设置视口<br/>
+	d3dContext_-&gt;RSSetViewports(1,&amp;viewport);<br/>
+	return LoadContent();<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre>D3DX11Demo.h<br><br/>
+<pre code_snippet_id="1963945" snippet_file_name="blog_20161103_3_7395757"  name="code" class="cpp">#ifndef _BLACK_DEMO_H_<br/>
+#define _BLACK_DEMO_H_<br/>
+#include&quot;D3DX.h&quot;<br/>
+class BlankDemo:public D3DXBase{<br/>
+	<br/>
+	public:<br/>
+		BlankDemo();<br/>
+		virtual ~BlankDemo();<br/>
+		bool LoadContent();<br/>
+		void UnloadContent();<br/>
+		void Update(float dt);<br/>
+		void Render();<br/>
+	private:<br/>
+		float updateColor_;<br/>
+};<br/>
+<br/>
+#endif</pre>D3DX11Demo.cpp<br><br/>
+<pre code_snippet_id="1963945" snippet_file_name="blog_20161103_4_1092492"  name="code" class="cpp">#include&quot;D3DX11Demo.h&quot;<br/>
+BlankDemo::BlankDemo():updateColor_(0.0f){<br/>
+	<br/>
+}<br/>
+BlankDemo::~BlankDemo(){<br/>
+	<br/>
+}<br/>
+bool BlankDemo::LoadContent(){<br/>
+	return true;<br/>
+}<br/>
+void  BlankDemo::UnloadContent(){<br/>
+	<br/>
+}<br/>
+void BlankDemo::Update(float dt){<br/>
+	updateColor_ = dt;<br/>
+}<br/>
+void BlankDemo::Render(){<br/>
+	<br/>
+	if(d3dContext_ == 0){<br/>
+		return;<br/>
+	}<br/>
+	float clearColor[4] = {updateColor_,0.5f,0.5f,1.0f};<br/>
+	d3dContext_-&gt;ClearRenderTargetView(backBufferTarget_,clearColor);<br/>
+	swapChain_-&gt;Present(0,0);<br/>
+	<br/>
+}</pre>windows.cpp<br><br/>
+<pre code_snippet_id="1963945" snippet_file_name="blog_20161103_5_3186043"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+#include&lt;memory&gt;<br/>
+#include&quot;D3DX11Demo.h&quot;<br/>
+#pragma comment(lib,&quot;gdi32.lib&quot;)<br/>
+#pragma comment(lib,&quot;user32.lib&quot;)<br/>
+#pragma comment(lib,&quot;kernel32.lib&quot;)<br/>
+#pragma comment(lib,&quot;d3d11.lib&quot;)<br/>
+#pragma comment(lib,&quot;d3dx11.lib&quot;)<br/>
+#pragma comment(lib,&quot;DxErr.lib&quot;)<br/>
+#pragma comment(lib,&quot;D3DX.lib&quot;)//user-defined linking D3DX.cpp to lib <br/>
+<br/>
+<br/>
+LRESULT CALLBACK WndProc(HWND hwnd,UINT  message,WPARAM wParam,LPARAM lParam);<br/>
+int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR cmdLine,int nShow){<br/>
+	UNREFERENCED_PARAMETER(hPrevInstance);<br/>
+	UNREFERENCED_PARAMETER(cmdLine);<br/>
+	WNDCLASSEX wndClass = {0};<br/>
+	wndClass.cbSize = sizeof(WNDCLASSEX);<br/>
+	wndClass.cbClsExtra = 0;<br/>
+	wndClass.cbWndExtra = 0;<br/>
+	wndClass.hIcon = LoadIcon(NULL,IDI_APPLICATION);<br/>
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;<br/>
+	wndClass.lpfnWndProc = WndProc;<br/>
+	wndClass.hInstance = hInstance;<br/>
+	wndClass.hCursor = LoadCursor(NULL,IDC_ARROW);<br/>
+	wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);<br/>
+	wndClass.lpszMenuName = NULL;<br/>
+	wndClass.lpszClassName = &quot;DX11BookWinddowClass&quot;;<br/>
+	if(!RegisterClassEx(&amp;wndClass)){<br/>
+		return -1;<br/>
+	}<br/>
+	RECT rc = {0,0,640,480};<br/>
+	AdjustWindowRect(&amp;rc,WS_OVERLAPPEDWINDOW,false);<br/>
+	HWND hwnd = CreateWindow(&quot;DX11BookWinddowClass&quot;,&quot;Blank Win32 Window&quot;,WS_OVERLAPPEDWINDOW,0,0,rc.right-rc.left,rc.bottom-rc.top,NULL,NULL,hInstance,NULL);<br/>
+	if(!hwnd)return -1;<br/>
+	<br/>
+	<br/>
+	<br/>
+	ShowWindow(hwnd,nShow);<br/>
+	<br/>
+	std::auto_ptr&lt;D3DXBase&gt; demo(new BlankDemo());<br/>
+	<br/>
+	bool result = demo-&gt;Initialize(hInstance,hwnd);<br/>
+	if(result == false){<br/>
+		return -1;<br/>
+	}<br/>
+	<br/>
+	<br/>
+	<br/>
+	MSG msg = {0};<br/>
+	while(msg.message != WM_QUIT){<br/>
+		if(PeekMessage(&amp;msg,0,0,0,PM_REMOVE)){<br/>
+			TranslateMessage(&amp;msg);<br/>
+			DispatchMessage(&amp;msg);<br/>
+		}<br/>
+		else{<br/>
+			<br/>
+			demo-&gt;Update(0.35f);<br/>
+			demo-&gt;Render();<br/>
+			UpdateWindow(hwnd);<br/>
+		}<br/>
+	}<br/>
+	demo-&gt;Shutdown();<br/>
+	<br/>
+	return static_cast&lt;int&gt;(msg.wParam);<br/>
+	<br/>
+	<br/>
+}<br/>
+<br/>
+LRESULT CALLBACK WndProc(HWND hwnd,UINT  message,WPARAM wParam,LPARAM lParam){<br/>
+	<br/>
+	PAINTSTRUCT ps;<br/>
+	HDC hdc;<br/>
+	switch(message){<br/>
+		case WM_PAINT:<br/>
+			hdc = BeginPaint(hwnd,&amp;ps);<br/>
+			EndPaint(hwnd,&amp;ps);<br/>
+			break;<br/>
+		case WM_DESTROY:<br/>
+			PostQuitMessage(0);<br/>
+			break;<br/>
+		default:<br/>
+			return DefWindowProc(hwnd,message,wParam,lParam);<br/>
+	}<br/>
+	return 0;<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20161103105624684?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,149 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java8 lambda尝试            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1689165" snippet_file_name="blog_20160519_1_6154007"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import java.util.ArrayList;<br/>
+import java.util.Collections;<br/>
+import java.util.Comparator;<br/>
+import static java.util.Comparator.comparing;<br/>
+import java.util.List;<br/>
+<br/>
+<br/>
+<br/>
+public class TestDoubleColon {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		List&lt;Apple&gt; apps = new ArrayList&lt;Apple&gt;();<br/>
+		Apple app = new Apple();<br/>
+		app.setWeight(12);<br/>
+		apps.add(app);<br/>
+		app = new Apple();<br/>
+		app.setWeight(16);<br/>
+		apps.add(app);<br/>
+		app = new Apple();<br/>
+		app.setWeight(77);<br/>
+		apps.add(app);<br/>
+		app = new Apple();<br/>
+		app.setWeight(99);<br/>
+		apps.add(app);<br/>
+		app = new Apple();<br/>
+		app.setWeight(88);<br/>
+		apps.add(app);<br/>
+		app = new Apple();<br/>
+		app.setWeight(12);<br/>
+		apps.add(app);<br/>
+		<br/>
+		List&lt;Apple&gt; appsCopy = new ArrayList&lt;Apple&gt;();//size为0<br/>
+		//System.out.println(appsCopy.size());//0<br/>
+		for(int i = 0;i&lt;apps.size();i++){<br/>
+			appsCopy.add(new Apple());<br/>
+		}<br/>
+		/**<br/>
+		 * public static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src) {<br/>
+        int srcSize = src.size();<br/>
+        if (srcSize &gt; dest.size())<br/>
+            throw new IndexOutOfBoundsException(&quot;Source does not fit in dest&quot;);<br/>
+<br/>
+        if (srcSize &lt; COPY_THRESHOLD ||<br/>
+            (src instanceof RandomAccess &amp;&amp; dest instanceof RandomAccess)) {<br/>
+            for (int i=0; i&lt;srcSize; i++)<br/>
+                dest.set(i, src.get(i));<br/>
+        } else {<br/>
+            ListIterator&lt;? super T&gt; di=dest.listIterator();<br/>
+            ListIterator&lt;? extends T&gt; si=src.listIterator();<br/>
+            for (int i=0; i&lt;srcSize; i++) {<br/>
+                di.next();<br/>
+                di.set(si.next());<br/>
+            }<br/>
+        }<br/>
+    }<br/>
+		 */<br/>
+		Collections.copy(appsCopy,apps);//必须要dest的size大于src的size<br/>
+		<br/>
+		System.out.println(&quot;==============apps=============&quot;);<br/>
+		for(Apple a : apps){<br/>
+			System.out.println(a.getWeight());<br/>
+		}<br/>
+		System.out.println(&quot;==============appsCopy=============&quot;);<br/>
+		for(Apple a : appsCopy){<br/>
+			System.out.println(a.getWeight());<br/>
+		}<br/>
+		//排序<br/>
+		Collections.sort(apps,new Comparator&lt;Apple&gt;() {<br/>
+<br/>
+			@Override<br/>
+			public int compare(Apple o1, Apple o2) {<br/>
+				<br/>
+				return o1.getWeight() - o2.getWeight();<br/>
+			}<br/>
+		});<br/>
+		System.out.println(&quot;==============apps sorted=============&quot;);<br/>
+		for(Apple a : apps){<br/>
+			System.out.println(a.getWeight());<br/>
+		}<br/>
+		<br/>
+		System.out.println(&quot;==============appsCopy sorted=============&quot;);<br/>
+		appsCopy.forEach(System.out::println);<br/>
+		appsCopy.sort(comparing(Apple::getWeight));<br/>
+		for(Apple a : appsCopy){<br/>
+			System.out.println(a.getWeight());<br/>
+		}<br/>
+	}<br/>
+<br/>
+		<br/>
+	<br/>
+}<br/>
+class Apple{<br/>
+	<br/>
+	private int weight;<br/>
+<br/>
+	public int getWeight() {<br/>
+		return weight;<br/>
+	}<br/>
+<br/>
+	public void setWeight(int weight) {<br/>
+		this.weight = weight;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1689165" snippet_file_name="blog_20160519_2_58485"  name="code" class="java">==============apps=============<br/>
+12<br/>
+16<br/>
+77<br/>
+99<br/>
+88<br/>
+12<br/>
+==============appsCopy=============<br/>
+12<br/>
+16<br/>
+77<br/>
+99<br/>
+88<br/>
+12<br/>
+==============apps sorted=============<br/>
+12<br/>
+12<br/>
+16<br/>
+77<br/>
+88<br/>
+99<br/>
+==============appsCopy sorted=============<br/>
+com.xiuye.test.Apple@1218025c<br/>
+com.xiuye.test.Apple@816f27d<br/>
+com.xiuye.test.Apple@87aac27<br/>
+com.xiuye.test.Apple@3e3abc88<br/>
+com.xiuye.test.Apple@6ce253f1<br/>
+com.xiuye.test.Apple@53d8d10a<br/>
+12<br/>
+12<br/>
+16<br/>
+77<br/>
+88<br/>
+99<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

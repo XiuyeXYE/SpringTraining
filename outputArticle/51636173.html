@@ -1,0 +1,115 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        itext PDF 分页 并 解决PdfReader not opened with owner password            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1713548" snippet_file_name="blog_20160611_1_3615961"  name="code" class="java">package com.xiuye.util;<br/>
+<br/>
+import java.io.BufferedOutputStream;<br/>
+import java.io.IOException;<br/>
+<br/>
+import javax.servlet.http.HttpServletResponse;<br/>
+<br/>
+import com.itextpdf.text.Document;<br/>
+import com.itextpdf.text.DocumentException;<br/>
+import com.itextpdf.text.pdf.PdfCopy;<br/>
+import com.itextpdf.text.pdf.PdfImportedPage;<br/>
+import com.itextpdf.text.pdf.PdfReader;<br/>
+import com.xiuye.logger.Logger;<br/>
+<br/>
+public class PdfOutputCustomPagesUtil {<br/>
+<br/>
+	private static Logger log = Logger<br/>
+			.getLogger(PdfOutputCustomPagesUtil.class);<br/>
+<br/>
+	/**<br/>
+	 * split pdf for my bookstore<br/>
+	 * <br/>
+	 * @param pdfFilename<br/>
+	 * @param startPage<br/>
+	 *            not equal 0 since 1<br/>
+	 * @param os<br/>
+	 */<br/>
+	public static void partOfPdfOutputPages(String pdfFilename, int startPage,<br/>
+			HttpServletResponse response) {<br/>
+		int expectEndPage = 0;<br/>
+		Document doc = null;<br/>
+		PdfCopy pdfCopy = null;<br/>
+<br/>
+		PdfReader reader = null;<br/>
+		try {<br/>
+			reader = new PdfReader(pdfFilename);<br/>
+<br/>
+			/**<br/>
+			 * 解决Exception in thread &quot;main&quot; java.lang.IllegalArgumentException:<br/>
+			 * PdfReader not opened with owner password<br/>
+			 * <br/>
+			 * <br/>
+			 */<br/>
+			java.lang.reflect.Field f = reader.getClass().getDeclaredField(<br/>
+					&quot;encrypted&quot;);<br/>
+			f.setAccessible(true);<br/>
+			f.set(reader, false);<br/>
+<br/>
+			int totalPages = reader.getNumberOfPages();<br/>
+			log.info(&quot;文档总页数:&quot; + totalPages + &quot;页&quot;);<br/>
+			if (totalPages == 0) {<br/>
+				return;<br/>
+			} else if (totalPages &gt; 0 &amp;&amp; totalPages &lt; 10) {<br/>
+				expectEndPage = totalPages;<br/>
+			} else if (totalPages &gt;= 10 &amp;&amp; totalPages &lt;= 50) {<br/>
+				expectEndPage = totalPages / 10;<br/>
+			} else {<br/>
+				expectEndPage = 50;<br/>
+			}<br/>
+			log.info(&quot;需要传送多少页:&quot; + expectEndPage + &quot;页&quot;);<br/>
+<br/>
+			doc = new Document(reader.getPageSize(1));<br/>
+			BufferedOutputStream bos = new BufferedOutputStream(<br/>
+					response.getOutputStream());<br/>
+			pdfCopy = new PdfCopy(doc, bos);<br/>
+<br/>
+			doc.open();<br/>
+			pdfCopy.open();<br/>
+			for (int i = startPage; i &lt;= expectEndPage; i++) {<br/>
+<br/>
+				doc.newPage();<br/>
+				PdfImportedPage page = pdfCopy.getImportedPage(reader, i);<br/>
+				pdfCopy.addPage(page);<br/>
+				pdfCopy.flush();<br/>
+<br/>
+			}<br/>
+<br/>
+		} catch (IOException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (DocumentException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (IllegalArgumentException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (IllegalAccessException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (NoSuchFieldException e) {<br/>
+			e.printStackTrace();<br/>
+		} catch (SecurityException e) {<br/>
+			e.printStackTrace();<br/>
+		} finally {<br/>
+			if (doc != null &amp;&amp; doc.isOpen()) {<br/>
+<br/>
+				doc.close();<br/>
+				doc = null;<br/>
+			}<br/>
+			if (pdfCopy != null) {<br/>
+				pdfCopy.close();<br/>
+				pdfCopy = null;<br/>
+			}<br/>
+			if (reader != null) {<br/>
+				reader.close();<br/>
+				reader = null;<br/>
+			}<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

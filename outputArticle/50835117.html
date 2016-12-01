@@ -1,0 +1,90 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        win32程序            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1602986" snippet_file_name="blog_20160309_1_7820080"  name="code" class="cpp">#include &lt;windows.h&gt;<br/>
+<br/>
+LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM ) ;        //声明用来处理消息的函数<br/>
+<br/>
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow )<br/>
+{<br/>
+    static TCHAR szAppName[] = TEXT(&quot;MyWindow&quot;) ;<br/>
+    HWND hwnd ;<br/>
+    MSG msg ;<br/>
+    WNDCLASS wndclass ;        //声明一个窗口类对象<br/>
+<br/>
+    //以下为窗口类对象wndclass的属性<br/>
+    wndclass.style = CS_HREDRAW | CS_VREDRAW ;                         //窗口样式<br/>
+    wndclass.lpszClassName = szAppName ;                               //窗口类名<br/>
+    wndclass.lpszMenuName = NULL ;                                     //窗口菜单:无<br/>
+    wndclass.hbrBackground = (HBRUSH) WHITE_BRUSH ;    //窗口背景颜色<br/>
+    wndclass.lpfnWndProc = WndProc ;                                   //窗口处理函数<br/>
+    wndclass.cbWndExtra = 0 ;                                          //窗口实例扩展:无<br/>
+    wndclass.cbClsExtra = 0 ;                                          //窗口类扩展:无<br/>
+    wndclass.hInstance = hInstance ;                                   //窗口实例句柄<br/>
+    wndclass.hIcon = LoadIcon( NULL, IDI_APPLICATION ) ;               //窗口最小化图标:使用缺省图标<br/>
+    wndclass.hCursor = LoadCursor( NULL, IDC_ARROW ) ;                 //窗口采用箭头光标<br/>
+<br/>
+    if( !RegisterClass( &amp;wndclass ) )<br/>
+    {    //注册窗口类, 如果注册失败弹出错误提示<br/>
+        MessageBox( NULL, TEXT(&quot;窗口注册失败!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR ) ;<br/>
+        return 0 ;<br/>
+    }<br/>
+<br/>
+    hwnd = CreateWindow(                   //创建窗口<br/>
+                szAppName,                 //窗口类名<br/>
+                TEXT(&quot;我的窗口&quot;),           //窗口标题<br/>
+                WS_OVERLAPPEDWINDOW,       //窗口的风格<br/>
+                CW_USEDEFAULT,             //窗口初始显示位置x:使用缺省值<br/>
+                CW_USEDEFAULT,             //窗口初始显示位置y:使用缺省值<br/>
+                CW_USEDEFAULT,             //窗口的宽度:使用缺省值<br/>
+                CW_USEDEFAULT,             //窗口的高度:使用缺省值<br/>
+                NULL,                      //父窗口:无<br/>
+                NULL,                      //子菜单:无<br/>
+                hInstance,                 //该窗口应用程序的实例句柄 <br/>
+                NULL                       //<br/>
+            ) ;<br/>
+<br/>
+    ShowWindow( hwnd, iCmdShow ) ;        //显示窗口<br/>
+    UpdateWindow( hwnd ) ;                //更新窗口<br/>
+<br/>
+    while( GetMessage( &amp;msg, NULL, 0, 0 ) )        //从消息队列中获取消息<br/>
+    {<br/>
+        TranslateMessage( &amp;msg ) ;                 //将虚拟键消息转换为字符消息<br/>
+        DispatchMessage( &amp;msg ) ;                  //分发到回调函数(过程函数)<br/>
+    }<br/>
+    return msg.wParam ;<br/>
+}<br/>
+<br/>
+LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )<br/>
+{<br/>
+    HDC hdc ;                //设备环境句柄<br/>
+    PAINTSTRUCT ps ;         //绘制结构<br/>
+    RECT rect;               //矩形结构<br/>
+<br/>
+    switch( message )        //处理得到的消息<br/>
+    {<br/>
+    case WM_CREATE:          //窗口创建完成时发来的消息<br/>
+        MessageBox( hwnd, TEXT(&quot;窗口已创建完成!&quot;), TEXT(&quot;我的窗口&quot;), MB_OK | MB_ICONINFORMATION ) ;<br/>
+        return 0;<br/>
+<br/>
+    case WM_PAINT:           //处理窗口区域无效时发来的消息<br/>
+        hdc = BeginPaint( hwnd, &amp;ps ) ;<br/>
+        GetClientRect( hwnd, &amp;rect ) ;<br/>
+        DrawText( hdc, TEXT( &quot;Hello, 这是我自己的窗口!&quot; ), -1, &amp;rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER ) ;<br/>
+        EndPaint( hwnd, &amp;ps ) ;<br/>
+        return 0 ;<br/>
+<br/>
+    case WM_LBUTTONDOWN:     //处理鼠标左键被按下的消息<br/>
+        MessageBox( hwnd, TEXT(&quot;鼠标左键被按下。&quot;), TEXT(&quot;单击&quot;), MB_OK | MB_ICONINFORMATION ) ;<br/>
+        return 0;<br/>
+<br/>
+    case WM_DESTROY:         //处理窗口关闭时的消息<br/>
+        MessageBox( hwnd, TEXT(&quot;关闭程序!&quot;), TEXT(&quot;结束&quot;), MB_OK | MB_ICONINFORMATION ) ;<br/>
+        PostQuitMessage( 0 ) ;<br/>
+        return 0;<br/>
+    }<br/>
+    return DefWindowProc( hwnd, message, wParam, lParam ) ;        //DefWindowProc处理我们自定义的消息处理函数没有处理到的消息<br/>
+}</pre><br><br/>
+   <br/>
+</div>

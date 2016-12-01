@@ -1,0 +1,217 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        EJB正确客户端调用（jboss6、jboss7）            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="plain">服务器端：<br/>
+17:47:50,930 信息    [org.jboss.modules] JBoss Modules version 1.1.1.GA<br/>
+17:47:51,054 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA<br/>
+17:47:51,088 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &quot;Brontes&quot; starting<br/>
+17:47:51,606 INFO  [org.xnio] XNIO Version 3.0.3.GA<br/>
+17:47:51,606 INFO  [org.jboss.as.server] JBAS015888: Creating http management service using socket-binding (management-http)<br/>
+17:47:51,612 INFO  [org.xnio.nio] XNIO NIO Implementation Version 3.0.3.GA<br/>
+17:47:51,617 INFO  [org.jboss.remoting] JBoss Remoting version 3.2.3.GA<br/>
+17:47:51,627 INFO  [org.jboss.as.logging] JBAS011502: Removing bootstrap log handlers<br/>
+17:47:51,629 INFO  [org.jboss.as.configadmin] (ServerService Thread Pool -- 26) JBAS016200: Activating ConfigAdmin Subsystem<br/>
+17:47:51,633 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 31) JBAS010280: Activating Infinispan subsystem.<br/>
+17:47:51,634 INFO  [org.jboss.as.security] (ServerService Thread Pool -- 44) JBAS013101: Activating Security Subsystem<br/>
+17:47:51,637 INFO  [org.jboss.as.webservices] (ServerService Thread Pool -- 48) JBAS015537: Activating WebServices Extension<br/>
+17:47:51,648 INFO  [org.jboss.as.security] (MSC service thread 1-2) JBAS013100: Current PicketBox version=4.0.7.Final<br/>
+17:47:51,652 INFO  [org.jboss.as.osgi] (ServerService Thread Pool -- 39) JBAS011940: Activating OSGi Subsystem<br/>
+17:47:51,660 INFO  [org.jboss.as.naming] (ServerService Thread Pool -- 38) JBAS011800: Activating Naming Subsystem<br/>
+17:47:51,694 INFO  [org.jboss.as.connector] (MSC service thread 1-3) JBAS010408: Starting JCA Subsystem (JBoss IronJacamar 1.0.9.Final)<br/>
+17:47:51,707 INFO  [org.jboss.as.naming] (MSC service thread 1-5) JBAS011802: Starting Naming Service<br/>
+17:47:51,713 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-5) JBAS015400: Bound mail session [java:jboss/mail/Default]<br/>
+17:47:51,715 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 27) JBAS010403: Deploying JDBC-compliant driver class org.h2.Driver (version 1.3)<br/>
+17:47:51,800 INFO  [org.jboss.ws.common.management.AbstractServerConfig] (MSC service thread 1-5) JBoss Web Services - Stack CXF Server 4.0.2.GA<br/>
+17:47:52,003 INFO  [org.apache.coyote.http11.Http11Protocol] (MSC service thread 1-2) Starting Coyote HTTP/1.1 on http--127.0.0.1-8080<br/>
+17:47:52,085 INFO  [org.jboss.as.remoting] (MSC service thread 1-3) JBAS017100: Listening on /127.0.0.1:4447<br/>
+17:47:52,086 INFO  [org.jboss.as.remoting] (MSC service thread 1-5) JBAS017100: Listening on /127.0.0.1:9999<br/>
+17:47:52,089 INFO  [org.jboss.as.server.deployment.scanner] (MSC service thread 1-4) JBAS015012: Started FileSystemDeploymentService for directory D:\installedSoftware\jboss-as-7.1.1.Final\standalone\deployments<br/>
+17:47:52,092 INFO  [org.jboss.as.server.deployment.scanner] (DeploymentScanner-threads - 1) JBAS015003: Found SecondEjb.jar in deployment directory. To trigger deployment create a file called SecondEjb.jar.dodeploy<br/>
+17:47:52,152 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-7) JBAS010400: Bound data source [java:jboss/datasources/ExampleDS]<br/>
+17:47:52,171 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-5) JBAS015876: Starting deployment of &quot;SecondEjb.jar&quot;<br/>
+17:47:52,243 INFO  [org.jboss.as.ejb3.deployment.processors.EjbJndiBindingsDeploymentUnitProcessor] (MSC service thread 1-6) JNDI bindings for session bean named SecondEjb in deployment unit deployment &quot;SecondEjb.jar&quot; are as follows:<br/>
+<br/>
+	java:global/SecondEjb/SecondEjb!secondejb.SecondEjbLocal<br/>
+	java:app/SecondEjb/SecondEjb!secondejb.SecondEjbLocal<br/>
+	java:module/SecondEjb!secondejb.SecondEjbLocal<br/>
+	java:global/SecondEjb/SecondEjb!secondejb.SecondEjbRemote<br/>
+	java:app/SecondEjb/SecondEjb!secondejb.SecondEjbRemote<br/>
+	java:module/SecondEjb!secondejb.SecondEjbRemote<br/>
+	java:jboss/exported/SecondEjb/SecondEjb!secondejb.SecondEjbRemote<br/>
+<br/>
+17:47:52,318 INFO  [org.jboss.as] (MSC service thread 1-8) JBAS015951: Admin console listening on http://127.0.0.1:9990<br/>
+17:47:52,318 INFO  [org.jboss.as] (MSC service thread 1-8) JBAS015874: JBoss AS 7.1.1.Final &quot;Brontes&quot; started in 1555ms - Started 173 of 250 services (76 services are passive or on-demand)<br/>
+17:47:52,386 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed &quot;SecondEjb.jar&quot;<br/>
+17:48:00,691 INFO  [stdout] (EJB default - 1) SecondEjb Created!<br/>
+<br/>
+17:48:00,692 INFO  [stdout] (EJB default - 1) Hello SecondEjb!<br/>
+<br/>
+17:48:00,710 INFO  [stdout] (EJB default - 2) Remote Method Called!<br/>
+<br/>
+17:48:25,404 INFO  [stdout] (EJB default - 3) Hello SecondEjb!<br/>
+<br/>
+17:48:25,414 INFO  [stdout] (EJB default - 4) Remote Method Called!<br/>
+<br/>
+</pre><br><br/>
+<pre name="code" class="plain">客户端：<br/>
+一月 15, 2016 5:51:54 下午 org.jboss.ejb.client.EJBClient &lt;clinit&gt;<br/>
+INFO: JBoss EJB Client version 1.0.5.Final<br/>
+一月 15, 2016 5:51:54 下午 org.xnio.Xnio &lt;clinit&gt;<br/>
+INFO: XNIO Version 3.0.3.GA<br/>
+一月 15, 2016 5:51:54 下午 org.xnio.nio.NioXnio &lt;clinit&gt;<br/>
+INFO: XNIO NIO Implementation Version 3.0.3.GA<br/>
+一月 15, 2016 5:51:54 下午 org.jboss.remoting3.EndpointImpl &lt;clinit&gt;<br/>
+INFO: JBoss Remoting version 3.2.3.GA<br/>
+一月 15, 2016 5:51:54 下午 org.jboss.ejb.client.remoting.VersionReceiver handleMessage<br/>
+INFO: Received server version 1 and marshalling strategies [river]<br/>
+一月 15, 2016 5:51:54 下午 org.jboss.ejb.client.remoting.RemotingConnectionEJBReceiver associate<br/>
+INFO: Successful version handshake completed for receiver context EJBReceiverContext{clientContext=org.jboss.ejb.client.EJBClientContext@114662e3, receiver=Remoting connection EJB receiver [connection=Remoting connection &lt;22b7be2a&gt;,channel=jboss.ejb,nodename=cdc-d-jackzhu]} on channel Channel ID 84356514 (outbound) of Remoting connection 1cdc8d59 to localhost/127.0.0.1:4447<br/>
+一月 15, 2016 5:51:54 下午 org.jboss.ejb.client.remoting.ChannelAssociation$ResponseReceiver handleMessage<br/>
+WARN: Unsupported message received with header 0xffffffff<br/>
+</pre><br/>
+<p>服务器端ejb bean：<br><br/>
+<pre name="code" class="java">package secondejb;<br/>
+<br/>
+import java.io.Serializable;<br/>
+<br/>
+public interface ISecondEjb extends Serializable{<br/>
+<br/>
+	void print();<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package secondejb;<br/>
+<br/>
+import javax.ejb.Local;<br/>
+<br/>
+/**<br/>
+ * SecondEjb local interface<br/>
+ */<br/>
+@Local<br/>
+public interface SecondEjbLocal extends ISecondEjb{<br/>
+<br/>
+	<br/>
+	void localPrint();<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package secondejb;<br/>
+<br/>
+import javax.ejb.Remote;<br/>
+<br/>
+<br/>
+@Remote<br/>
+public interface SecondEjbRemote extends ISecondEjb {<br/>
+<br/>
+	void remotePrint();<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package secondejb;<br/>
+<br/>
+import javax.ejb.Stateless;<br/>
+<br/>
+/**<br/>
+ * Session Bean implementation class SecondEjb<br/>
+ */<br/>
+@Stateless<br/>
+public class SecondEjb implements SecondEjbLocal,SecondEjbRemote {<br/>
+<br/>
+	/**<br/>
+     * Default constructor. <br/>
+     */<br/>
+    public SecondEjb() {<br/>
+        System.out.println(&quot;SecondEjb Created!&quot;);<br/>
+    }<br/>
+<br/>
+	@Override<br/>
+	public void print() {<br/>
+		System.out.println(&quot;Hello SecondEjb!&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void remotePrint() {<br/>
+		<br/>
+		<br/>
+		System.out.println(&quot;Remote Method Called!&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void localPrint() {<br/>
+<br/>
+<br/>
+		System.out.println(&quot;Local Method Called!&quot;);<br/>
+		<br/>
+	}<br/>
+}</pre>客户端调用ejb：</p><br/>
+<p><pre name="code" class="java">package ejbclientcalled;<br/>
+<br/>
+<br/>
+import java.util.Properties;<br/>
+<br/>
+import javax.naming.Context;<br/>
+import javax.naming.InitialContext;<br/>
+<br/>
+<br/>
+import secondejb.SecondEjbRemote;<br/>
+<br/>
+public class SecondEjbClient {<br/>
+<br/>
+	<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+<br/>
+		try {<br/>
+<br/>
+			Properties props = new Properties();<br/>
+<br/>
+			props.setProperty(Context.URL_PKG_PREFIXES,<br/>
+					&quot;org.jboss.ejb.client.naming&quot;);<br/>
+<br/>
+			InitialContext ctx = new InitialContext(props);<br/>
+<br/>
+			SecondEjbRemote bean = (SecondEjbRemote) ctx<br/>
+					.lookup(&quot;ejb:/SecondEjb/SecondEjb!secondejb.SecondEjbRemote&quot;);<br/>
+<br/>
+			bean.print();<br/>
+			bean.remotePrint();<br/>
+<br/>
+		} catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="plain">jboss-ejb-client.properties：<br/>
+endpoint.name= client-endpoint<br/>
+remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED= false<br/>
+remote.connections= default<br/>
+remote.connection.default.host= localhost<br/>
+remote.connection.default.port= 4447<br/>
+remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS= false<br/>
+remote.connection.default.username= <br/>
+remote.connection.default.password=</pre><br><br/>
+<img src="http://img.blog.csdn.net/20160115180346071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160115180353264?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160115180357786?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160115180402250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160115181240077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160115181245552?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><br><br/>
+<br><br/>
+<br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+   <br/>
+</div>

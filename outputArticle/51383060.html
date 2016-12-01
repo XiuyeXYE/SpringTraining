@@ -1,0 +1,9 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        读取oracle sequence 的currval            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>select serial.currval from dual;//mybe error</p><br/>
+<p>刚创建的sequence的currval可能还没有&#20540;</p><br/>
+<p>必须：select serial.nextval from dual 后才能有效执行以上语句</p><br/>
+   <br/>
+</div>

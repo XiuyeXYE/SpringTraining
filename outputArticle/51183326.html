@@ -1,0 +1,68 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java继承：属性不具有多态性 和 return this 返回当前对象            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1652123" snippet_file_name="blog_20160418_1_3571182"  name="code" class="java">class A{<br/>
+	public String name=&quot;AAA&quot;;<br/>
+	public String getName(){<br/>
+		return name;<br/>
+	}<br/>
+}<br/>
+class B extends A{<br/>
+	public String name=&quot;BBB&quot;;<br/>
+<br/>
+}<br/>
+class C{<br/>
+	private String name=&quot;CCC&quot;;<br/>
+	public String getName(){<br/>
+		return this.name;<br/>
+	}<br/>
+}<br/>
+class D extends C{<br/>
+	private String name = &quot;DDD&quot;;<br/>
+}<br/>
+class E{<br/>
+	public void f(){<br/>
+		System.out.println(&quot;E.f&quot;);<br/>
+	}<br/>
+	public Object getCurrentObject(){<br/>
+		return this;<br/>
+	}<br/>
+}<br/>
+class F extends E{<br/>
+	public void g(){<br/>
+		System.out.println(&quot;E.g&quot;);<br/>
+	}<br/>
+}<br/>
+<br/>
+public class TestInherit1{<br/>
+	public static void main(String args[]){<br/>
+		<br/>
+		System.out.println(new B().getName());<br/>
+		System.out.println(new D().getName());<br/>
+		E e = new F();<br/>
+		Object o = e.getCurrentObject();<br/>
+		F f = (F)o;<br/>
+		System.out.println(e);<br/>
+		System.out.println(o);<br/>
+		System.out.println(f);<br/>
+		f.f();<br/>
+		f.g();<br/>
+<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1652123" snippet_file_name="blog_20160418_2_2731367"  name="code" class="java">D:\programming\java&gt;vi TestInherit1.java<br/>
+<br/>
+D:\programming\java&gt;javac TestInherit1.java<br/>
+<br/>
+D:\programming\java&gt;java TestInherit1<br/>
+AAA<br/>
+CCC<br/>
+F@1f82982<br/>
+F@1f82982<br/>
+F@1f82982<br/>
+E.f<br/>
+E.g</pre><br><br/>
+   <br/>
+</div>

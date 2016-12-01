@@ -1,0 +1,37 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        用自定义缓存区的方式实现文件的移动            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">import java.io.*;<br/>
+import java.util.*;<br/>
+<br/>
+public class demo15<br/>
+{<br/>
+  public static void main(String args[])<br/>
+  {<br/>
+    try{<br/>
+      FileInputStream fis = new FileInputStream(&quot;pw.txt&quot;);<br/>
+      FileOutputStream fos = new FileOutputStream(&quot;pwcopy.txt&quot;);<br/>
+<br/>
+      byte []buffer = new byte[1024];//缓冲区<br/>
+      int length = -1;<br/>
+      while((length=fis.read(buffer))!=-1)<br/>
+      {<br/>
+        fos.write(buffer,0,length);<br/>
+      }<br/>
+      System.out.println(&quot;over&quot;);<br/>
+      fis.close();<br/>
+      fos.close();<br/>
+<br/>
+<br/>
+    }<br/>
+    catch(Exception e)<br/>
+    {<br/>
+      System.out.println(e.getMessage());<br/>
+    }<br/>
+<br/>
+  }<br/>
+}<br/>
+</pre><br><br/>
+   <br/>
+</div>

@@ -1,0 +1,127 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        EJBCase            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package com.xiuye.ejb.bean;<br/>
+<br/>
+import javax.ejb.Remote;<br/>
+<br/>
+<br/>
+@Remote<br/>
+public interface IHelloService {<br/>
+<br/>
+	public String sayHelloEJB(String name);<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package com.xiuye.ejb.bean;<br/>
+<br/>
+import javax.ejb.Stateless;<br/>
+<br/>
+@Stateless<br/>
+public class HelloService implements IHelloService{<br/>
+<br/>
+	@Override<br/>
+	public String sayHelloEJB(String name) {<br/>
+		<br/>
+		String msg = &quot;Hello &quot; + name + &quot;, Welcome to EJB world!&quot;;<br/>
+		<br/>
+		return msg;<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package com.xiuye.bean.test;<br/>
+<br/>
+import java.util.Hashtable;<br/>
+<br/>
+import javax.naming.Context;<br/>
+import javax.naming.InitialContext;<br/>
+import javax.naming.NamingException;<br/>
+import javax.rmi.PortableRemoteObject;<br/>
+<br/>
+import com.xiuye.ejb.bean.IHelloService;<br/>
+<br/>
+public class TestClient {<br/>
+<br/>
+	private static Context context;<br/>
+	<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		try{<br/>
+			Context ctx = getInitialContext();<br/>
+			Object obj = ctx.lookup(&quot;HelloEJBService/remote&quot;);<br/>
+			IHelloService service = (IHelloService)PortableRemoteObject.narrow(obj, IHelloService.class);<br/>
+			System.out.println(service.sayHelloEJB(&quot;Client&quot;));<br/>
+			<br/>
+		}<br/>
+		catch(Exception e){<br/>
+			e.printStackTrace();<br/>
+		}<br/>
+		<br/>
+	}<br/>
+	private static Context getInitialContext() throws NamingException{<br/>
+		<br/>
+		if(context == null){<br/>
+			Hashtable props = new Hashtable();<br/>
+			props.put(Context.INITIAL_CONTEXT_FACTORY, &quot;org.jnp.interfaces.NamingContextFactory&quot;);<br/>
+			props.put(Context.URL_PKG_PREFIXES, &quot;org.jboss.naming:org.jnp.interfaces&quot;);<br/>
+			props.put(Context.PROVIDER_URL, &quot;jnp://localhost:8080&quot;);<br/>
+			context = new InitialContext(props);<br/>
+			<br/>
+			<br/>
+			<br/>
+<br/>
+		}<br/>
+		<br/>
+		return context;<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package com.xiuye.servlet;<br/>
+<br/>
+import java.io.IOException;<br/>
+import java.io.PrintWriter;<br/>
+<br/>
+import javax.ejb.EJB;<br/>
+import javax.servlet.ServletException;<br/>
+import javax.servlet.http.HttpServlet;<br/>
+import javax.servlet.http.HttpServletRequest;<br/>
+import javax.servlet.http.HttpServletResponse;<br/>
+<br/>
+import com.xiuye.ejb.bean.IHelloService;<br/>
+<br/>
+<br/>
+<br/>
+public class TestServlet extends HttpServlet {<br/>
+<br/>
+	<br/>
+	@EJB<br/>
+	IHelloService service;<br/>
+	@Override<br/>
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)<br/>
+			throws ServletException, IOException {<br/>
+		<br/>
+		<br/>
+		resp.setContentType(&quot;text/html&quot;);<br/>
+		PrintWriter out = resp.getWriter();<br/>
+		out.println(&quot;&lt;h1&gt;&quot;+service.sayHelloEJB(&quot;Web Client&quot;)+&quot;&lt;/h1&gt;&quot;);<br/>
+		<br/>
+		<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)<br/>
+			throws ServletException, IOException {<br/>
+		<br/>
+		super.doGet(req, resp);<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

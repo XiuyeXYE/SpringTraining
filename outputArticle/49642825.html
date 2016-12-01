@@ -1,0 +1,45 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        javascript的prototype实现回调            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p><pre name="code" class="javascript">Function.prototype.andThen=function(g) { <br/>
+				  var f=this; <br/>
+				  return function() { <br/>
+					  f();g(); <br/>
+				  } <br/>
+				}; <br/>
+				function Manager() { <br/>
+				  this.callback=function () {alert(&quot;origin&quot;)}; // do nothing <br/>
+				  this.registerCallback=function(callbackFunction) { <br/>
+				        this.callback=(this.callback).andThen(callbackFunction); <br/>
+				  } <br/>
+				} <br/>
+				function sayHi(){<br/>
+					alert(&quot;Hi&quot;);<br/>
+				}<br/>
+				function sayBye(){<br/>
+					alert(&quot;Bye&quot;);<br/>
+				}<br/>
+				function sayW(){<br/>
+					alert(&quot;W&quot;);<br/>
+				}<br/>
+				var manager=new Manager(); <br/>
+				manager.registerCallback(sayHi); <br/>
+				manager.registerCallback(sayBye); <br/>
+				manager.registerCallback(sayW);<br/>
+				manager.callback();</pre><br><br/>
+模糊中。。。怎么回调的，而且每个函数被注册的都被调用都调了？。</p><br/>
+<p></p><br/>
+<div class="console-user-command console-adjacent-user-command-result" style="clear:right; position:relative; border-top-width:1px; border-top-style:solid; border-top-color:rgb(240,240,240); padding:1px 22px 1px 0px; margin-left:24px; min-height:16px; border-bottom-style:none; color:rgb(34,34,34); font-family:Consolas,'Lucida Console',monospace; font-size:12px"><br/>
+<pre name="code" class="javascript">var b = a.add();<br/>
+undefined<br/>
+Function.prototype.add = function(){alert(&quot;g&quot;);return function(){alert(&quot;g&quot;);}};<br/>
+function (){alert(&quot;g&quot;);return function(){alert(&quot;g&quot;);}}<br/>
+Function.prototype.add = function(){alert(&quot;g&quot;);return function(){alert(&quot;k&quot;);}};<br/>
+function (){alert(&quot;g&quot;);return function(){alert(&quot;k&quot;);}}<br/>
+a.add().add();<br/>
+function (){alert(&quot;k&quot;);}<br/>
+a.add().add().add();<br/>
+function (){alert(&quot;k&quot;);}<br/>
+a.add().add().add()();<br/>
+undefined</pre></div>

@@ -1,0 +1,97 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        dataGrid(primefaces)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="html">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;!DOCTYPE html&gt;<br/>
+<br/>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;<br/>
+	xmlns:ui=&quot;http://xmlns.jcp.org/jsf/facelets&quot;<br/>
+	xmlns:h=&quot;http://xmlns.jcp.org/jsf/html&quot;<br/>
+	xmlns:f=&quot;http://xmlns.jcp.org/jsf/core&quot;<br/>
+	xmlns:c=&quot;http://xmlns.jcp.org/jsp/jstl/core&quot;<br/>
+	xmlns:fn=&quot;http://xmlns.jcp.org/jsp/jstl/functions&quot;<br/>
+	xmlns:p=&quot;http://primefaces.org/ui&quot; lang=&quot;en&quot;&gt;<br/>
+&lt;h:head&gt;<br/>
+	&lt;title&gt;DataGridView&lt;/title&gt;<br/>
+	&lt;meta name=&quot;keywords&quot; content=&quot;enter,your,keywords,here&quot; /&gt;<br/>
+	&lt;meta name=&quot;description&quot; content=&quot;A short description of this page.&quot; /&gt;<br/>
+	&lt;meta name=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;<br/>
+<br/>
+	&lt;!--&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;--&gt;<br/>
+&lt;/h:head&gt;<br/>
+&lt;h:body&gt;<br/>
+	&lt;h1&gt;#{fn:length(dataGridview.cars)}&lt;/h1&gt;<br/>
+<br/>
+	&lt;h:form id=&quot;form&quot;&gt;<br/>
+		&lt;p:dataGrid var=&quot;car&quot; value=&quot;#{dataGridview.cars}&quot; columns=&quot;3&quot;<br/>
+			layout=&quot;grid&quot; rows=&quot;12&quot; paginator=&quot;true&quot; id=&quot;cars&quot;<br/>
+			paginatorTemplate=&quot;{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}&quot;<br/>
+			rowsPerPageTemplate=&quot;6,12,16&quot;&gt;<br/>
+<br/>
+			&lt;f:facet name=&quot;header&quot;&gt;<br/>
+					Cars for Sale<br/>
+			&lt;/f:facet&gt;<br/>
+			&lt;p:panel header=&quot;#{car.id}&quot; style=&quot;text-align:center&quot;&gt;<br/>
+<br/>
+				&lt;h:panelGrid columns=&quot;1&quot; style=&quot;width:100%&quot;&gt;<br/>
+<br/>
+					&lt;p:graphicImage name=&quot;picture/little_animal_01.png&quot;&gt;<br/>
+<br/>
+					&lt;/p:graphicImage&gt;<br/>
+					&lt;h:outputText value=&quot;#{car.year}&quot;&gt;&lt;/h:outputText&gt;<br/>
+					&lt;p:commandLink update=&quot;:form:carDetail&quot;<br/>
+						oncomplete=&quot;PF(&#39;carDialog&#39;).show()&quot; title=&quot;View Detail&quot;&gt;<br/>
+						&lt;h:outputText styleClass=&quot;ui-icon ui-icon-search&quot;<br/>
+							style=&quot;margin:0 auto&quot;&gt;&lt;/h:outputText&gt;<br/>
+						&lt;f:setPropertyActionListener value=&quot;#{car}&quot;<br/>
+							target=&quot;#{dataGridview.selectedCar}&quot; /&gt;<br/>
+					&lt;/p:commandLink&gt;<br/>
+				&lt;/h:panelGrid&gt;<br/>
+<br/>
+<br/>
+			&lt;/p:panel&gt;<br/>
+<br/>
+		&lt;/p:dataGrid&gt;<br/>
+<br/>
+		&lt;p:dialog header=&quot;Car Info &quot; widgetVar=&quot;carDialog&quot; modal=&quot;true&quot;<br/>
+			showEffect=&quot;fade&quot; hideEffect=&quot;fade&quot; resizable=&quot;false&quot;&gt;<br/>
+<br/>
+			&lt;p:outputPanel id=&quot;carDetail&quot; style=&quot;text-align:center;&quot;&gt;<br/>
+<br/>
+				&lt;p:panelGrid columns=&quot;2&quot;<br/>
+					rendered=&quot;#{not empty dataGridview.selectedCar}&quot;<br/>
+					columnClasses=&quot;label,value&quot;&gt;<br/>
+<br/>
+					&lt;f:facet name=&quot;header&quot;&gt;<br/>
+						&lt;p:graphicImage<br/>
+							name=&quot;/MyThirdJSF/root/picture/little_animal_02.png&quot; /&gt;<br/>
+					&lt;/f:facet&gt;<br/>
+<br/>
+					&lt;h:outputText value=&quot;Id:&quot; /&gt;<br/>
+					&lt;h:outputText value=&quot;#{dataGridview.selectedCar.id}&quot; /&gt;<br/>
+<br/>
+					&lt;h:outputText value=&quot;Year:&quot; /&gt;<br/>
+					&lt;h:outputText value=&quot;#{dataGridView.selectedCar.year}&quot; /&gt;<br/>
+<br/>
+					&lt;h:outputText value=&quot;Color:&quot; /&gt;<br/>
+					&lt;h:outputText value=&quot;#{dataGridView.selectedCar.color}&quot;<br/>
+						style=&quot;color:#{dataGridView.selectedCar.color}&quot; /&gt;<br/>
+<br/>
+					&lt;h:outputText value=&quot;Price:&quot; /&gt;<br/>
+					&lt;h:outputText value=&quot;$#{dataGridView.selectedCar.price}&quot; /&gt;<br/>
+<br/>
+<br/>
+				&lt;/p:panelGrid&gt;<br/>
+<br/>
+			&lt;/p:outputPanel&gt;<br/>
+<br/>
+<br/>
+		&lt;/p:dialog&gt;<br/>
+<br/>
+	&lt;/h:form&gt;<br/>
+&lt;/h:body&gt;<br/>
+&lt;/html&gt;<br/>
+</pre><br><br/>
+   <br/>
+</div>

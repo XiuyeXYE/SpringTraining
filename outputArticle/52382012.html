@@ -1,0 +1,102 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java方法重载--参数类型转换            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1859038" snippet_file_name="blog_20160831_1_5484221"  code_snippet_id="1859038" snippet_file_name="blog_20160831_1_5484221" name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+import java.io.Serializable;<br/>
+<br/>
+public class TestOverload {<br/>
+<br/>
+	static abstract class A {<br/>
+<br/>
+	}<br/>
+<br/>
+	static class B extends A {<br/>
+<br/>
+	}<br/>
+<br/>
+	static class C extends A {<br/>
+<br/>
+	}<br/>
+<br/>
+	public void f(A a) {<br/>
+		System.out.println(&quot;AAAAAAA&quot;);<br/>
+	}<br/>
+<br/>
+	public void f(B a) {<br/>
+		System.out.println(&quot;BBBBBBB&quot;);<br/>
+	}<br/>
+<br/>
+	public void f(C a) {<br/>
+		System.out.println(&quot;CCCCCCC&quot;);<br/>
+	}<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		TestOverload l = new TestOverload();<br/>
+		// l.f(new A());<br/>
+		l.f(new B());<br/>
+		l.f(new C());<br/>
+<br/>
+		say(&#39;a&#39;);<br/>
+<br/>
+	}<br/>
+<br/>
+	/**<br/>
+	 * 依次注释1~9， say(&#39;a&#39;)会依次向上转型输出，<br/>
+	 * char-&gt;int-&gt;long-&gt;float-&gt;double-&gt;Character-&gt;Serializable-&gt;Object-&gt;char...<br/>
+	 * <br/>
+	 * @param obj<br/>
+	 */<br/>
+<br/>
+	// 8<br/>
+	public static void say(Object obj) {<br/>
+		System.out.println(&quot;Object&quot;);<br/>
+	}<br/>
+<br/>
+	// 1<br/>
+	public static void say(char obj) {<br/>
+		System.out.println(&quot;char&quot;);<br/>
+	}<br/>
+<br/>
+	// 2<br/>
+	public static void say(int obj) {<br/>
+		System.out.println(&quot;int&quot;);<br/>
+	}<br/>
+<br/>
+	// 3<br/>
+	public static void say(long obj) {<br/>
+		System.out.println(&quot;long&quot;);<br/>
+	}<br/>
+<br/>
+	// 4<br/>
+	public static void say(float obj) {<br/>
+		System.out.println(&quot;float&quot;);<br/>
+	}<br/>
+<br/>
+	// 5<br/>
+	public static void say(double obj) {<br/>
+		System.out.println(&quot;double&quot;);<br/>
+	}<br/>
+<br/>
+	// 6<br/>
+	public static void say(Character obj) {<br/>
+		System.out.println(&quot;Character&quot;);<br/>
+	}<br/>
+<br/>
+	// 7<br/>
+	public static void say(Serializable obj) {<br/>
+		System.out.println(&quot;Serializable&quot;);<br/>
+	}<br/>
+<br/>
+	// 9<br/>
+	public static void say(char... obj) {<br/>
+		System.out.println(&quot;char...&quot;);<br/>
+	}<br/>
+}<br/>
+</pre><pre code_snippet_id="1859038" snippet_file_name="blog_20160831_2_6276565"  name="code" class="java">BBBBBBB<br/>
+CCCCCCC<br/>
+char</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

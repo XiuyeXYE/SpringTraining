@@ -1,0 +1,40 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        try c++11 foreach(1)            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1612376" snippet_file_name="blog_20160316_1_4771658"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+/*int f(int a[10]){//实际上插入的参数是指针 &lt;=&gt;int f(int *a)<br/>
+	<br/>
+	for(int b : a){//error  &#39;begin&#39; was not declared in this scope; &#39;end&#39; was not declared in this scope<br/>
+		b = 10;<br/>
+	}<br/>
+	//return a;<br/>
+}*/<br/>
+int main(){<br/>
+	<br/>
+	int a[10];<br/>
+	<br/>
+	for(int &amp;b : a){//必须是引用，否则本就是个副本，没有改变a中元素的值<br/>
+		b = 10;<br/>
+	}<br/>
+	for(int i = 0;i &lt; 10 ;i++){<br/>
+		cout &lt;&lt; a[i] &lt;&lt; endl;<br/>
+	}<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1612376" snippet_file_name="blog_20160316_2_6134861"  name="code" class="cpp">C:\Users\jackz\Desktop\codes\cpp&gt;g++ -std=c++11 returnArrayFunction.cpp<br/>
+<br/>
+C:\Users\jackz\Desktop\codes\cpp&gt;a<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10<br/>
+10</pre><br><br/>
+   <br/>
+</div>

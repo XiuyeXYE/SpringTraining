@@ -1,0 +1,45 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        获取成员变量的地址和偏移地址            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1605050" snippet_file_name="blog_20160310_1_4174943"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+<br/>
+struct Point3D{<br/>
+int a;<br/>
+int b;<br/>
+int c;<br/>
+};<br/>
+<br/>
+int main(){<br/>
+<br/>
+Point3D *p = NULL;<br/>
+int offset = (int)(&amp;(p)-&gt;c);<br/>
+int i = (int)(&amp;(p-&gt;c));<br/>
+cout &lt;&lt; &amp;(p-&gt;c) &lt;&lt; endl;<br/>
+cout &lt;&lt; i &lt;&lt; endl;<br/>
+<br/>
+cout &lt;&lt; offset &lt;&lt; endl;<br/>
+cout &lt;&lt; &quot;............&quot; &lt;&lt; endl;<br/>
+int j = (int)(&amp;(*p).c);<br/>
+cout &lt;&lt; j &lt;&lt; endl;<br/>
+<br/>
+Point3D p3d;<br/>
+int k = (int)(&amp;p3d.c);<br/>
+cout &lt;&lt; k &lt;&lt; endl;<br/>
+<br/>
+return 0;<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1605050" snippet_file_name="blog_20160310_2_9223689"  name="code" class="cpp">$ ./a<br/>
+0x8<br/>
+8<br/>
+8<br/>
+............<br/>
+8<br/>
+2686712<br/>
+</pre><br><br/>
+<pre name="code" class="cpp"></pre><br/>
+   <br/>
+</div>

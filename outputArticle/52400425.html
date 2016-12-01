@@ -1,0 +1,61 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java解析json--获得json一级的各个属性            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<p>要解析的文本:</p><br/>
+<p><pre code_snippet_id="1861611" snippet_file_name="blog_20160901_1_7783645"  name="code" class="java">{<br/>
+name:&quot;1234567&quot;,<br/>
+obj:<br/>
+	{<br/>
+		first:&quot;123456&quot;,<br/>
+		second:&quot;jjjjjj&quot;<br/>
+	},<br/>
+arr:<br/>
+	[<br/>
+	1,2,3,4,5,6,7,7,8,9<br/>
+	]<br/>
+}</pre>一级属性解析的代码：</p><br/>
+<p><pre code_snippet_id="1861611" snippet_file_name="blog_20160901_2_1752597"  name="code" class="java">try (BufferedReader br = new BufferedReader(new FileReader(&quot;demo.json&quot;));) {<br/>
+			String all = &quot;&quot;;<br/>
+			String s = &quot;&quot;;<br/>
+			while ((s = br.readLine()) != null) {<br/>
+				<br/>
+				all += s;<br/>
+				<br/>
+			}<br/>
+			/**<br/>
+			 * 去掉字符串的空白字符<br/>
+			 */<br/>
+			all = all.replaceAll(&quot;\\s&quot;, &quot;&quot;);<br/>
+			System.out.println(&quot;all_1 := &quot;+all);<br/>
+			/**<br/>
+			 * 去掉首尾的{}<br/>
+			 */<br/>
+			all = all.replaceAll(&quot;^\\{|\\}$&quot;, &quot;&quot;);<br/>
+			System.out.println(&quot;all_2 := &quot;+all);<br/>
+			<br/>
+			/**<br/>
+			 * 从字符串中提取数据<br/>
+			 */<br/>
+			Pattern p = Pattern.compile(&quot;\\w+:(\&quot;\\w+\&quot;|\\{\\S+\\}|\\[\\S+\\])&quot;);<br/>
+			Matcher m = p.matcher(all);<br/>
+			while(m.find()){<br/>
+				System.out.println(&quot;pattern := &quot;+m.group());<br/>
+			}<br/>
+			<br/>
+		} catch (Exception e) {<br/>
+			e.printStackTrace();<br/>
+		}</pre>输出结果:</p><br/>
+<p><pre code_snippet_id="1861611" snippet_file_name="blog_20160901_3_5198943"  name="code" class="java">all_1 := {name:&quot;1234567&quot;,obj:{first:&quot;123456&quot;,second:&quot;jjjjjj&quot;},arr:[1,2,3,4,5,6,7,7,8,9]}<br/>
+all_2 := name:&quot;1234567&quot;,obj:{first:&quot;123456&quot;,second:&quot;jjjjjj&quot;},arr:[1,2,3,4,5,6,7,7,8,9]<br/>
+pattern := name:&quot;1234567&quot;<br/>
+pattern := obj:{first:&quot;123456&quot;,second:&quot;jjjjjj&quot;}<br/>
+pattern := arr:[1,2,3,4,5,6,7,7,8,9]</pre></p><br/>
+<p><br><br/>
+</p><br/>
+注意:java的正则表达式中 &quot;[&quot;,&quot;]&quot;,&quot;{&quot;,&quot;}&quot;,&quot;|&quot;,&quot;&amp;&quot;,&quot;.&quot;,&quot;*&quot;,&quot;&#43;&quot;.....为普通符号时，必须转义哈，否则报莫名其妙的错误或者解析不正确。<br><br/>
+<br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

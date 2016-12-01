@@ -1,0 +1,64 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        static proxy            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632468" snippet_file_name="blog_20160402_1_5775826"  name="code" class="java">package com.test.designpattern.proxy.silence;<br/>
+<br/>
+public interface Server {<br/>
+	void service();<br/>
+}<br/>
+</pre><pre code_snippet_id="1632468" snippet_file_name="blog_20160402_2_8316317"  name="code" class="java">package com.test.designpattern.proxy.silence;<br/>
+<br/>
+public class RealServer implements Server{<br/>
+<br/>
+	@Override<br/>
+	public void service() {<br/>
+		<br/>
+		System.out.println(&quot;Hello Client,I am Server.I will service for you!&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632468" snippet_file_name="blog_20160402_3_7618206"  name="code" class="java">package com.test.designpattern.proxy.silence;<br/>
+<br/>
+public class ProxyServer implements Server{<br/>
+<br/>
+	private Server server = null;<br/>
+	<br/>
+	@Override<br/>
+	public void service() {<br/>
+		<br/>
+		if(server == null){<br/>
+			server = new RealServer();<br/>
+		}<br/>
+		<br/>
+		System.out.println(&quot;Hello Client,I am Proxy Server,I will service for you.\nBut I don&#39;t really service for you.\nThe real server will service for you providing following something:&quot;);<br/>
+		<br/>
+		server.service();<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632468" snippet_file_name="blog_20160402_4_8871942"  name="code" class="java">package com.test.designpattern.proxy.silence;<br/>
+<br/>
+public class Main {<br/>
+<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		Server s = new ProxyServer();<br/>
+		s.service();<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632468" snippet_file_name="blog_20160402_5_3713729"  name="code" class="java">Hello Client,I am Proxy Server,I will service for you.<br/>
+But I don&#39;t really service for you.<br/>
+The real server will service for you providing following something:<br/>
+Hello Client,I am Server.I will service for you!<br/>
+</pre><br><br/>
+<pre code_snippet_id="1632468" snippet_file_name="blog_20160402_6_191718"  name="code" class="java">代理就是调用真正拥有者能力、作用、效果，或者在其原来的基础上增加一些新特性，相当于拥有者对代理授权使用，但其核心仍是拥有者的</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

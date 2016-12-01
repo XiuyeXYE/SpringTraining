@@ -1,0 +1,44 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        OpenMP First Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1755207" snippet_file_name="blog_20160711_1_6550191"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+int main(){<br/>
+	<br/>
+	#pragma omp parallel<br/>
+	{<br/>
+		cout &lt;&lt; &quot;All Threads run this&quot; &lt;&lt; endl;<br/>
+		#pragma omp sections<br/>
+		{<br/>
+			#pragma omp section<br/>
+			{<br/>
+				cout &lt;&lt; &quot;This executes in parallel&quot; &lt;&lt; endl;<br/>
+			}<br/>
+			#pragma omp section<br/>
+			{<br/>
+				cout &lt;&lt; &quot;Sequential statement 1&quot; &lt;&lt; endl;<br/>
+				cout &lt;&lt; &quot;This always executes after statement 1&quot; &lt;&lt; endl;<br/>
+			}<br/>
+			#pragma omp section<br/>
+			{<br/>
+				cout &lt;&lt; &quot;This also executes in parallel&quot; &lt;&lt; endl;<br/>
+			}<br/>
+		}<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1755207" snippet_file_name="blog_20160711_2_945038"  name="code" class="cpp">D:\programming\C++&gt;set omp_num_threads=4<br/>
+<br/>
+D:\programming\C++&gt;parallelSections<br/>
+All Threads run this<br/>
+This executes in parallel<br/>
+Sequential statement 1<br/>
+This always executes after statement 1<br/>
+This also executes in parallel<br/>
+All Threads run this<br/>
+All Threads run this<br/>
+All Threads run this</pre>Is OpenmMP &quot;Open Multi Processor&quot;?<br/>
+   <br/>
+</div>

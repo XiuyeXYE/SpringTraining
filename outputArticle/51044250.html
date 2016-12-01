@@ -1,0 +1,48 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Cglib dynamic proxy            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1632584" snippet_file_name="blog_20160402_1_2999930"  name="code" class="java">package com.test.designpattern.proxy.dynamic;<br/>
+<br/>
+import java.lang.reflect.Method;<br/>
+<br/>
+import net.sf.cglib.proxy.Enhancer;<br/>
+import net.sf.cglib.proxy.MethodInterceptor;<br/>
+import net.sf.cglib.proxy.MethodProxy;<br/>
+<br/>
+public class CglibProxy implements MethodInterceptor{<br/>
+<br/>
+	//private Object obj;<br/>
+	<br/>
+	public Object getInstance(Object obj){<br/>
+		<br/>
+		//this.obj = obj;<br/>
+		Enhancer enhancer = new Enhancer();		<br/>
+		enhancer.setSuperclass(obj.getClass());<br/>
+		enhancer.setCallback(this);<br/>
+		Object obj1 = enhancer.create();<br/>
+		return obj1;<br/>
+		<br/>
+	}<br/>
+	<br/>
+	@Override<br/>
+	public Object intercept(Object obj1	, Method method, Object[] args,<br/>
+			MethodProxy proxy) throws Throwable {<br/>
+		System.out.println(&quot;I am cglib Proxy,I am invoking...&quot;);<br/>
+		Object o = proxy.invokeSuper(obj1, args);<br/>
+		System.out.println(o);<br/>
+		return o;<br/>
+	}<br/>
+<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1632584" snippet_file_name="blog_20160402_2_9825800"  name="code" class="java">Server s1 = (Server) new CglibProxy().getInstance(new RealServer());<br/>
+		s1.service();</pre><br><br/>
+<pre code_snippet_id="1632584" snippet_file_name="blog_20160402_3_2715739"  name="code" class="java">I am cglib Proxy,I am invoking...<br/>
+Hello Client,I am Server.I will service for you!<br/>
+null<br/>
+</pre><br><br/>
+<br><br/>
+   <br/>
+</div>

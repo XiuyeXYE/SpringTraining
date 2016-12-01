@@ -1,0 +1,117 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        EJB拦截器            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre name="code" class="java">package remote;<br/>
+<br/>
+import javax.ejb.Remote;<br/>
+<br/>
+<br/>
+@Remote<br/>
+public interface Hello {<br/>
+<br/>
+	String hello(String name);<br/>
+	void crazyit();<br/>
+	void exclude();<br/>
+	<br/>
+	<br/>
+}<br/>
+</pre><pre name="code" class="java">package intercepter;<br/>
+<br/>
+import javax.interceptor.AroundInvoke;<br/>
+import javax.interceptor.InvocationContext;<br/>
+<br/>
+public class MyIntercepter {<br/>
+<br/>
+	@AroundInvoke<br/>
+	public Object log(InvocationContext ctx) throws Exception{<br/>
+		<br/>
+		System.out.println(&quot;-----拦截器开始运行-----&quot;);<br/>
+		<br/>
+		Object ctv = ctx.proceed();<br/>
+		<br/>
+		if(ctv != null){<br/>
+			ctv = &quot;拦截器改变了返回值：&quot; + ctv;<br/>
+		}<br/>
+	<br/>
+		System.out.println(&quot;-----拦截器执行结束-----&quot;);<br/>
+		return ctv;<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><br><br/>
+<pre name="code" class="java">package stateless;<br/>
+<br/>
+import intercepter.MyIntercepter;<br/>
+<br/>
+import javax.ejb.Stateless;<br/>
+import javax.interceptor.ExcludeClassInterceptors;<br/>
+import javax.interceptor.Interceptors;<br/>
+<br/>
+import remote.Hello;<br/>
+<br/>
+@Stateless<br/>
+@Interceptors(MyIntercepter.class)<br/>
+public class HelloImplRemote implements Hello{<br/>
+<br/>
+	@Override<br/>
+	public String hello(String name) {<br/>
+		<br/>
+		System.out.println(name+&quot;,您好！现在时间是:&quot;+new java.util.Date());<br/>
+		<br/>
+		<br/>
+		<br/>
+		return &quot;crazy.org&quot;;<br/>
+	}<br/>
+<br/>
+	@Override<br/>
+	public void crazyit() {<br/>
+		<br/>
+		System.out.println(&quot;javaee 拦截器测试&quot;);<br/>
+		System.out.println(&quot;最好的javaee测试&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+	@ExcludeClassInterceptors<br/>
+	@Override<br/>
+	public void exclude() {<br/>
+		<br/>
+		System.out.println(&quot;被排除在拦截器方法之外&quot;);<br/>
+		<br/>
+	}<br/>
+<br/>
+}<br/>
+</pre><pre name="code" class="html">&lt;/pre&gt;&lt;pre name=&quot;code&quot; class=&quot;html&quot;&gt;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br/>
+&lt;ejb-jar version=&quot;3.1&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd&quot;&gt;<br/>
+  &lt;display-name&gt;intercepter &lt;/display-name&gt;<br/>
+  &lt;enterprise-beans&gt;<br/>
+      <br/>
+      &lt;session&gt;<br/>
+          <br/>
+          &lt;ejb-name&gt;<br/>
+              <br/>
+              ejbref<br/>
+              <br/>
+          &lt;/ejb-name&gt;<br/>
+          &lt;ejb-local-ref&gt;<br/>
+              <br/>
+              &lt;ejb-ref-name&gt;ejb3/Hello&lt;/ejb-ref-name&gt;<br/>
+              &lt;ejb-ref-type&gt;Session&lt;/ejb-ref-type&gt;<br/>
+              &lt;local&gt;local.ServiceLocal&lt;/local&gt;<br/>
+              <br/>
+          &lt;/ejb-local-ref&gt;<br/>
+          <br/>
+      &lt;/session&gt;<br/>
+      <br/>
+  &lt;/enterprise-beans&gt;<br/>
+  <br/>
+ &lt;/ejb-jar&gt;</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160117145843064?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160117145848962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br/>
+</p><br/>
+<p><br><br/>
+</p><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

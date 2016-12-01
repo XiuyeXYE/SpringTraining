@@ -1,0 +1,64 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Mybatis查询 注意 传入参数            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1708317" snippet_file_name="blog_20160605_1_8005891"  name="code" class="html">Myfault solving：<br/>
+&lt;select id=&quot;findUserByNameAndPasswd&quot; resultType=&quot;com.xiuye.orm.User&quot;<br/>
+		parameterType=&quot;string&quot;&gt;<br/>
+		select * from user where username = #{0} and<br/>
+		password=#{1}<br/>
+	&lt;/select&gt;<br/>
+<br/>
+	&lt;select id=&quot;findUserByPhoneAndPasswd&quot; resultType=&quot;com.xiuye.orm.User&quot;<br/>
+		parameterType=&quot;string&quot;&gt;<br/>
+		select * from user where phone = #{0} and password = #{1}<br/>
+	&lt;/select&gt;<br/>
+<br/>
+	&lt;select id=&quot;findUserByEmailAndPasswd&quot; resultType=&quot;com.xiuye.orm.User&quot;<br/>
+		parameterType=&quot;string&quot;&gt;<br/>
+		select * from user where email = #{0} and<br/>
+		password=#{1}<br/>
+	&lt;/select&gt;</pre><br><br/>
+<pre code_snippet_id="1708317" snippet_file_name="blog_20160605_2_415870"  name="code" class="html">DAO层的函数方法 <br/>
+<br/>
+Public User selectUser(String name,String area);<br/>
+对应的Mapper.xml  <br/>
+<br/>
+&lt;select id=&quot;selectUser&quot; resultMap=&quot;BaseResultMap&quot;&gt;<br/>
+    select  *  from user_user_t   where user_name = #{0} and user_area=#{1}<br/>
+&lt;/select&gt;<br/>
+其中，#{0}代表接收的是dao层中的第一个参数，#{1}代表dao层中第二参数，更多参数一致往后加即可。<br/>
+<br/>
+<br/>
+此方法采用Map传多参数.<br/>
+<br/>
+Dao层的函数方法<br/>
+<br/>
+<br/>
+Public User selectUser(Map paramMap);<br/>
+对应的Mapper.xml<br/>
+<br/>
+&lt;select id=&quot; selectUser&quot; resultMap=&quot;BaseResultMap&quot;&gt;<br/>
+   select  *  from user_user_t   where user_name = #{userName，jdbcType=VARCHAR} and user_area=#{userArea,jdbcType=VARCHAR}<br/>
+&lt;/select&gt;<br/>
+Service层调用<br/>
+<br/>
+<br/>
+Private User xxxSelectUser(){<br/>
+Map paramMap=new hashMap();<br/>
+paramMap.put(“userName”,”对应具体的参数值”);<br/>
+paramMap.put(“userArea”,”对应具体的参数值”);<br/>
+User user=xxx. selectUser(paramMap);}<br/>
+个人认为此方法不够直观，见到接口方法不能直接的知道要传的参数是什么。<br/>
+<br/>
+<br/>
+Dao层的函数方法<br/>
+<br/>
+Public User selectUser(@param(“userName”)Stringname,@param(“userArea”)String area);<br/>
+对应的Mapper.xml<br/>
+<br/>
+&lt;select id=&quot; selectUser&quot; resultMap=&quot;BaseResultMap&quot;&gt;<br/>
+   select  *  from user_user_t   where user_name = #{userName，jdbcType=VARCHAR} and user_area=#{userArea,jdbcType=VARCHAR}<br/>
+&lt;/select&gt; </pre><br><br/>
+   <br/>
+</div>

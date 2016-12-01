@@ -1,0 +1,51 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        结构体指定成员赋值            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1649749" snippet_file_name="blog_20160416_1_3621922"  name="code" class="cpp">#include&lt;iostream&gt;<br/>
+using namespace std;<br/>
+void f(){<br/>
+	cout &lt;&lt; &quot;Hello&quot; &lt;&lt; endl;<br/>
+}<br/>
+<br/>
+int main(){<br/>
+	struct Test{<br/>
+		void (*function)();<br/>
+		string name;<br/>
+	};<br/>
+	Test t = {.function=f,.name=&quot;World&quot;};<br/>
+	t.function();<br/>
+	cout &lt;&lt; t.name &lt;&lt; endl;<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><pre code_snippet_id="1649749" snippet_file_name="blog_20160416_2_5290361"  name="code" class="cpp">D:\programming\C++&gt;g++ StructPointerTest.cpp<br/>
+<br/>
+D:\programming\C++&gt;cl StructPointerTest.cpp<br/>
+用于 x86 的 Microsoft (R) C/C++ 优化编译器 18.00.21005.1 版版权所有(C) Microsoft<br/>
+ Corporation。  保留所有权利。<br/>
+<br/>
+StructPointerTest.cpp<br/>
+F:\360Apps\vs2013\VC\include\xlocale(337) : warning C4530: 使用了 C++ 异常处理程<br/>
+序，但未启用展开语义。请指定 /EHsc<br/>
+StructPointerTest.cpp(12) : error C2143: 语法错误 : 缺少“}”(在“.”的前面)<br/>
+StructPointerTest.cpp(12) : warning C4832: 标记“.”在 UDT“std::basic_string&lt;ch<br/>
+ar,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;”之后是非法的<br/>
+StructPointerTest.cpp(12) : error C2143: 语法错误 : 缺少“;”(在“.”的前面)<br/>
+StructPointerTest.cpp(13) : error C2143: 语法错误 : 缺少“;”(在“.”的前面)<br/>
+StructPointerTest.cpp(13) : error C4430: 缺少类型说明符 - 假定为 int。注意:  C++<br/>
+ 不支持默认 int<br/>
+StructPointerTest.cpp(14) : error C2143: 语法错误 : 缺少“;”(在“&lt;&lt;”的前面)<br/>
+StructPointerTest.cpp(14) : error C4430: 缺少类型说明符 - 假定为 int。注意:  C++<br/>
+ 不支持默认 int<br/>
+StructPointerTest.cpp(15) : error C2059: 语法错误:“return”<br/>
+StructPointerTest.cpp(17) : error C2059: 语法错误:“}”<br/>
+StructPointerTest.cpp(17) : error C2143: 语法错误 : 缺少“;”(在“}”的前面)<br/>
+<br/>
+D:\programming\C++&gt;a<br/>
+Hello<br/>
+World</pre><br/>
+<p>Microsoft (R) C/C&#43;&#43;不支持 .</p><br/>
+<p>gnu 支持 .</p><br/>
+   <br/>
+</div>

@@ -1,0 +1,53 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        TDM-GCC编译win32程序            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1603594" snippet_file_name="blog_20160309_1_9299324"  name="code" class="cpp">#include&lt;windows.h&gt;<br/>
+//#pragma comment(lib,&quot;user32.lib&quot;)<br/>
+//#pragma comment(lib,&quot;gdi32.lib&quot;)<br/>
+int WINAPI WinMain(HINSTANCE hInstance,<br/>
+	HINSTANCE hPrevInstance,<br/>
+	LPSTR lpCmdLine,<br/>
+	int nShowCmd)<br/>
+{<br/>
+<br/>
+	HDC hdc;<br/>
+	HWND hwnd;<br/>
+	COLORREF clr;<br/>
+	TCHAR szBuffer[] = TEXT(&quot;您好呀，欢迎来到英雄联盟!&quot;);<br/>
+	hwnd = GetDesktopWindow();<br/>
+	hdc = GetWindowDC(hwnd);<br/>
+	SetBkMode(hdc,TRANSPARENT);<br/>
+	clr = SetTextColor(hdc,RGB(0,255,0));<br/>
+	TextOut(hdc,0,0,szBuffer,lstrlen(szBuffer));<br/>
+	SetTextColor(hdc,RGB(255,0,0));<br/>
+	TextOut(hdc,0,20,szBuffer,lstrlen(szBuffer));<br/>
+	SetBkMode(hdc,OPAQUE);<br/>
+	SetTextColor(hdc,RGB(0,0,255));<br/>
+	TextOut(hdc,0,40,szBuffer,lstrlen(szBuffer));<br/>
+	SetTextColor(hdc,clr);<br/>
+	ReleaseDC(hwnd,hdc);<br/>
+	Sleep(5000);<br/>
+	return 0;<br/>
+<br/>
+}<br/>
+</pre><br/>
+<p><img src="http://img.blog.csdn.net/20160309200000800?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160309195948140?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p><img src="http://img.blog.csdn.net/20160309200015187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p><br/>
+<p>编译的时候一定要加“-mwindows”,否则编译出错：</p><br/>
+<p><pre code_snippet_id="1603594" snippet_file_name="blog_20160309_2_1316429"  name="code" class="cpp">C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x5e): undefined reference to `SetBkMode@8&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x74): undefined reference to `SetTextColor@8&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0xae): undefined reference to `TextOutA@20&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0xc4): undefined reference to `SetTextColor@8&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0xfb): undefined reference to `TextOutA@20&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x111): undefined reference to `SetBkMode@8&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x127): undefined reference to `SetTextColor@8&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x15e): undefined reference to `TextOutA@20&#39;<br/>
+C:\Users\jackz\AppData\Local\Temp\ccGCPuC0.o:windows7.cpp:(.text+0x173): undefined reference to `SetTextColor@8&#39;<br/>
+collect2.exe: error: ld returned 1 exit status<br/>
+</pre><br><br/>
+<br><br/>
+</p><br/>
+   <br/>
+</div>

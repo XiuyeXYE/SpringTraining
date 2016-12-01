@@ -1,0 +1,133 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        java 枚举enum的本来源码            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1671459" snippet_file_name="blog_20160504_1_5209256"  name="code" class="java">package com.xiuye.test;<br/>
+<br/>
+public class TestEnum {<br/>
+<br/>
+	enum week{<br/>
+		one,two,three<br/>
+	};<br/>
+	<br/>
+	public static void main(String[] args) {<br/>
+		<br/>
+		week k = week.one;<br/>
+		System.out.println(k);<br/>
+		<br/>
+	}<br/>
+	<br/>
+}<br/>
+</pre><pre code_snippet_id="1671459" snippet_file_name="blog_20160504_2_9080714"  name="code" class="java">// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.<br/>
+// Jad home page: http://www.kpdus.com/jad.html<br/>
+// Decompiler options: packimports(3) <br/>
+// Source File Name:   TestEnum.java<br/>
+<br/>
+package com.xiuye.test;<br/>
+<br/>
+import java.io.PrintStream;<br/>
+<br/>
+public class TestEnum<br/>
+{<br/>
+    static final class week extends Enum//内部定义枚举<br/>
+    {<br/>
+<br/>
+        public static week[] values()<br/>
+        {<br/>
+            week aweek[];<br/>
+            int i;<br/>
+            week aweek1[];<br/>
+            System.arraycopy(aweek = ENUM$VALUES, 0, aweek1 = new week[i = aweek.length], 0, i);<br/>
+            return aweek1;<br/>
+        }<br/>
+<br/>
+        public static week valueOf(String s)<br/>
+        {<br/>
+            return (week)Enum.valueOf(com/xiuye/test/TestEnum$week, s);<br/>
+        }<br/>
+<br/>
+        public static final week one;<br/>
+        public static final week two;<br/>
+        public static final week three;<br/>
+        private static final week ENUM$VALUES[];<br/>
+<br/>
+        static <br/>
+        {<br/>
+            one = new week(&quot;one&quot;, 0);<br/>
+            two = new week(&quot;two&quot;, 1);<br/>
+            three = new week(&quot;three&quot;, 2);<br/>
+            ENUM$VALUES = (new week[] {<br/>
+                one, two, three<br/>
+            });<br/>
+        }<br/>
+<br/>
+        private week(String s, int i)<br/>
+        {<br/>
+            super(s, i);<br/>
+        }<br/>
+    }<br/>
+<br/>
+<br/>
+    public TestEnum()<br/>
+    {<br/>
+    }<br/>
+<br/>
+    public static void main(String args[])<br/>
+    {<br/>
+        week k = week.one;<br/>
+        System.out.println(k);<br/>
+    }<br/>
+}<br/>
+</pre><pre code_snippet_id="1671459" snippet_file_name="blog_20160504_3_7826978"  name="code" class="java">// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.<br/>
+// Jad home page: http://www.kpdus.com/jad.html<br/>
+// Decompiler options: packimports(3) <br/>
+// Source File Name:   TestEnum.java<br/>
+<br/>
+package com.xiuye.test;<br/>
+<br/>
+<br/>
+// Referenced classes of package com.xiuye.test:<br/>
+//            TestEnum<br/>
+<br/>
+static final class TestEnum$week extends Enum//集成Enum类<br/>
+{<br/>
+<br/>
+    public static TestEnum$week[] values()//定义静态的values方法<br/>
+    {<br/>
+        TestEnum$week atestenum$week[];<br/>
+        int i;<br/>
+        TestEnum$week atestenum$week1[];<br/>
+        System.arraycopy(atestenum$week = ENUM$VALUES, 0, atestenum$week1 = new TestEnum$week[i = atestenum$week.length], 0, i);//数组copy<br/>
+        return atestenum$week1;<br/>
+    }<br/>
+<br/>
+    public static TestEnum$week valueOf(String s)//定义静态valueOf方法<br/>
+    {<br/>
+        return (TestEnum$week)Enum.valueOf(com/xiuye/test/TestEnum$week, s);<br/>
+    }<br/>
+<br/>
+    public static final TestEnum$week one;//枚举变量<br/>
+    public static final TestEnum$week two;//枚举变量<br/>
+    public static final TestEnum$week three;//枚举变量<br/>
+    private static final TestEnum$week ENUM$VALUES[];//枚举数组<br/>
+<br/>
+    static <br/>
+    {<br/>
+        one = new TestEnum$week(&quot;one&quot;, 0);<br/>
+        two = new TestEnum$week(&quot;two&quot;, 1);<br/>
+        three = new TestEnum$week(&quot;three&quot;, 2);<br/>
+        ENUM$VALUES = (new TestEnum$week[] {<br/>
+            one, two, three<br/>
+        });<br/>
+    }<br/>
+<br/>
+    private TestEnum$week(String s, int i)//枚举构造函数私有<br/>
+    {<br/>
+        super(s, i);<br/>
+    }<br/>
+}<br/>
+</pre><br><br/>
+<br><br/>
+<br><br/>
+   <br/>
+</div>

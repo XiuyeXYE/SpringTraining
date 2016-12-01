@@ -1,0 +1,78 @@
+<style type="text/css" >div{color:#008B8B;}</style>
+<h1 style='color:green;'>        Objective-C Rectangle Demo            </h1>
+<div id="article_content" class="article_content">
+<br/>
+<pre code_snippet_id="1633709" snippet_file_name="blog_20160404_1_1303655"  name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+<br/>
+@interface Rectangle:NSObject<br/>
+{<br/>
+    int width;<br/>
+    int height;<br/>
+}<br/>
+<br/>
+-(void)setWidth:(int)_w;<br/>
+-(void)setHeight:(int)_h;<br/>
+-(void)setWH:(int)_w:(int)_h;<br/>
+-(int)getArea;<br/>
+-(int)getCircumference;<br/>
+<br/>
+@end<br/>
+</pre><pre code_snippet_id="1633709" snippet_file_name="blog_20160404_2_5480349"  name="code" class="objc">#import &quot;Rectangle.h&quot;<br/>
+<br/>
+@implementation Rectangle<br/>
+<br/>
+-(void)setWidth:(int)_w{<br/>
+    width = _w;<br/>
+}<br/>
+-(void)setHeight:(int)_h{<br/>
+    height = _h;<br/>
+}<br/>
+-(void)setWH:(int)_w:(int)_h{<br/>
+    width = _w;<br/>
+    height = _h;<br/>
+}<br/>
+-(int)getArea{<br/>
+    return width * height;<br/>
+}<br/>
+-(int)getCircumference{<br/>
+    return 2 * (width + height);<br/>
+}<br/>
+<br/>
+@end;</pre><br><br/>
+<pre code_snippet_id="1633709" snippet_file_name="blog_20160404_3_6418441"  name="code" class="objc">#import &lt;Foundation/Foundation.h&gt;<br/>
+#import &quot;header/Rectangle.h&quot;<br/>
+<br/>
+int main (int argc, const char * argv[])<br/>
+{<br/>
+   NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];<br/>
+<br/>
+   NSLog (@&quot;hello world&quot;);<br/>
+   Rectangle *rect = [[Rectangle alloc] init];<br/>
+  <br/>
+   [rect setWidth:123];<br/>
+   [rect setHeight:456];<br/>
+   int area = [rect getArea];<br/>
+   int length = [rect getCircumference];<br/>
+   NSLog(@&quot;Area = %d&quot;,area);<br/>
+   NSLog(@&quot;Circumference = %d&quot;,length);<br/>
+   <br/>
+   [rect setWH:50:50];<br/>
+   area = [rect getArea];<br/>
+   length = [rect getCircumference];<br/>
+   NSLog(@&quot;Area = %d&quot;,area);<br/>
+   NSLog(@&quot;Circumference = %d&quot;,length);<br/>
+   <br/>
+   [pool drain];<br/>
+   return 0;<br/>
+}<br/>
+</pre><br><br/>
+<pre code_snippet_id="1633709" snippet_file_name="blog_20160404_4_3560739"  name="code" class="objc">sh-4.3$ gcc `gnustep-config --objc-flags` -L/usr/GNUstep/System/Library/Libraries -lgnustep-base -lobjc *.m header/*.m -o main                                                              <br/>
+sh-4.3$ main                                                                                                                                                                                <br/>
+2016-04-03 16:19:46.283 main[128] hello world                                                                                                                                               <br/>
+2016-04-03 16:19:46.284 main[128] Area = 56088                                                                                                                                              <br/>
+2016-04-03 16:19:46.284 main[128] Circumference = 1158                                                                                                                                      <br/>
+2016-04-03 16:19:46.284 main[128] Area = 2500                                                                                                                                               <br/>
+2016-04-03 16:19:46.284 main[128] Circumference = 200  </pre><br><br/>
+<br><br/>
+   <br/>
+</div>
