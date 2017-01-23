@@ -194,7 +194,7 @@ public class ExclHandleMain {
 			ps.addBatch();
 			if (i % 1000 == 0) {
 				int[] r = ps.executeBatch();
-				System.out.println(r.length == 1000 ? "success 100" : "failed 100!");
+				System.out.println(r.length == 1000 ? "success 1000" : "failed 1000!");
 			}
 			i++;
 		}
