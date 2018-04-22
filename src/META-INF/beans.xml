@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tag="http://www.xiuye.com/schema/user"
+		xsi:schemaLocation="
+    			http://www.springframework.org/schema/beans
+    			http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    			http://www.xiuye.com/schema/user
+    			http://www.xiuye.com/schema/user.xsd
+    	"
+		>
+		<tag:user id="userBean" username="xiuye" email="xiuye@xiuye.com"/>
+</beans>
+
