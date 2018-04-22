@@ -10,5 +10,8 @@
     	"
 		>
 		<tag:user id="userBean" username="xiuye" email="xiuye@xiuye.com"/>
+		<bean id="car" class="com.xiuye.spring.factory.CarFactoryBean" >
+		    <property name="carInfo" value="垃圾跑车,400,100000000"></property>
+		</bean>
 </beans>
 
